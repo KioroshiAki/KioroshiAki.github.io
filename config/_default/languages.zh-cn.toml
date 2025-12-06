@@ -1,7 +1,7 @@
 languageCode = "zh-cn"
 languageName = "简体中文"
-weight = 4
-title = "Blowfish"
+weight = 1
+title = "KA's Blog"
 
 [params]
   displayName = "简体中文"
@@ -9,14 +9,14 @@ title = "Blowfish"
   rtl = false
   dateFormat = "2006-01-02"
   logo = "img/blowfish_logo_transparent.png"
-  description = "一个强大、轻量级的 Hugo 主题。"
+  description = "施工中..."
 
 [params.author]
-  name = "Blowfish"
+  name = "KioroshiAki"
   image = "img/blowfish_logo.png"
-  headline = "一个强大、轻量级的 Hugo 主题。"
-  bio = "一个强大、轻量级的 Hugo 主题。"
+  headline = "施工中..."
+  bio = "施工中..."
+  email = "1289023447@qq.com"
   links = [
-    { x-twitter = "https://twitter.com/burufugu" },
-    { github = "https://github.com/nunocoracao/blowfish" },
+    { github = "https://github.com/kioroshiaki" },
   ]

@@ -14,9 +14,9 @@ enableSearch = true
 enableCodeCopy = true
 enableStructuredBreadcrumbs = true
 
-replyByEmail = false
+replyByEmail = true
 
-mainSections = ["docs"]
+mainSections = ["posts"]
 # robots = ""
 
 disableImageOptimization = false
@@ -32,7 +32,7 @@ hotlinkFeatureImage = false
 
 highlightCurrentMenuArea = true
 smartTOC = true
-smartTOCHideUnfocusedChildren = false
+smartTOCHideUnfocusedChildren = true
 
 #giteaDefaultServer = "https://git.fsfe.org"
 #forgejoDefaultServer = "https://v11.next.forgejo.org"
@@ -50,12 +50,12 @@ fingerprintAlgorithm = "sha512" # Valid values are "sha512" (default), "sha384",
   showScrollToTop = true
 
 [homepage]
-  layout = "custom" # valid options: page, profile, hero, card, background, custom
+  layout = "hero" # valid options: page, profile, hero, card, background, custom
   # homepageImage = "/img/iceland.jpg" # used in: hero, and card
-  showRecent = false
-  showRecentItems = 12
+  showRecent = true
+  showRecentItems = 3
   showMoreLink = true
-  showMoreLinkDest = "docs"
+  showMoreLinkDest = "posts"
   cardView = true
   cardViewScreenWidth = false
   layoutBackgroundBlur = true # only used when layout equals background
@@ -67,7 +67,7 @@ fingerprintAlgorithm = "sha512" # Valid values are "sha512" (default), "sha384",
   showLikes = false
   showDateOnlyInArticle = false
   showDateUpdated = false
-  showAuthor = true
+  showAuthor = false
   # showAuthorBottom = false
   showHero = true
   heroStyle = "background" # valid options: basic, big, background, thumbAndBackground
@@ -75,21 +75,19 @@ fingerprintAlgorithm = "sha512" # Valid values are "sha512" (default), "sha384",
   layoutBackgroundHeaderSpace = true # only used when heroStyle equals background
   showBreadcrumbs = true
   showDraftLabel = true
-  showEdit = true
-  editURL = "https://github.com/nunocoracao/blowfish/tree/main/exampleSite/content"
-  editAppendPath = true
-  seriesOpened = false
+  showEdit = false
+  seriesOpened = true
   showHeadingAnchors = true
   showPagination = true
   invertPagination = false
-  showReadingTime = true
+  showReadingTime = false
   showTableOfContents = true
-  showRelatedContent = true
+  showRelatedContent = false
   relatedContentLimit = 9
   showTaxonomies = true
-  showAuthorsBadges = true
+  showAuthorsBadges = false
   showWordCount = false
-  sharingLinks = [ "linkedin", "twitter", "bluesky", "reddit", "whatsapp", "telegram", "pinterest", "facebook", "email", "line"]
+  sharingLinks = false
   showZenMode = true
 
 [list]
@@ -98,14 +96,14 @@ fingerprintAlgorithm = "sha512" # Valid values are "sha512" (default), "sha384",
   layoutBackgroundBlur = true # only used when heroStyle equals background
   layoutBackgroundHeaderSpace = false
   showBreadcrumbs = false
-  showSummary = false
+  showSummary = true
   showViews = false
   showLikes = false
   showTableOfContents = true
-  showCards = true
-  orderByWeight = true
+  showCards = false
+  orderByWeight = false
   groupByYear = false
-  cardView = true
+  cardView = false
   cardViewScreenWidth = false
   constrainItemsWidth = false
 
@@ -134,13 +132,13 @@ fingerprintAlgorithm = "sha512" # Valid values are "sha512" (default), "sha384",
   cardViewScreenWidth = false
 
 [firebase]
-  #apiKey = "AIzaSyB5tqlqDky77Vb4Tc4apiHV4hRZI18KGiY"
-  #authDomain = "blowfish-21fff.firebaseapp.com"
-  #projectId = "blowfish-21fff"
-  #storageBucket = "blowfish-21fff.appspot.com"
-  #messagingSenderId = "60108104191"
-  #appId = "1:60108104191:web:039842ebe1370698b487ca"
-  #measurementId = "G-PEDMYR1V0K"
+  # apiKey = "AIzaSyB5tqlqDky77Vb4Tc4apiHV4hRZI18KGiY"
+  # authDomain = "blowfish-21fff.firebaseapp.com"
+  # projectId = "blowfish-21fff"
+  # storageBucket = "blowfish-21fff.appspot.com"
+  # messagingSenderId = "60108104191"
+  # appId = "1:60108104191:web:039842ebe1370698b487ca"
+  # measurementId = "G-PEDMYR1V0K"
 
 [fathomAnalytics]
   # site = "ABC12345"
@@ -158,11 +156,11 @@ fingerprintAlgorithm = "sha512" # Valid values are "sha512" (default), "sha384",
   # enableTrackEvent = false
 
 [buymeacoffee]
-  identifier = "nunocoracao"
-  globalWidget = true
-  globalWidgetMessage = ""
-  globalWidgetColor = "#FFDD00"
-  globalWidgetPosition = "right"
+  # identifier = "nunocoracao"
+  # globalWidget = true
+  # globalWidgetMessage = ""
+  # globalWidgetColor = "#FFDD00"
+  # globalWidgetPosition = "right"
 
 [verification]
   # google = ""
