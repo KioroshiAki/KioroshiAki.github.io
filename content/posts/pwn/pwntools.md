@@ -200,6 +200,18 @@ ls # 看看当前目录中的东西
 cat flag # 如果有flag，直接读取
 ```
 
+最后大概就是这样：
+```terminal
+[+] Starting local process './main': pid 8358
+[+] a = 9307
+[+] b = 1667
+[+] a * b = 15514769
+[*] Switching to interactive mode
+Correct! Opening shell...
+$ whoami
+kioroshiaki
+```
+
 ## 后记
 
 看完这个脚本，你会发现前面好多内容完全看不懂/用不到？！
