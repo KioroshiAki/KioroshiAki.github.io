@@ -21,6 +21,11 @@
   weight = 10
 
 [[main]]
+  name = "关于"
+  pageRef = "posts/about"
+  weight = 20
+
+[[main]]
   identifier = "github"
   pre = "github"
   url = "https://github.com/kioroshiaki"

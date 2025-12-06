@@ -14,9 +14,9 @@ title = "KA's Blog"
 [params.author]
   name = "KioroshiAki"
   image = "img/blowfish_logo.png"
-  headline = "施工中..."
+  headline = "Beta v0.1 施工中..."
   bio = "施工中..."
-  email = "1289023447@qq.com"
+  email = "EndotherminUnit2@outlook.com"
   links = [
     { github = "https://github.com/kioroshiaki" },
   ]
