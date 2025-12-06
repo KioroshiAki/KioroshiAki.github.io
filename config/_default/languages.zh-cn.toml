@@ -8,7 +8,7 @@ title = "KA's Blog"
   isoCode = "zh-cn"
   rtl = false
   dateFormat = "2006-01-02"
-  logo = "img/blowfish_logo_transparent.png"
+  # logo = "img/blowfish_logo_transparent.png"
   description = "施工中..."
 
 [params.author]

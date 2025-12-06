@@ -15,8 +15,8 @@
 
   
   
-    <title>Test &middot; KA&#39;s Blog</title>
-    <meta name="title" content="Test &middot; KA&#39;s Blog">
+    <title>0x00 Python Pwntools &middot; KA&#39;s Blog</title>
+    <meta name="title" content="0x00 Python Pwntools &middot; KA&#39;s Blog">
   
 
   
@@ -26,7 +26,7 @@
   
   
   
-  <link rel="canonical" href="http://localhost:1313/posts/test/test/">
+  <link rel="canonical" href="http://localhost:1313/posts/pwn/pwntools/">
   
 
   
@@ -44,22 +44,20 @@
   
 
   
-  <meta property="og:url" content="http://localhost:1313/posts/test/test/">
+  <meta property="og:url" content="http://localhost:1313/posts/pwn/pwntools/">
   <meta property="og:site_name" content="KA&#39;s Blog">
-  <meta property="og:title" content="Test">
-  <meta property="og:description" content="这是一篇测试blog！
-#include&lt;stdio.h&gt; int main(void){ printf(&#34;Hello, World!&#34;); return 0; } Hello, world! 一级标题测试 # 二级标题测试 # 粗体测试">
+  <meta property="og:title" content="0x00 Python Pwntools">
+  <meta property="og:description" content="pwntools的基础使用方法 # 大概一个半月之前，我打算开始学pwn，那时我还是啥都不知道的小菜。花了半天时间配了个WSL，找了一堆视频和文章，有的上来开始讲ELF，有的上来开始讲栈溢出，虽然这些在pwn中确实很基础，但我看了半天感觉确实也很离谱。">
   <meta property="og:locale" content="zh_cn">
   <meta property="og:type" content="article">
     <meta property="article:section" content="posts">
-    <meta property="article:published_time" content="2025-12-06T11:04:10+08:00">
-    <meta property="article:modified_time" content="2025-12-06T11:04:10+08:00">
+    <meta property="article:published_time" content="2025-12-06T17:00:00+08:00">
+    <meta property="article:modified_time" content="2025-12-06T17:00:00+08:00">
 
   
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="Test">
-  <meta name="twitter:description" content="这是一篇测试blog！
-#include&lt;stdio.h&gt; int main(void){ printf(&#34;Hello, World!&#34;); return 0; } Hello, world! 一级标题测试 # 二级标题测试 # 粗体测试">
+  <meta name="twitter:title" content="0x00 Python Pwntools">
+  <meta name="twitter:description" content="pwntools的基础使用方法 # 大概一个半月之前，我打算开始学pwn，那时我还是啥都不知道的小菜。花了半天时间配了个WSL，找了一堆视频和文章，有的上来开始讲ELF，有的上来开始讲栈溢出，虽然这些在pwn中确实很基础，但我看了半天感觉确实也很离谱。">
 
   
   
@@ -223,26 +221,26 @@
     "@context": "https://schema.org",
     "@type": "Article",
     "articleSection": "Posts",
-    "name": "Test",
-    "headline": "Test",
+    "name": "0x00 Python Pwntools",
+    "headline": "0x00 Python Pwntools",
     
-    "abstract": "\u003cp\u003e这是一篇测试blog！\u003c\/p\u003e\n\u003cdiv class=\u0022highlight\u0022\u003e\u003cpre tabindex=\u00220\u0022 class=\u0022chroma\u0022\u003e\u003ccode class=\u0022language-c\u0022 data-lang=\u0022c\u0022\u003e\u003cspan class=\u0022line\u0022\u003e\u003cspan class=\u0022cl\u0022\u003e\u003cspan class=\u0022cp\u0022\u003e#include\u003c\/span\u003e\u003cspan class=\u0022cpf\u0022\u003e\u0026lt;stdio.h\u0026gt;\u003c\/span\u003e\u003cspan class=\u0022cp\u0022\u003e\n\u003c\/span\u003e\u003c\/span\u003e\u003c\/span\u003e\u003cspan class=\u0022line\u0022\u003e\u003cspan class=\u0022cl\u0022\u003e\u003cspan class=\u0022cp\u0022\u003e\u003c\/span\u003e\u003cspan class=\u0022kt\u0022\u003eint\u003c\/span\u003e \u003cspan class=\u0022nf\u0022\u003emain\u003c\/span\u003e\u003cspan class=\u0022p\u0022\u003e(\u003c\/span\u003e\u003cspan class=\u0022kt\u0022\u003evoid\u003c\/span\u003e\u003cspan class=\u0022p\u0022\u003e){\u003c\/span\u003e\n\u003c\/span\u003e\u003c\/span\u003e\u003cspan class=\u0022line\u0022\u003e\u003cspan class=\u0022cl\u0022\u003e    \u003cspan class=\u0022nf\u0022\u003eprintf\u003c\/span\u003e\u003cspan class=\u0022p\u0022\u003e(\u003c\/span\u003e\u003cspan class=\u0022s\u0022\u003e\u0026#34;Hello, World!\u0026#34;\u003c\/span\u003e\u003cspan class=\u0022p\u0022\u003e);\u003c\/span\u003e\n\u003c\/span\u003e\u003c\/span\u003e\u003cspan class=\u0022line\u0022\u003e\u003cspan class=\u0022cl\u0022\u003e    \u003cspan class=\u0022k\u0022\u003ereturn\u003c\/span\u003e \u003cspan class=\u0022mi\u0022\u003e0\u003c\/span\u003e\u003cspan class=\u0022p\u0022\u003e;\u003c\/span\u003e\n\u003c\/span\u003e\u003c\/span\u003e\u003cspan class=\u0022line\u0022\u003e\u003cspan class=\u0022cl\u0022\u003e\u003cspan class=\u0022p\u0022\u003e}\u003c\/span\u003e\n\u003c\/span\u003e\u003c\/span\u003e\u003c\/code\u003e\u003c\/pre\u003e\u003c\/div\u003e\u003cpre tabindex=\u00220\u0022\u003e\u003ccode class=\u0022language-terminal\u0022 data-lang=\u0022terminal\u0022\u003eHello, world!\n\u003c\/code\u003e\u003c\/pre\u003e\n\u003ch1 class=\u0022relative group\u0022\u003e一级标题测试\n    \u003cdiv id=\u0022一级标题测试\u0022 class=\u0022anchor\u0022\u003e\u003c\/div\u003e\n    \n    \u003cspan\n        class=\u0022absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none\u0022\u003e\n        \u003ca class=\u0022text-primary-300 dark:text-neutral-700 !no-underline\u0022 href=\u0022#%e4%b8%80%e7%ba%a7%e6%a0%87%e9%a2%98%e6%b5%8b%e8%af%95\u0022 aria-label=\u0022锚点\u0022\u003e#\u003c\/a\u003e\n    \u003c\/span\u003e\n    \n\u003c\/h1\u003e\n\n\u003ch2 class=\u0022relative group\u0022\u003e二级标题测试\n    \u003cdiv id=\u0022二级标题测试\u0022 class=\u0022anchor\u0022\u003e\u003c\/div\u003e\n    \n    \u003cspan\n        class=\u0022absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none\u0022\u003e\n        \u003ca class=\u0022text-primary-300 dark:text-neutral-700 !no-underline\u0022 href=\u0022#%e4%ba%8c%e7%ba%a7%e6%a0%87%e9%a2%98%e6%b5%8b%e8%af%95\u0022 aria-label=\u0022锚点\u0022\u003e#\u003c\/a\u003e\n    \u003c\/span\u003e\n    \n\u003c\/h2\u003e\n\u003cp\u003e\u003cstrong\u003e粗体测试\u003c\/strong\u003e\u003c\/p\u003e",
+    "abstract": "\u003ch1 class=\u0022relative group\u0022\u003epwntools的基础使用方法\n    \u003cdiv id=\u0022pwntools的基础使用方法\u0022 class=\u0022anchor\u0022\u003e\u003c\/div\u003e\n    \n    \u003cspan\n        class=\u0022absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none\u0022\u003e\n        \u003ca class=\u0022text-primary-300 dark:text-neutral-700 !no-underline\u0022 href=\u0022#pwntools%e7%9a%84%e5%9f%ba%e7%a1%80%e4%bd%bf%e7%94%a8%e6%96%b9%e6%b3%95\u0022 aria-label=\u0022锚点\u0022\u003e#\u003c\/a\u003e\n    \u003c\/span\u003e\n    \n\u003c\/h1\u003e\n\u003cp\u003e大概一个半月之前，我打算开始学pwn，那时我还是啥都不知道的小菜。花了半天时间配了个WSL，找了一堆视频和文章，有的上来开始讲ELF，有的上来开始讲栈溢出，虽然这些在pwn中确实很基础，但我看了半天感觉确实也很离谱。\u003c\/p\u003e",
     "inLanguage": "zh-cn",
-    "url" : "http://localhost:1313/posts/test/test/",
+    "url" : "http://localhost:1313/posts/pwn/pwntools/",
     "author" : {
       "@type": "Person",
       "name": "KioroshiAki"
     },
     "copyrightYear": "2025",
-    "dateCreated": "2025-12-06T11:04:10\u002b08:00",
-    "datePublished": "2025-12-06T11:04:10\u002b08:00",
+    "dateCreated": "2025-12-06T17:00:00\u002b08:00",
+    "datePublished": "2025-12-06T17:00:00\u002b08:00",
     
-    "dateModified": "2025-12-06T11:04:10\u002b08:00",
+    "dateModified": "2025-12-06T17:00:00\u002b08:00",
     
     
     
     "mainEntityOfPage": "true",
-    "wordCount": "59"
+    "wordCount": "1966"
   },
   {
     "@context": "https://schema.org",
@@ -255,8 +253,8 @@
         },{
           "@type": "ListItem",
           "position":  2 ,
-          "name": "Test",
-          "item": "http://localhost:1313/posts/test/test/",
+          "name": "0x00 Python Pwntools",
+          "item": "http://localhost:1313/posts/pwn/pwntools/",
         }]
   }]
   </script>
@@ -701,7 +699,7 @@
     <img
       id="background-image"
       src="/img/background.svg"
-      alt="Test"
+      alt="0x00 Python Pwntools"
       loading="eager"
       decoding="async"
       fetchpriority="high"
@@ -755,8 +753,8 @@
 
   
   <li class="hidden">
-    <a class="hover:underline decoration-neutral-300 dark:underline-neutral-600" href="/posts/test/test/"
-      >Test</a
+    <a class="hover:underline decoration-neutral-300 dark:underline-neutral-600" href="/posts/pwn/pwntools/"
+      >0x00 Python Pwntools</a
     ><span class="px-1 text-primary-500">/</span>
   </li>
 
@@ -765,7 +763,7 @@
 
       
       <h1 class="mt-0 text-4xl font-extrabold text-neutral-900 dark:text-neutral">
-        Test
+        0x00 Python Pwntools
       </h1>
       <div class="mt-1 mb-6 text-base text-neutral-500 dark:text-neutral-400 print:hidden">
         
@@ -901,8 +899,16 @@
     class="min-w-[220px] py-2 border-dotted border-s-1 -ms-5 ps-5 dark:border-neutral-600">
     <nav id="TableOfContents">
   <ul>
-    <li><a href="#二级标题测试">二级标题测试</a></li>
-    <li><a href="#二级标题测试2">二级标题测试2</a></li>
+    <li><a href="#基础使用方法">基础使用方法</a>
+      <ul>
+        <li><a href="#设置context">设置context</a></li>
+        <li><a href="#设置目标libcelf">设置目标libc，ELF</a></li>
+        <li><a href="#启动程序">启动程序</a></li>
+        <li><a href="#基础交互">基础交互</a></li>
+      </ul>
+    </li>
+    <li><a href="#实战演练">实战演练</a></li>
+    <li><a href="#后记">后记</a></li>
   </ul>
 </nav>
   </div>
@@ -916,8 +922,16 @@
     class="py-2 border-dotted border-neutral-300 border-s-1 -ms-5 ps-5 dark:border-neutral-600">
     <nav id="TableOfContents">
   <ul>
-    <li><a href="#二级标题测试">二级标题测试</a></li>
-    <li><a href="#二级标题测试2">二级标题测试2</a></li>
+    <li><a href="#基础使用方法">基础使用方法</a>
+      <ul>
+        <li><a href="#设置context">设置context</a></li>
+        <li><a href="#设置目标libcelf">设置目标libc，ELF</a></li>
+        <li><a href="#启动程序">启动程序</a></li>
+        <li><a href="#基础交互">基础交互</a></li>
+      </ul>
+    </li>
+    <li><a href="#实战演练">实战演练</a></li>
+    <li><a href="#后记">后记</a></li>
   </ul>
 </nav>
   </div>
@@ -1035,82 +1049,226 @@
         
 
         <div class="article-content max-w-prose mb-20">
-          <p>这是一篇测试blog！</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="cp">#include</span><span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
-</span></span></span><span class="line"><span class="cl"><span class="cp"></span><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span>
-</span></span><span class="line"><span class="cl">    <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;Hello, World!&#34;</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></div><pre tabindex="0"><code class="language-terminal" data-lang="terminal">Hello, world!
-</code></pre>
-<h1 class="relative group">一级标题测试
-    <div id="一级标题测试" class="anchor"></div>
+          
+<h1 class="relative group">pwntools的基础使用方法
+    <div id="pwntools的基础使用方法" class="anchor"></div>
     
     <span
         class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
-        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#%e4%b8%80%e7%ba%a7%e6%a0%87%e9%a2%98%e6%b5%8b%e8%af%95" aria-label="锚点">#</a>
+        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#pwntools%e7%9a%84%e5%9f%ba%e7%a1%80%e4%bd%bf%e7%94%a8%e6%96%b9%e6%b3%95" aria-label="锚点">#</a>
     </span>
     
 </h1>
+<p>大概一个半月之前，我打算开始学pwn，那时我还是啥都不知道的小菜。花了半天时间配了个WSL，找了一堆视频和文章，有的上来开始讲ELF，有的上来开始讲栈溢出，虽然这些在pwn中确实很基础，但我看了半天感觉确实也很离谱。</p>
+<p><strong>全  都  看  不  懂  ！</strong></p>
+<p>后来找了个大佬求带，大佬当时只给我讲了一个题，那道题不需要各种漏洞，只需要做一个“简单的口算”，在限定时间内求出两个几千左右的随机数的积，我顿感震惊：这就是最基础的二进制安全吗？防止开挂破坏玩家生态？？</p>
+<p>所以说，作为学了一个月还是没有啥成就的小菜，要来写（shui）第一篇blog，还必须要有干货，写什么？那就写python pwntools怎么用，如何写一个神奇的口算脚本！</p>
+<p>建立连接之前，咱们也可以进行一些设置。</p>
 
-<h2 class="relative group">二级标题测试
-    <div id="二级标题测试" class="anchor"></div>
+<h2 class="relative group">基础使用方法
+    <div id="基础使用方法" class="anchor"></div>
     
     <span
         class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
-        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#%e4%ba%8c%e7%ba%a7%e6%a0%87%e9%a2%98%e6%b5%8b%e8%af%95" aria-label="锚点">#</a>
+        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#%e5%9f%ba%e7%a1%80%e4%bd%bf%e7%94%a8%e6%96%b9%e6%b3%95" aria-label="锚点">#</a>
     </span>
     
 </h2>
-<p><strong>粗体测试</strong></p>
-<p><em>斜体测试</em></p>
 
-  
-
-
-
-<div
-  
-    class="flex px-4 py-3 rounded-md bg-primary-100 dark:bg-primary-900"
-  
-  >
-  <span
-    
-      class="text-primary-400 pe-3 flex items-center"
-    
-    >
-    <span class="relative block icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M506.3 417l-213.3-364c-16.33-28-57.54-28-73.98 0l-213.2 364C-10.59 444.9 9.849 480 42.74 480h426.6C502.1 480 522.6 445 506.3 417zM232 168c0-13.25 10.75-24 24-24S280 154.8 280 168v128c0 13.25-10.75 24-23.1 24S232 309.3 232 296V168zM256 416c-17.36 0-31.44-14.08-31.44-31.44c0-17.36 14.07-31.44 31.44-31.44s31.44 14.08 31.44 31.44C287.4 401.9 273.4 416 256 416z"/></svg>
-</span>
-  </span>
-
-  <span
-    
-      class="dark:text-neutral-300"
-    
-    >简码测试</span>
-</div>
-
-
-<h2 class="relative group">二级标题测试2
-    <div id="二级标题测试2" class="anchor"></div>
+<h3 class="relative group">设置context
+    <div id="设置context" class="anchor"></div>
     
     <span
         class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
-        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#%e4%ba%8c%e7%ba%a7%e6%a0%87%e9%a2%98%e6%b5%8b%e8%af%952" aria-label="锚点">#</a>
+        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#%e8%ae%be%e7%bd%aecontext" aria-label="锚点">#</a>
+    </span>
+    
+</h3>
+<p>首先导入pwntools：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">pwn</span> <span class="kn">import</span> <span class="o">*</span>
+</span></span></code></pre></div><p>接下来可以设置一些背景信息。在这里，你可以告诉脚本使用的架构，操作系统，日志详细程度等详细信息，一般情况下是可以不设置的，但是设置了可能方便某些模块的使用，或者获得更详细的调试信息。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="c1"># 可以这样</span>
+</span></span><span class="line"><span class="cl"><span class="n">context</span><span class="p">(</span><span class="n">xx</span> <span class="o">=</span> <span class="s2">&#34;xx&#34;</span><span class="p">,</span> <span class="n">yy</span> <span class="o">=</span> <span class="s2">&#34;yy&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 也可以这样</span>
+</span></span><span class="line"><span class="cl"><span class="n">context</span><span class="o">.</span><span class="n">xx</span> <span class="o">=</span> <span class="s2">&#34;xx&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="n">context</span><span class="o">.</span><span class="n">yy</span> <span class="o">=</span> <span class="s2">&#34;yy&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 具体设置的参数：</span>
+</span></span><span class="line"><span class="cl"><span class="n">context</span><span class="o">.</span><span class="n">arch</span> <span class="o">=</span> <span class="s2">&#34;amd64&#34;</span>  <span class="c1"># 架构，有i386，amd64等</span>
+</span></span><span class="line"><span class="cl"><span class="n">context</span><span class="o">.</span><span class="n">os</span> <span class="o">=</span> <span class="s2">&#34;linux&#34;</span>  <span class="c1"># 操作系统，一般都是linux</span>
+</span></span><span class="line"><span class="cl"><span class="n">context</span><span class="o">.</span><span class="n">log_level</span> <span class="o">=</span> <span class="s2">&#34;debug&#34;</span>  <span class="c1"># 日志详细程度，选择debug之后每次接收或者发送都有详细的日志</span>
+</span></span></code></pre></div>
+<h3 class="relative group">设置目标libc，ELF
+    <div id="设置目标libcelf" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
+        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#%e8%ae%be%e7%bd%ae%e7%9b%ae%e6%a0%87libcelf" aria-label="锚点">#</a>
+    </span>
+    
+</h3>
+<p>你可以设置ELF和libc，这样你可以让脚本帮你找一些gadgets的位置，比如标准库函数的偏移地址。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">xx</span> <span class="o">=</span> <span class="n">ELF</span><span class="p">(</span><span class="s2">&#34;./xx&#34;</span><span class="p">)</span>  <span class="c1">#指定一个ELF</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 接下来你就可以对这个ELF做一些操作，比如：</span>
+</span></span><span class="line"><span class="cl"><span class="n">system_offset</span> <span class="o">=</span> <span class="n">xx</span><span class="o">.</span><span class="n">symbols</span><span class="p">[</span><span class="s1">&#39;system&#39;</span><span class="p">]</span> <span class="c1"># 找一些函数的地址，如果开了地址随机化就是偏移地址</span>
+</span></span><span class="line"><span class="cl"><span class="n">binsh_offset</span> <span class="o">=</span> <span class="n">xx</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">b</span><span class="s2">&#34;/bin/sh&#34;</span><span class="p">)</span> <span class="c1"># 搜一些字符串的地址，开了随机化同上</span>
+</span></span><span class="line"><span class="cl"><span class="n">puts_got</span> <span class="o">=</span> <span class="n">xx</span><span class="o">.</span><span class="n">got</span><span class="p">[</span><span class="s1">&#39;puts&#39;</span><span class="p">]</span> <span class="c1"># 找一个函数的got表地址，同上</span>
+</span></span><span class="line"><span class="cl"><span class="n">puts_plt</span> <span class="o">=</span> <span class="n">xx</span><span class="o">.</span><span class="n">plt</span><span class="p">[</span><span class="s1">&#39;puts&#39;</span><span class="p">]</span> <span class="c1"># 找一个函数的plt表地址，同上</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">xx</span><span class="o">.</span><span class="n">address</span> <span class="o">=</span> <span class="mh">0x114514</span> <span class="c1"># 设置这个ELF的基址，之后搜索到的地址都是加上基址之后的实际地址</span>
+</span></span></code></pre></div>
+<h3 class="relative group">启动程序
+    <div id="启动程序" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
+        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#%e5%90%af%e5%8a%a8%e7%a8%8b%e5%ba%8f" aria-label="锚点">#</a>
+    </span>
+    
+</h3>
+<p>接下来就可以启动程序，开始操作了。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">xx</span> <span class="o">=</span> <span class="n">process</span><span class="p">(</span><span class="s2">&#34;./xx&#34;</span><span class="p">)</span> <span class="c1"># 开一个本地程序</span>
+</span></span><span class="line"><span class="cl"><span class="n">xx</span> <span class="o">=</span> <span class="n">connect</span><span class="p">(</span><span class="s2">&#34;0.0.0.0&#34;</span><span class="p">,</span> <span class="mi">11111</span><span class="p">)</span> <span class="c1"># 连接一个在线环境</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">gdb</span><span class="o">.</span><span class="n">attach</span><span class="p">(</span><span class="n">xx</span><span class="p">)</span> <span class="c1"># gdb附加调试</span>
+</span></span><span class="line"><span class="cl"><span class="n">gdb</span><span class="o">.</span><span class="n">attach</span><span class="p">(</span><span class="n">xx</span><span class="p">,</span> <span class="s1">&#39;&#39;&#39;
+</span></span></span><span class="line"><span class="cl"><span class="s1">    b 0x114514
+</span></span></span><span class="line"><span class="cl"><span class="s1">    continue
+</span></span></span><span class="line"><span class="cl"><span class="s1">&#39;&#39;&#39;</span><span class="p">)</span> <span class="c1"># 还能顺带给gdb发点指令！</span>
+</span></span></code></pre></div>
+<h3 class="relative group">基础交互
+    <div id="基础交互" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
+        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#%e5%9f%ba%e7%a1%80%e4%ba%a4%e4%ba%92" aria-label="锚点">#</a>
+    </span>
+    
+</h3>
+<p>你可以对程序做一些交互，比如发送和接收。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="c1"># 接收</span>
+</span></span><span class="line"><span class="cl"><span class="n">xx</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="c1"># 收n个字节</span>
+</span></span><span class="line"><span class="cl"><span class="n">xx</span><span class="o">.</span><span class="n">recvline</span><span class="p">()</span> <span class="c1"># 收一行</span>
+</span></span><span class="line"><span class="cl"><span class="n">xx</span><span class="o">.</span><span class="n">recvuntil</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;xx&#39;</span><span class="p">)</span> <span class="c1"># 收到xx为止</span>
+</span></span><span class="line"><span class="cl"><span class="n">xx</span><span class="o">.</span><span class="n">recvall</span><span class="p">()</span> <span class="c1"># 一直收</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">a</span> <span class="o">=</span> <span class="n">xx</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="mi">114514</span><span class="p">)</span> <span class="c1"># 还能把收到的字符串赋给a！</span>
+</span></span><span class="line"><span class="cl"><span class="n">a</span> <span class="o">=</span> <span class="n">xx</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="c1"># 移除两端的空白字符</span>
+</span></span><span class="line"><span class="cl"><span class="n">a</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">xx</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="mi">16</span><span class="p">),</span> <span class="mi">10</span><span class="p">)</span> <span class="c1"># 如果收到的字符串像个数字，可以把他按特定进制转换成整数</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">xx</span><span class="o">.</span><span class="n">clean</span><span class="p">()</span> <span class="c1"># 还能把收到的扔了！</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 发送</span>
+</span></span><span class="line"><span class="cl"><span class="n">xx</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;xx&#39;</span><span class="p">)</span> <span class="c1"># 发送xx，不带回车</span>
+</span></span><span class="line"><span class="cl"><span class="n">xx</span><span class="o">.</span><span class="n">sendline</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;xx&#39;</span><span class="p">)</span> <span class="c1"># 带回车</span>
+</span></span><span class="line"><span class="cl"><span class="n">xx</span><span class="o">.</span><span class="n">sendafter</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;xx&#39;</span><span class="p">,</span> <span class="sa">b</span><span class="s1">&#39;yy&#39;</span><span class="p">)</span> <span class="c1"># 收到xx后发yy，不带回车</span>
+</span></span><span class="line"><span class="cl"><span class="n">xx</span><span class="o">.</span><span class="n">sendlineafter</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;xx&#39;</span><span class="p">,</span> <span class="sa">b</span><span class="s1">&#39;yy&#39;</span><span class="p">)</span> <span class="c1"># 收到xx后发yy，带回车</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">payload</span> <span class="o">=</span> <span class="sa">b</span><span class="s1">&#39;xx&#39;</span> <span class="o">+</span> <span class="sa">b</span><span class="s1">&#39;yy&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="n">xx</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">payload</span><span class="p">)</span> <span class="c1"># 构造好了再发</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">payload</span> <span class="o">=</span> <span class="n">cyclic</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">xx</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">payload</span><span class="p">)</span> <span class="c1"># 发垃圾</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">payload</span> <span class="o">=</span> <span class="n">p32</span><span class="p">(</span><span class="mh">0x64636261</span><span class="p">,</span> <span class="n">endian</span> <span class="o">=</span> <span class="s1">&#39;little&#39;</span><span class="p">)</span> <span class="c1"># 以指定字节序将整数打包为特定位数的字节串，不足高位补0</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># payload = b&#39;abcd&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="n">payload</span> <span class="o">=</span> <span class="n">u32</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;abcd&#39;</span><span class="p">,</span> <span class="n">endian</span> <span class="o">=</span> <span class="s1">&#39;little&#39;</span><span class="p">)</span> <span class="c1"># 以指定字节序将字节串解包为特定位数的整数，长度必须为32bits</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># payload = 0x64636261</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">a</span> <span class="o">=</span> <span class="mi">114514</span>
+</span></span><span class="line"><span class="cl"><span class="n">xx</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span> <span class="c1"># 将数字转化为字符串编码输出，注意要用encode编码，不编码默认用ascii编码，可能发送的不是你想发送的东西</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 其他</span>
+</span></span><span class="line"><span class="cl"><span class="n">a</span> <span class="o">=</span> <span class="mi">2</span>
+</span></span><span class="line"><span class="cl"><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&#34;xx&#34;</span><span class="p">)</span> <span class="c1"># 可以添加一些醒目的调试信息</span>
+</span></span><span class="line"><span class="cl"><span class="n">log</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="s2">&#34;a = &#34;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">a</span><span class="p">))</span> <span class="c1"># 成功信息，注意后面加的只能是字符串</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 还有警告warn，错误error，等待waitfor等信息</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">xx</span><span class="o">.</span><span class="n">interactive</span><span class="p">()</span> <span class="c1"># 由你亲自上阵进行交互！一般用来验证是否成功getshell，或者拿flag</span>
+</span></span></code></pre></div>
+<h2 class="relative group">实战演练
+    <div id="实战演练" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
+        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#%e5%ae%9e%e6%88%98%e6%bc%94%e7%bb%83" aria-label="锚点">#</a>
     </span>
     
 </h2>
-<a
-  class="!rounded-md bg-primary-600 px-4 py-2 !text-neutral !no-underline hover:!bg-primary-500 dark:bg-primary-800 dark:hover:!bg-primary-700"
-  href="#%e4%ba%8c%e7%ba%a7%e6%a0%87%e9%a2%98%e6%b5%8b%e8%af%95"
-  target="_self"
-  
-  role="button">
-  
-跳转测试
-
-</a>
-
+<p>现在我们就来尝试做一个口算脚本！</p>
+<p>例题：极客大挑战2024 - 简单的签到</p>
+<p>拿到文件，拖入ida，主要的函数如下：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">math1</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">v0</span><span class="p">;</span> <span class="c1">// eax
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="kt">int</span> <span class="n">v2</span><span class="p">;</span> <span class="c1">// [rsp+10h] [rbp-10h]
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="kt">int</span> <span class="n">v3</span><span class="p">;</span> <span class="c1">// [rsp+14h] [rbp-Ch]
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl">  <span class="n">v0</span> <span class="o">=</span> <span class="nf">time</span><span class="p">(</span><span class="mi">0LL</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">srand</span><span class="p">(</span><span class="n">v0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="n">v3</span> <span class="o">=</span> <span class="nf">rand</span><span class="p">()</span> <span class="o">%</span> <span class="mi">10000</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">v2</span> <span class="o">=</span> <span class="nf">rand</span><span class="p">()</span> <span class="o">%</span> <span class="mi">10000</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;%d * %d = &#34;</span><span class="p">,</span> <span class="n">v3</span><span class="p">,</span> <span class="n">v2</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="p">(</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span><span class="p">)</span><span class="nf">get_input_with_timeout</span><span class="p">()</span> <span class="o">!=</span> <span class="n">v2</span> <span class="o">*</span> <span class="n">v3</span> <span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;Incorrect. The correct answer was %d. Exiting...</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">v2</span> <span class="o">*</span> <span class="n">v3</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">puts</span><span class="p">(</span><span class="s">&#34;Correct! Opening shell...&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="nf">system</span><span class="p">(</span><span class="s">&#34;/bin/sh&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>这个函数会随机两个一万以内的数，要求你在限定时间内输入这两个数的积。</p>
+<p>我们只要收到数字然后相乘就可以了，但是他发送的是一个乘法，不是单纯的两个数字，如何去掉其他字符呢？</p>
+<p>这时就可以用上面提到的<code>recvuntil</code>和<code>strip</code>了！</p>
+<p>写好的payload如下：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">pwn</span> <span class="kn">import</span> <span class="o">*</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 我们也可以设置context的，但是这里不需要设置，懒了（跪</span>
+</span></span><span class="line"><span class="cl"><span class="n">io</span> <span class="o">=</span> <span class="n">process</span><span class="p">(</span><span class="s2">&#34;./main&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">io</span><span class="o">.</span><span class="n">recvuntil</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;challenge.&#39;</span><span class="p">)</span> <span class="c1"># 接收欢迎信息</span>
+</span></span><span class="line"><span class="cl"><span class="n">io</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span> <span class="c1"># </span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">a</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">io</span><span class="o">.</span><span class="n">recvuntil</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39; &#39;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span> <span class="c1"># 收到乘号前面的空格为止，去除空白</span>
+</span></span><span class="line"><span class="cl"><span class="n">log</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="s2">&#34;a = &#34;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">a</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="n">io</span><span class="o">.</span><span class="n">recvuntil</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;* &#39;</span><span class="p">)</span> <span class="c1"># 把等号和后面的空格收了</span>
+</span></span><span class="line"><span class="cl"><span class="n">b</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">io</span><span class="o">.</span><span class="n">recvuntil</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39; &#39;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span> <span class="c1"># 收到等号前面的空格为止，去除空白</span>
+</span></span><span class="line"><span class="cl"><span class="n">log</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="s2">&#34;b = &#34;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">b</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">r</span> <span class="o">=</span> <span class="n">a</span> <span class="o">*</span> <span class="n">b</span> <span class="c1"># 计算</span>
+</span></span><span class="line"><span class="cl"><span class="n">log</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="s2">&#34;a * b = &#34;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">r</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">io</span><span class="o">.</span><span class="n">recvuntil</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;= &#39;</span><span class="p">)</span> <span class="c1"># 把等号和后面的空格收了</span>
+</span></span><span class="line"><span class="cl"><span class="n">io</span><span class="o">.</span><span class="n">sendline</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">r</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span> <span class="c1"># 编码输出</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">io</span><span class="o">.</span><span class="n">interactive</span><span class="p">()</span> <span class="c1"># 开启交互模式</span>
+</span></span></code></pre></div><p>先给拿到的附件里的ELF程序加上可执行权限，让脚本能打开程序，运行脚本。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">chmod +x main
+</span></span><span class="line"><span class="cl">python3 1.python
+</span></span></code></pre></div><p>等进入交互模式后，你就可以验证自己有没有成功getshell了。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 本地可以用这个</span>
+</span></span><span class="line"><span class="cl">whoami <span class="c1"># 发送用户名</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 远程可以用这个</span>
+</span></span><span class="line"><span class="cl">ls <span class="c1"># 看看当前目录中的东西</span>
+</span></span><span class="line"><span class="cl">cat flag <span class="c1"># 如果有flag，直接读取</span>
+</span></span></code></pre></div>
+<h2 class="relative group">后记
+    <div id="后记" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
+        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#%e5%90%8e%e8%ae%b0" aria-label="锚点">#</a>
+    </span>
+    
+</h2>
+<p>看完这个脚本，你会发现前面好多内容完全看不懂/用不到？！</p>
+<p>确实是这样，不过这是为了水blog啊（被打</p>
+<p>不过这是为了熟悉pwntools的一些知识，方便后面写脚本！这些都是常用的一些内容！即使现在看不懂/用不到，随着进一步的学习，迟早会用到的！</p>
 
           
           
@@ -1119,7 +1277,7 @@
               <a
                 target="_blank"
                 class="m-1 rounded bg-neutral-300 p-1.5 text-neutral-700 hover:bg-primary-500 hover:text-neutral dark:bg-neutral-700 dark:text-neutral-300 dark:hover:bg-primary-400 dark:hover:text-neutral-800"
-                href="mailto:EndotherminUnit2@outlook.com?subject=Reply%20to%20Test">
+                href="mailto:EndotherminUnit2@outlook.com?subject=Reply%20to%200x00%20Python%20Pwntools">
                 通过邮件回复
               </a>
             </strong>
@@ -1147,8 +1305,8 @@
           type="text/javascript"
           src="/js/page.min.54b6f4371722649edbe871e431d8670d670878c22be8f36e229fe53cc9b786fe25a834def5e6de621f7a3e37b72bc8cd73839aa5ed907ed6cbd45cd3e1b0fa20.js"
           integrity="sha512-VLb0NxciZJ7b6HHkMdhnDWcIeMIr6PNuIp/lPMm3hv4lqDTe9ebeYh96Pje3K8jNc4Oape2QftbL1FzT4bD6IA=="
-          data-oid="views_posts/test/test.md"
-          data-oid-likes="likes_posts/test/test.md"></script>
+          data-oid="views_posts/pwn/pwntools.md"
+          data-oid-likes="likes_posts/pwn/pwntools.md"></script>
       
     </section>
 
@@ -1164,17 +1322,17 @@
       <div class="flex justify-between pt-3">
         <span class="flex flex-col">
           
-        </span>
-        <span class="flex flex-col items-end">
-          
             <a
-              class="flex text-right text-neutral-700 hover:text-primary-600 dark:text-neutral dark:hover:text-primary-400"
+              class="flex text-neutral-700 hover:text-primary-600 dark:text-neutral dark:hover:text-primary-400"
               href="/posts/about/">
               <span class="leading-6">
-                About&ensp;<span class="inline-block rtl:rotate-180">&rarr;</span>
+                <span class="inline-block rtl:rotate-180">&larr;</span>&ensp;About
               </span>
             </a>
             
+          
+        </span>
+        <span class="flex flex-col items-end">
           
         </span>
       </div>

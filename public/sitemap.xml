@@ -3,13 +3,25 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
 
   <url>
+    <loc>http://localhost:1313/posts/pwn/pwntools/</loc>
+    <lastmod>2025-12-06T17:00:00+08:00</lastmod>
+    <changefreq>always</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
     <loc>http://localhost:1313/</loc>
-    <lastmod>2025-12-06T11:04:10+08:00</lastmod>
+    <lastmod>2025-12-06T17:00:00+08:00</lastmod>
     <changefreq>always</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>http://localhost:1313/posts/</loc>
+    <lastmod>2025-12-06T17:00:00+08:00</lastmod>
+    <changefreq>always</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>http://localhost:1313/posts/about/</loc>
     <lastmod>2025-12-06T11:04:10+08:00</lastmod>
     <changefreq>always</changefreq>
     <priority>0.5</priority>
