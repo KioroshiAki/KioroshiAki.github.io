@@ -1,14 +1,14 @@
 +++
 date = '2025-12-06T17:00:00+08:00'
 draft = false
-title = '0x00 Python Pwntools'
+title = 'Python Pwntools的基础使用方法'
 +++
-
-# pwntools的基础使用方法
 
 大概一个半月之前，我打算开始学pwn，那时我还是啥都不知道的小菜。花了半天时间配了个WSL，找了一堆视频和文章，有的上来开始讲ELF，有的上来开始讲栈溢出，虽然这些在pwn中确实很基础，但我看了半天感觉确实也很离谱。
 
 **全  都  看  不  懂  ！**
+
+![ALL_FxxKING_SUCK(nope)](/resource/img1.png)
 
 后来找了个大佬求带，大佬当时只给我讲了一个题，那道题不需要各种漏洞，只需要做一个“简单的口算”，在限定时间内求出两个几千左右的随机数的积，我顿感震惊：这就是最基础的二进制安全吗？防止开挂破坏玩家生态？？
 
@@ -165,7 +165,7 @@ from pwn import *
 io = process("./main")
 
 io.recvuntil(b'challenge.') # 接收欢迎信息
-io.send(b'\n') # 
+io.send(b'\n') # 按任意键继续
 
 a = int(io.recvuntil(b' ').strip()) # 收到乘号前面的空格为止，去除空白
 log.success("a = " + str(a))
