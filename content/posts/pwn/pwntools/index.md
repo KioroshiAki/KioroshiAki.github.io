@@ -2,6 +2,8 @@
 date = '2025-12-06T17:00:00+08:00'
 draft = false
 title = 'Python Pwntools的基础使用方法'
+categories = ["Pwn"]
+summary = "看完这篇就能成为口算大神了吗？"
 +++
 
 大概一个半月之前，我打算开始学pwn，那时我还是啥都不知道的小菜。花了半天时间配了个WSL，找了一堆视频和文章，有的上来开始讲ELF，有的上来开始讲栈溢出，虽然这些在pwn中确实很基础，但我看了半天感觉确实也很离谱。
@@ -103,9 +105,9 @@ xx.send(payload) # 构造好了再发
 payload = cyclic(100)
 xx.send(payload) # 发垃圾
 
-payload = p32(0x64636261, endian = 'little') # 以指定字节序将整数打包为特定位数的字节串，不足高位补0
+payload = p32(0x64636261, endian = 'little') # 以指定字节序（不指定默认小端序）将整数打包为特定位数的字节串，不足高位补0
 # payload = b'abcd'
-payload = u32(b'abcd', endian = 'little') # 以指定字节序将字节串解包为特定位数的整数，长度必须为32bits
+payload = u32(b'abcd', endian = 'little') # 以指定字节序（不指定同上）将字节串解包为特定位数的整数，长度必须为32bits
 # payload = 0x64636261
 
 a = 114514
@@ -169,7 +171,7 @@ io.send(b'\n') # 按任意键继续
 
 a = int(io.recvuntil(b' ').strip()) # 收到乘号前面的空格为止，去除空白
 log.success("a = " + str(a))
-io.recvuntil(b'* ') # 把等号和后面的空格收了
+io.recvuntil(b'* ') # 把乘号和后面的空格收了
 b = int(io.recvuntil(b' ').strip()) # 收到等号前面的空格为止，去除空白
 log.success("b = " + str(b))
 
@@ -186,7 +188,7 @@ io.interactive() # 开启交互模式
 
 ```bash
 chmod +x main
-python3 1.python
+python3 1.py
 ```
 
 等进入交互模式后，你就可以验证自己有没有成功getshell了。

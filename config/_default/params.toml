@@ -100,7 +100,7 @@ fingerprintAlgorithm = "sha512" # Valid values are "sha512" (default), "sha384",
   showViews = false
   showLikes = false
   showTableOfContents = true
-  showCards = false
+  showCards = true
   orderByWeight = false
   groupByYear = false
   cardView = false
@@ -114,7 +114,7 @@ fingerprintAlgorithm = "sha512" # Valid values are "sha512" (default), "sha384",
   showTermCount = true
   showHero = true
   heroStyle = "background" # valid options: basic, big, background, thumbAndBackground
-  showBreadcrumbs = false
+  showBreadcrumbs = true
   showViews = false
   showLikes = false
   showTableOfContents = true
@@ -123,12 +123,12 @@ fingerprintAlgorithm = "sha512" # Valid values are "sha512" (default), "sha384",
 [term]
   showHero = true
   heroStyle = "background" # valid options: basic, big, background, thumbAndBackground
-  showBreadcrumbs = false
+  showBreadcrumbs = true
   showViews = false
   showLikes = false
   showTableOfContents = true
   groupByYear = false
-  cardView = true
+  cardView = false
   cardViewScreenWidth = false
 
 [firebase]
