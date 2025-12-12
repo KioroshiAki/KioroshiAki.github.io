@@ -10,7 +10,7 @@ defaultAppearance = "dark" # valid options: light or dark
 autoSwitchAppearance = true
 
 enableA11y = false
-enableSearch = true
+enableSearch = false
 enableCodeCopy = true
 enableStructuredBreadcrumbs = true
 
@@ -24,7 +24,7 @@ disableImageOptimizationMD = false
 disableTextInHeader = false
 # backgroundImageWidth = 1200
 
-defaultBackgroundImage = "/img/background.svg"
+defaultBackgroundImage = "/img/background.jpg"
 defaultFeaturedImage = "/img/featured.svg"
 defaultSocialImage = "/img/blowfish_banner.png"
 hotlinkFeatureImage = false
@@ -32,7 +32,7 @@ hotlinkFeatureImage = false
 
 highlightCurrentMenuArea = true
 smartTOC = true
-smartTOCHideUnfocusedChildren = true
+smartTOCHideUnfocusedChildren = false
 
 #giteaDefaultServer = "https://git.fsfe.org"
 #forgejoDefaultServer = "https://v11.next.forgejo.org"
@@ -50,7 +50,7 @@ fingerprintAlgorithm = "sha512" # Valid values are "sha512" (default), "sha384",
   showScrollToTop = true
 
 [homepage]
-  layout = "hero" # valid options: page, profile, hero, card, background, custom
+  layout = "background" # valid options: page, profile, hero, card, background, custom
   # homepageImage = "/img/iceland.jpg" # used in: hero, and card
   showRecent = true
   showRecentItems = 3
@@ -62,16 +62,16 @@ fingerprintAlgorithm = "sha512" # Valid values are "sha512" (default), "sha384",
   disableHeroImageFilter = false # only used when layout equals hero
 
 [article]
-  showDate = false
+  showDate = true
   showViews = false
   showLikes = false
   showDateOnlyInArticle = false
   showDateUpdated = false
-  showAuthor = false
+  showAuthor = true
   # showAuthorBottom = false
   showHero = true
-  heroStyle = "basic" # valid options: basic, big, background, thumbAndBackground
-  layoutBackgroundBlur = true # only used when heroStyle equals background
+  heroStyle = "background" # valid options: basic, big, background, thumbAndBackground
+  layoutBackgroundBlur = false # only used when heroStyle equals background
   layoutBackgroundHeaderSpace = true # only used when heroStyle equals background
   showBreadcrumbs = true
   showDraftLabel = true
@@ -86,7 +86,7 @@ fingerprintAlgorithm = "sha512" # Valid values are "sha512" (default), "sha384",
   relatedContentLimit = 9
   showTaxonomies = true
   showAuthorsBadges = false
-  showWordCount = false
+  showWordCount = true
   sharingLinks = false
   showZenMode = true
 
@@ -94,7 +94,7 @@ fingerprintAlgorithm = "sha512" # Valid values are "sha512" (default), "sha384",
   showHero = true
   heroStyle = "background" # valid options: basic, big, background, thumbAndBackground
   layoutBackgroundBlur = true # only used when heroStyle equals background
-  layoutBackgroundHeaderSpace = false
+  layoutBackgroundHeaderSpace = true
   showBreadcrumbs = false
   showSummary = true
   showViews = false
@@ -127,7 +127,7 @@ fingerprintAlgorithm = "sha512" # Valid values are "sha512" (default), "sha384",
   showViews = false
   showLikes = false
   showTableOfContents = true
-  groupByYear = false
+  groupByYear = true
   cardView = false
   cardViewScreenWidth = false
 

@@ -22,8 +22,13 @@
 
 [[main]]
   name = "关于"
-  pageRef = "posts/about"
+  pageRef = "about"
   weight = 20
+
+# [[main]]
+#   name = "友链"
+#   pageRef = "friends"
+#   weight = 30
 
 [[main]]
   identifier = "github"
@@ -36,7 +41,7 @@
 # The footer menu is displayed at the bottom of the page, just before
 # the copyright notice. Configure as per the main menu above.
 
- [[footer]]
-   name = "分类"
-   pageRef = "categories"
-   weight = 10
+# [[footer]]
+#   name = "分类"
+#   pageRef = "categories"
+#   weight = 10

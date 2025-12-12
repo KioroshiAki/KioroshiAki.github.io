@@ -9,13 +9,13 @@ title = "KA's Blog"
   rtl = false
   dateFormat = "2006-01-02"
   # logo = "img/blowfish_logo_transparent.png"
-  description = "施工中..."
+  description = "Welcome to KA's blog!"
 
 [params.author]
   name = "KioroshiAki"
   image = "img/blowfish_logo.png"
   headline = "Beta v0.1 施工中..."
-  bio = "施工中..."
+  bio = "Burning Love !!!!!"
   email = "EndotherminUnit2@outlook.com"
   links = [
     { github = "https://github.com/kioroshiaki" },

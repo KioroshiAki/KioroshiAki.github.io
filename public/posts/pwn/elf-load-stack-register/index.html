@@ -1,0 +1,1552 @@
+<!doctype html>
+<html
+  lang="zh-cn"
+  dir="ltr"
+  class="scroll-smooth"
+  data-default-appearance="dark"
+  data-auto-appearance="true"><head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+  
+    <meta http-equiv="content-language" content="zh-cn">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="theme-color">
+
+  
+  
+    <title>ELF、内存装载、栈与寄存器 &middot; KA&#39;s Blog</title>
+    <meta name="title" content="ELF、内存装载、栈与寄存器 &middot; KA&#39;s Blog">
+  
+
+  
+  
+    <meta name="description" content="从磁盘到内存，程序经历了什么？">
+  
+  
+  
+  
+  <link rel="canonical" href="http://localhost:1313/posts/pwn/elf-load-stack-register/">
+  
+
+  
+  
+    <meta name="author" content="KioroshiAki">
+  
+  
+    
+      
+        
+          <link href="https://github.com/kioroshiaki" rel="me">
+        
+      
+    
+  
+
+  
+  <meta property="og:url" content="http://localhost:1313/posts/pwn/elf-load-stack-register/">
+  <meta property="og:site_name" content="KA&#39;s Blog">
+  <meta property="og:title" content="ELF、内存装载、栈与寄存器">
+  <meta property="og:description" content="从磁盘到内存，程序经历了什么？">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2025-12-12T08:00:00+08:00">
+    <meta property="article:modified_time" content="2025-12-12T08:00:00+08:00">
+    <meta property="og:image" content="http://localhost:1313/posts/pwn/elf-load-stack-register/featured.png">
+
+  
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="http://localhost:1313/posts/pwn/elf-load-stack-register/featured.png">
+  <meta name="twitter:title" content="ELF、内存装载、栈与寄存器">
+  <meta name="twitter:description" content="从磁盘到内存，程序经历了什么？">
+
+  
+  
+  
+  
+    
+      
+    
+  
+    
+  
+    
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+  
+  
+  
+  
+  
+  
+  
+    
+  
+  
+  <link
+    type="text/css"
+    rel="stylesheet"
+    href="/css/main.bundle.min.0975a8c7c266a0697f94839b45e1574c449de253527d44ed516d5c5c3c820c9389d7d86576faae12267b129f8749ecbf7581cddb636aba7690aa633b95aaa87d.css"
+    integrity="sha512-CXWox8JmoGl/lIObReFXTESd4lNSfUTtUW1cXDyCDJOJ19hldvquEiZ7Ep&#43;HSey/dYHN22NqunaQqmM7laqofQ==">
+
+  
+  
+  <script
+    type="text/javascript"
+    src="/js/appearance.min.6f41174b3a05b680820fe08cadbfa5fb7a7ca347b76a0955cdc68b9d8aca1ce24f0547e138cea33bcc7904d551a90afcb1cc7f2d9fe8557075d501419046c08c.js"
+    integrity="sha512-b0EXSzoFtoCCD&#43;CMrb&#43;l&#43;3p8o0e3aglVzcaLnYrKHOJPBUfhOM6jO8x5BNVRqQr8scx/LZ/oVXB11QFBkEbAjA=="></script>
+  
+  
+  
+  
+  
+    
+    <script
+      type="text/javascript"
+      src="/js/zen-mode.min.9814dee9614d32aeb56239d118edfe20acd6231424f9b19c2dd48835038414130a5e946c0d1c9087d60e60e31840c9babfd217e3d4b95643dc8d651a71ccdf4a.js"
+      integrity="sha512-mBTe6WFNMq61YjnRGO3&#43;IKzWIxQk&#43;bGcLdSINQOEFBMKXpRsDRyQh9YOYOMYQMm6v9IX49S5VkPcjWUacczfSg=="></script>
+  
+  
+    
+    <script src="/lib/zoom/zoom.min.umd.a527109b68c082a70f3697716dd72a9d5aa8b545cf800cecbbc7399f2ca6f6e0ce3e431f2062b48bbfa47c9ea42822714060bef309be073f49b9c0e30d318d7b.js" integrity="sha512-pScQm2jAgqcPNpdxbdcqnVqotUXPgAzsu8c5nyym9uDOPkMfIGK0i7&#43;kfJ6kKCJxQGC&#43;8wm&#43;Bz9JucDjDTGNew=="></script>
+  
+
+  
+  
+  
+    
+  
+  
+  
+    
+  
+  
+  
+  
+  
+  
+    
+    <script
+      defer
+      type="text/javascript"
+      id="script-bundle"
+      src="/js/main.bundle.min.35f47889fc6a3c1a4a61584d7a5ced5dba0a4fc9af07b15bb6e660134b25ad0d6eee516605924230e64d184bfcc4f417ef710cc4eecf4cda2c6a944f4312f7d6.js"
+      integrity="sha512-NfR4ifxqPBpKYVhNelztXboKT8mvB7FbtuZgE0slrQ1u7lFmBZJCMOZNGEv8xPQX73EMxO7PTNosapRPQxL31g=="
+      data-copy="复制"
+      data-copied="已复制"></script>
+  
+
+  
+  
+
+<script src="/lib/jquery/jquery.slim.min.b0dca576e87d7eaa5850ae4e61759c065786cdb6489d68fcc82240539eebd5da522bdb4fda085ffd245808c8fe2acb2516408eb774ef26b5f6015fc6737c0ea8.js" integrity="sha512-sNylduh9fqpYUK5OYXWcBleGzbZInWj8yCJAU57r1dpSK9tP2ghf/SRYCMj&#43;KsslFkCOt3TvJrX2AV/Gc3wOqA=="></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+  
+  
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+  
+
+  
+  <script type="application/ld+json">
+  [{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "articleSection": "文章合集",
+    "name": "ELF、内存装载、栈与寄存器",
+    "headline": "ELF、内存装载、栈与寄存器",
+    
+    "abstract": "从磁盘到内存，程序经历了什么？",
+    "inLanguage": "zh-cn",
+    "url" : "http://localhost:1313/posts/pwn/elf-load-stack-register/",
+    "author" : {
+      "@type": "Person",
+      "name": "KioroshiAki"
+    },
+    "copyrightYear": "2025",
+    "dateCreated": "2025-12-12T08:00:00\u002b08:00",
+    "datePublished": "2025-12-12T08:00:00\u002b08:00",
+    
+    "dateModified": "2025-12-12T08:00:00\u002b08:00",
+    
+    
+    
+    "mainEntityOfPage": "true",
+    "wordCount": "4196"
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [{
+          "@type": "ListItem",
+          "position":  1 ,
+          "name": "文章合集",
+          "item": "http://localhost:1313/posts/",
+        },{
+          "@type": "ListItem",
+          "position":  2 ,
+          "name": "ELF、内存装载、栈与寄存器",
+          "item": "http://localhost:1313/posts/pwn/elf-load-stack-register/",
+        }]
+  }]
+  </script>
+
+
+
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+</head>
+
+
+
+
+
+
+
+  
+    
+  
+
+
+
+
+
+
+
+  
+    
+  
+
+
+
+
+
+
+  
+  
+  <body class="flex flex-col h-screen m-auto leading-7 max-w-7xl px-6 sm:px-14 md:px-24 lg:px-32 text-lg bg-neutral text-neutral-900 dark:bg-neutral-800 dark:text-neutral scrollbar-thin scrollbar-track-neutral-200 scrollbar-thumb-neutral-400 dark:scrollbar-track-neutral-800 dark:scrollbar-thumb-neutral-600">
+    <div id="the-top" class="absolute flex self-center">
+      <a
+        class="px-3 py-1 text-sm -translate-y-8 rounded-b-lg bg-primary-200 focus:translate-y-0 dark:bg-neutral-600"
+        href="#main-content">
+        <span class="font-bold text-primary-600 pe-2 dark:text-primary-400">&darr;</span>
+        跳过正文
+      </a>
+    </div>
+    
+    
+      <div class="min-h-[148px]"></div>
+<div class="fixed inset-x-0 z-100">
+  <div
+    id="menu-blur"
+    class="absolute opacity-0 inset-x-0 top-0 h-full single_hero_background nozoom backdrop-blur-2xl shadow-2xl"></div>
+  <div class="relative m-auto leading-7 max-w-7xl px-6 sm:px-14 md:px-24 lg:px-32">
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div
+  class="main-menu flex items-center justify-between py-6 md:justify-start gap-x-3 pt-[2px] pr-2 md:pr-4 pb-[3px] pl-0">
+  
+  
+
+  <div class="flex flex-1 items-center justify-between">
+    <nav class="flex space-x-3">
+      
+        <a href="/" class="text-base font-medium">
+          KA&rsquo;s Blog
+        </a>
+      
+    </nav>
+    
+  <nav class="hidden md:flex items-center gap-x-5 md:ml-12 h-12">
+    
+      
+        
+  <a
+  href="/categories/"
+  
+  class="flex items-center hover:text-primary-600 dark:hover:text-primary-400"
+  aria-label="分类"
+  title="文章分类">
+  
+  
+    <p class="text-base font-medium">
+      分类
+    </p>
+  
+</a>
+
+
+
+      
+        
+  <a
+  href="/posts/"
+  
+  class="flex items-center hover:text-primary-600 dark:hover:text-primary-400"
+  aria-label="文章"
+  title="文章合集">
+  
+  
+    <p class="text-base font-medium">
+      文章
+    </p>
+  
+</a>
+
+
+
+      
+        
+  <a
+  href="/about/"
+  
+  class="flex items-center hover:text-primary-600 dark:hover:text-primary-400"
+  aria-label="关于"
+  title="我    是    谁    ？">
+  
+  
+    <p class="text-base font-medium">
+      关于
+    </p>
+  
+</a>
+
+
+
+      
+        
+  <a
+  href="https://github.com/kioroshiaki"
+  target="_blank"
+  class="flex items-center hover:text-primary-600 dark:hover:text-primary-400"
+  aria-label="github"
+  title="">
+  
+    <span >
+      <span class="relative block icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><path fill="currentColor" d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+</span>
+    </span>
+  
+  
+</a>
+
+
+
+      
+    
+
+    
+
+    
+
+    
+
+    
+      <div class=" flex items-center">
+        <button
+          id="appearance-switcher"
+          aria-label="Dark mode switcher"
+          type="button"
+          class="text-base hover:text-primary-600 dark:hover:text-primary-400">
+          <div class="flex items-center justify-center dark:hidden">
+            <span class="relative block icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M32 256c0-123.8 100.3-224 223.8-224c11.36 0 29.7 1.668 40.9 3.746c9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3c9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480C132.1 480 32 379.6 32 256z"/></svg>
+</span>
+          </div>
+          <div class="items-center justify-center hidden dark:flex">
+            <span class="relative block icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 159.1c-53.02 0-95.1 42.98-95.1 95.1S202.1 351.1 256 351.1s95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347L446.1 255.1l63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7l-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89L164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6L12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256l-63.15 91.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7l19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109l109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69 0-127.1-57.31-127.1-127.1c0-70.69 57.31-127.1 127.1-127.1s127.1 57.3 127.1 127.1C383.1 326.7 326.7 383.1 256 383.1z"/></svg>
+</span>
+          </div>
+        </button>
+      </div>
+    
+  </nav>
+
+    
+  <div class="flex md:hidden items-center gap-x-5 md:ml-12 h-12">
+    <span></span>
+
+    
+
+    
+
+    
+
+    
+      <button
+        id="appearance-switcher-mobile"
+        aria-label="Dark mode switcher"
+        type="button"
+        class="text-base hover:text-primary-600 dark:hover:text-primary-400 me-1">
+        <div class="flex items-center justify-center dark:hidden">
+          <span class="relative block icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M32 256c0-123.8 100.3-224 223.8-224c11.36 0 29.7 1.668 40.9 3.746c9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3c9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480C132.1 480 32 379.6 32 256z"/></svg>
+</span>
+        </div>
+        <div class="items-center justify-center hidden dark:flex">
+          <span class="relative block icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 159.1c-53.02 0-95.1 42.98-95.1 95.1S202.1 351.1 256 351.1s95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347L446.1 255.1l63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7l-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89L164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6L12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256l-63.15 91.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7l19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109l109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69 0-127.1-57.31-127.1-127.1c0-70.69 57.31-127.1 127.1-127.1s127.1 57.3 127.1 127.1C383.1 326.7 326.7 383.1 256 383.1z"/></svg>
+</span>
+        </div>
+      </button>
+    
+  </div>
+
+  </div>
+  
+  <div class="-my-2 md:hidden">
+    <div id="menu-button" class="block">
+      
+        <div class="cursor-pointer hover:text-primary-600 dark:hover:text-primary-400">
+          <span class="relative block icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M0 96C0 78.33 14.33 64 32 64H416C433.7 64 448 78.33 448 96C448 113.7 433.7 128 416 128H32C14.33 128 0 113.7 0 96zM0 256C0 238.3 14.33 224 32 224H416C433.7 224 448 238.3 448 256C448 273.7 433.7 288 416 288H32C14.33 288 0 273.7 0 256zM416 448H32C14.33 448 0 433.7 0 416C0 398.3 14.33 384 32 384H416C433.7 384 448 398.3 448 416C448 433.7 433.7 448 416 448z"/></svg>
+</span>
+        </div>
+        <div
+          id="menu-wrapper"
+          class="fixed inset-0 z-30 invisible w-screen h-screen m-0 overflow-auto transition-opacity opacity-0 cursor-default bg-neutral-100/50 backdrop-blur-sm dark:bg-neutral-900/50 pt-[5px]">
+          <ul
+            class="flex space-y-2 mt-3 flex-col items-end w-full px-6 py-6 mx-auto overflow-visible list-none text-end max-w-7xl">
+            <li id="menu-close-button">
+              <span
+                class="cursor-pointer inline-block align-text-bottom hover:text-primary-600 dark:hover:text-primary-400">
+                <span class="relative block icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="currentColor" d="M310.6 361.4c12.5 12.5 12.5 32.75 0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3L54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75 0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-105.4 105.4L310.6 361.4z"/></svg>
+</span>
+              </span>
+            </li>
+
+            
+              
+  <li class="mt-1">
+  <a
+    href="/categories/"
+    
+    class="flex items-center hover:text-primary-600 dark:hover:text-primary-400"
+    aria-label="分类"
+    title="文章分类">
+    
+    
+      <p class="text-bg font-bg">
+        分类
+      </p>
+    
+  </a>
+</li>
+
+
+
+            
+              
+  <li class="mt-1">
+  <a
+    href="/posts/"
+    
+    class="flex items-center hover:text-primary-600 dark:hover:text-primary-400"
+    aria-label="文章"
+    title="文章合集">
+    
+    
+      <p class="text-bg font-bg">
+        文章
+      </p>
+    
+  </a>
+</li>
+
+
+
+            
+              
+  <li class="mt-1">
+  <a
+    href="/about/"
+    
+    class="flex items-center hover:text-primary-600 dark:hover:text-primary-400"
+    aria-label="关于"
+    title="我    是    谁    ？">
+    
+    
+      <p class="text-bg font-bg">
+        关于
+      </p>
+    
+  </a>
+</li>
+
+
+
+            
+              
+  <li class="mt-1">
+  <a
+    href="https://github.com/kioroshiaki"
+    
+      target="_blank"
+    
+    class="flex items-center hover:text-primary-600 dark:hover:text-primary-400"
+    aria-label="github"
+    title="">
+    
+      <div >
+        <span class="relative block icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><path fill="currentColor" d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+</span>
+      </div>
+    
+    
+  </a>
+</li>
+
+
+
+            
+
+          </ul>
+          
+        </div>
+      
+    </div>
+  </div>
+
+</div>
+
+
+
+
+  <script>
+    (function () {
+      var $mainmenu = $(".main-menu");
+      var path = window.location.pathname;
+      $mainmenu.find('a[href="' + path + '"]').each(function (i, e) {
+        $(e).children("p").addClass("active");
+      });
+    })();
+  </script>
+
+
+  </div>
+</div>
+
+
+<script
+  type="text/javascript"
+  src="/js/background-blur.min.00a57c73ea12f2cab2980c3c3d649e89f6d82f190f74bbe2b67f2f5e39ab7d032ece47086400ca05396758aace13299da49aca43ea643d2625e62c506267a169.js"
+  integrity="sha512-AKV8c&#43;oS8sqymAw8PWSeifbYLxkPdLvitn8vXjmrfQMuzkcIZADKBTlnWKrOEymdpJrKQ&#43;pkPSYl5ixQYmehaQ=="
+  data-blur-id="menu-blur"></script>
+
+    
+    <div class="relative flex flex-col grow">
+      <main id="main-content" class="grow">
+        
+  
+  <article>
+    
+    
+      
+      
+      
+      
+        
+
+
+
+
+
+
+
+  
+  
+    
+  
+    
+  
+    
+  
+    
+  
+
+
+
+
+
+
+  
+    
+    
+      
+      
+    
+  
+
+
+
+
+
+    <div id="hero" class="h-[150px] md:h-[200px]"></div>
+  
+  <div class="fixed inset-x-0 top-0 h-[800px] single_hero_background nozoom">
+    
+    
+    
+    <img
+      id="background-image"
+      src="/posts/pwn/elf-load-stack-register/background_hu_3488d8a2041b6d26.jpg"
+      alt="ELF、内存装载、栈与寄存器"
+      loading="eager"
+      decoding="async"
+      fetchpriority="high"
+      class="absolute inset-0 w-full h-full object-cover"
+      >
+    <div
+      class="absolute inset-0 bg-gradient-to-t from-neutral dark:from-neutral-800 to-transparent mix-blend-normal"></div>
+    <div
+      class="absolute inset-0 opacity-60 bg-gradient-to-t from-neutral dark:from-neutral-800 to-neutral-100 dark:to-neutral-800 mix-blend-normal"></div>
+  </div>
+
+  
+      
+    
+
+    
+    <header id="single_header" class="mt-5 max-w-prose">
+      
+        <ol class="text-sm text-neutral-500 dark:text-neutral-400 print:hidden">
+  
+  
+    
+  
+    
+  
+  <li class="hidden">
+    <a class="hover:underline decoration-neutral-300 dark:underline-neutral-600" href="/"
+      >KA&#39;s Blog</a
+    ><span class="px-1 text-primary-500">/</span>
+  </li>
+
+  
+  <li class="inline">
+    <a class="hover:underline decoration-neutral-300 dark:underline-neutral-600" href="/posts/"
+      >文章合集</a
+    ><span class="px-1 text-primary-500">/</span>
+  </li>
+
+  
+  <li class="hidden">
+    <a class="hover:underline decoration-neutral-300 dark:underline-neutral-600" href="/posts/pwn/elf-load-stack-register/"
+      >ELF、内存装载、栈与寄存器</a
+    ><span class="px-1 text-primary-500">/</span>
+  </li>
+
+</ol>
+
+
+      
+      <h1 class="mt-0 text-4xl font-extrabold text-neutral-900 dark:text-neutral">
+        ELF、内存装载、栈与寄存器
+      </h1>
+      <div class="mt-1 mb-6 text-base text-neutral-500 dark:text-neutral-400 print:hidden">
+        
+
+
+
+
+
+  
+  
+
+
+
+  
+
+  
+  
+  
+    
+  
+
+  
+
+  
+    
+  
+
+  
+
+  
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+  <div class="flex flex-row flex-wrap items-center">
+    
+    
+      <time datetime="2025-12-12T08:00:00&#43;08:00">2025-12-12</time><span class="px-2 text-primary-500">&middot;</span><span>4196 字</span><span class="px-2 text-primary-500">&middot;</span><span class="mb-[2px]">
+  <span
+    id="zen-mode-button"
+    class="text-lg hover:text-primary-500"
+    title="啟用阅读模式"
+    data-title-i18n-disable="啟用阅读模式"
+    data-title-i18n-enable="停用阅读模式">
+    <span class="inline-block align-text-bottom"><span class="relative block icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50" width="50px" height="50px">
+    <path fill="currentColor" d="M 12.980469 4 C 9.1204688 4 5.9804688 7.14 5.9804688 11 L 6 26 L 9.9804688 26 L 9.9804688 11 C 9.9804688 9.35 11.320469 8 12.980469 8 L 40.019531 8 C 41.679531 8 43.019531 9.35 43.019531 11 L 43.019531 39 C 43.019531 40.65 41.679531 42 40.019531 42 L 29 42 C 29 43.54 28.420938 44.94 27.460938 46 L 40.019531 46 C 43.879531 46 47.019531 42.86 47.019531 39 L 47.019531 11 C 47.019531 7.14 43.879531 4 40.019531 4 L 12.980469 4 z M 7 28 C 4.794 28 3 29.794 3 32 L 3 42 C 3 44.206 4.794 46 7 46 L 23 46 C 25.206 46 27 44.206 27 42 L 27 32 C 27 29.794 25.206 28 23 28 L 7 28 z M 7 32 L 23 32 L 23.001953 42 L 7 42 L 7 32 z"/>
+</svg></span></span>
+  </span>
+</span>
+
+    
+
+    
+    
+  </div>
+
+  
+
+  
+  
+    <div class="flex flex-row flex-wrap items-center">
+      
+        
+      
+        
+          
+            
+              <a class="relative mt-[0.5rem] me-2" href="/categories/pwn/">
+                <span class="flex cursor-pointer">
+  <span
+    class="rounded-md border border-primary-400 px-1 py-[1px] text-xs font-normal text-primary-700 dark:border-primary-600 dark:text-primary-400">
+    PWN
+  </span>
+</span>
+
+              </a>
+            
+          
+        
+      
+        
+      
+        
+          
+        
+      
+    </div>
+  
+
+  
+  
+
+
+
+      </div>
+      
+        
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    
+    
+<div class="flex author">
+  
+    
+    
+      
+    
+    
+      
+      
+      
+        
+        
+        
+      
+      <img
+        class="!mt-0 !mb-0 h-24 w-24 rounded-full me-4"
+        width="96"
+        height="96"
+        alt="KioroshiAki"
+        src="/img/blowfish_logo_hu_aa21873d9381d20c.png"
+        data-zoom-src="/img/blowfish_logo_hu_2b0742f9b901ea73.png">
+    
+  
+  <div class="place-self-center">
+    
+      <div class="text-[0.6rem] uppercase leading-3 text-neutral-500 dark:text-neutral-400">
+        作者
+      </div>
+      <div class="font-semibold leading-6 text-neutral-800 dark:text-neutral-300">
+        KioroshiAki
+      </div>
+    
+    
+      <div class="text-sm text-neutral-700 dark:text-neutral-400">Burning Love !!!!!</div>
+    
+    <div class="text-2xl sm:text-lg">
+  <div class="flex flex-wrap text-neutral-400 dark:text-neutral-500">
+    
+      
+        <a
+          class="px-1 hover:text-primary-700 dark:hover:text-primary-400"
+          href="https://github.com/kioroshiaki"
+          target="_blank"
+          aria-label="Github"
+          title="Github"
+          rel="me noopener noreferrer"
+          ><span class="inline-block align-text-bottom"><span class="relative block icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><path fill="currentColor" d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+</span></span></a
+        >
+      
+    
+  </div>
+
+</div>
+  </div>
+</div>
+
+  
+
+  
+
+  
+    <div class="mb-5"></div>
+  
+
+      
+    </header>
+
+    
+    <section class="flex flex-col max-w-full mt-0 prose dark:prose-invert lg:flex-row">
+      
+      
+      
+      
+      
+        <div class="order-first lg:ml-auto px-0 lg:order-last lg:ps-8 lg:max-w-2xs">
+          <div class="toc ps-5 print:hidden lg:sticky lg:top-[140px]">
+            
+              <details
+  open
+  id="TOCView"
+  class="toc-right mt-0 overflow-y-auto overscroll-contain scrollbar-thin scrollbar-track-neutral-200 scrollbar-thumb-neutral-400 dark:scrollbar-track-neutral-800 dark:scrollbar-thumb-neutral-600 rounded-lg -ms-5 ps-5 pe-2 hidden lg:block">
+  <summary
+    class="block py-1 text-lg font-semibold cursor-pointer bg-neutral-100 text-neutral-800 -ms-5 ps-5 dark:bg-neutral-700 dark:text-neutral-100 lg:hidden">
+    目录
+  </summary>
+  <div
+    class="min-w-[220px] py-2 border-dotted border-s-1 -ms-5 ps-5 dark:border-neutral-600">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#elf文件结构">ELF文件结构</a>
+      <ul>
+        <li><a href="#文件头--两个视图共有">文件头 &mdash; 两个视图共有</a></li>
+        <li><a href="#节头表与节--链接视图">节头表与节 &mdash; 链接视图</a></li>
+        <li><a href="#程序头表与段--执行视图">程序头表与段 &mdash; 执行视图</a></li>
+      </ul>
+    </li>
+    <li><a href="#内存装载">内存装载</a>
+      <ul>
+        <li><a href="#读取文件头划分虚拟内存空间">读取文件头、划分虚拟内存空间</a></li>
+        <li><a href="#装载">装载</a></li>
+        <li><a href="#初始化动态链接">初始化、动态链接</a></li>
+      </ul>
+    </li>
+    <li><a href="#栈与寄存器">栈与寄存器</a>
+      <ul>
+        <li><a href="#栈">栈</a></li>
+        <li><a href="#寄存器">寄存器</a></li>
+      </ul>
+    </li>
+    <li><a href="#总结">总结</a></li>
+  </ul>
+</nav>
+  </div>
+</details>
+<details class="toc-inside mt-0 overflow-hidden rounded-lg -ms-5 ps-5 lg:hidden">
+  <summary
+    class="py-1 text-lg font-semibold cursor-pointer bg-neutral-100 text-neutral-800 -ms-5 ps-5 dark:bg-neutral-700 dark:text-neutral-100 lg:hidden">
+    目录
+  </summary>
+  <div
+    class="py-2 border-dotted border-neutral-300 border-s-1 -ms-5 ps-5 dark:border-neutral-600">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#elf文件结构">ELF文件结构</a>
+      <ul>
+        <li><a href="#文件头--两个视图共有">文件头 &mdash; 两个视图共有</a></li>
+        <li><a href="#节头表与节--链接视图">节头表与节 &mdash; 链接视图</a></li>
+        <li><a href="#程序头表与段--执行视图">程序头表与段 &mdash; 执行视图</a></li>
+      </ul>
+    </li>
+    <li><a href="#内存装载">内存装载</a>
+      <ul>
+        <li><a href="#读取文件头划分虚拟内存空间">读取文件头、划分虚拟内存空间</a></li>
+        <li><a href="#装载">装载</a></li>
+        <li><a href="#初始化动态链接">初始化、动态链接</a></li>
+      </ul>
+    </li>
+    <li><a href="#栈与寄存器">栈与寄存器</a>
+      <ul>
+        <li><a href="#栈">栈</a></li>
+        <li><a href="#寄存器">寄存器</a></li>
+      </ul>
+    </li>
+    <li><a href="#总结">总结</a></li>
+  </ul>
+</nav>
+  </div>
+</details>
+
+
+<script>
+  (function () {
+    'use strict'
+
+    const SCROLL_OFFSET_RATIO = 0.33
+    const TOC_SELECTOR = '#TableOfContents'
+    const ANCHOR_SELECTOR = '.anchor'
+    const TOC_LINK_SELECTOR = 'a[href^="#"]'
+    const NESTED_LIST_SELECTOR = 'li ul'
+    const ACTIVE_CLASS = 'active'
+    let isJumpingToAnchor = false
+
+    function getActiveAnchorId(anchors, offsetRatio) {
+      const threshold = window.scrollY + window.innerHeight * offsetRatio
+      const tocLinks = [...document.querySelectorAll('#TableOfContents a[href^="#"]')]
+      const tocIds = new Set(tocLinks.map(link => link.getAttribute('href').substring(1)))
+
+      if (isJumpingToAnchor) {
+        for (let i = 0; i < anchors.length; i++) {
+          const anchor = anchors[i]
+          if (!tocIds.has(anchor.id)) continue
+          const top = anchor.getBoundingClientRect().top + window.scrollY
+          if (Math.abs(window.scrollY - top) < 100) {
+            return anchor.id
+          }
+        }
+      }
+
+      for (let i = anchors.length - 1; i >= 0; i--) {
+        const top = anchors[i].getBoundingClientRect().top + window.scrollY
+        if (top <= threshold && tocIds.has(anchors[i].id)) {
+          return anchors[i].id
+        }
+      }
+      return anchors.find(anchor => tocIds.has(anchor.id))?.id || ''
+    }
+
+    function updateTOC({ toc, anchors, links, scrollOffset, collapseInactive }) {
+      const activeId = getActiveAnchorId(anchors, scrollOffset)
+      if (!activeId) return
+
+      links.forEach(link => {
+        const isActive = link.getAttribute('href') === `#${activeId}`
+        link.classList.toggle(ACTIVE_CLASS, isActive)
+
+        if (collapseInactive) {
+          const ul = link.closest('li')?.querySelector('ul')
+          if (ul) ul.style.display = isActive ? '' : 'none'
+        }
+      })
+
+      if (collapseInactive) {
+        const activeLink = toc.querySelector(`a[href="#${CSS.escape(activeId)}"]`)
+        let el = activeLink
+        while (el && el !== toc) {
+          if (el.tagName === 'UL') el.style.display = ''
+          if (el.tagName === 'LI') el.querySelector('ul')?.style.setProperty('display', '')
+          el = el.parentElement
+        }
+      }
+    }
+
+    function initTOC() {
+      const toc = document.querySelector(TOC_SELECTOR)
+      if (!toc) return
+
+      const collapseInactive = false
+      const anchors = [...document.querySelectorAll(ANCHOR_SELECTOR)]
+      const links = [...toc.querySelectorAll(TOC_LINK_SELECTOR)]
+
+      if (collapseInactive) {
+        toc.querySelectorAll(NESTED_LIST_SELECTOR).forEach(ul => ul.style.display = 'none')
+      }
+
+      links.forEach(link => {
+        link.addEventListener('click', () => {
+          isJumpingToAnchor = true
+        })
+      })
+
+      const config = {
+        toc,
+        anchors,
+        links,
+        scrollOffset: SCROLL_OFFSET_RATIO,
+        collapseInactive
+      }
+
+      window.addEventListener('scroll', () => updateTOC(config), { passive: true })
+      window.addEventListener('hashchange', () => updateTOC(config), { passive: true })
+
+      updateTOC(config)
+    }
+
+    document.readyState === 'loading'
+      ? document.addEventListener('DOMContentLoaded', initTOC)
+      : initTOC()
+  })()
+</script>
+
+
+            
+          </div>
+        </div>
+      
+
+
+      <div class="min-w-0 min-h-0 max-w-fit">
+        
+
+        <div class="article-content max-w-prose mb-20">
+          <p>要说pwn中最基础的一种攻击手段，必须是栈溢出，但是什么是栈，为什么要溢出？在正式了解栈溢出之前，需要<strong>简单</strong>了解一些前置知识：</p>
+
+<h2 class="relative group">ELF文件结构
+    <div id="elf文件结构" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
+        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#elf%e6%96%87%e4%bb%b6%e7%bb%93%e6%9e%84" aria-label="锚点">#</a>
+    </span>
+    
+</h2>
+<p>我们要了解一个程序是如何从磁盘到内存，然后跑起来的，但是要了解这个问题，我们也要先简单了解一下ELF。</p>
+<p>ELF（Executable and Linkable Format）是Linux中的一种二进制文件格式，根据文件的不同功能，ELF可被分类为<strong>可执行文件、目标文件、共享库</strong>。什么是目标文件和共享库？这里就不细讲了，以后迟早会说到（挖坑ing）</p>
+<p>我们重点要讨论的是可执行文件的结构，需要注意的是ELF文件有两种视图 &mdash; <strong>链接视图和执行视图</strong>，区分这两种视图的目的是为了让链接器和装载器都能快速的了解程序布局，提高链接和执行这两个不同的操作的效率。在<strong>不同的视图下结构会有一些微妙的差别</strong>，我们来简单看一下：</p>
+
+<h3 class="relative group">文件头 &mdash; 两个视图共有
+    <div id="文件头--两个视图共有" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
+        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#%e6%96%87%e4%bb%b6%e5%a4%b4--%e4%b8%a4%e4%b8%aa%e8%a7%86%e5%9b%be%e5%85%b1%e6%9c%89" aria-label="锚点">#</a>
+    </span>
+    
+</h3>
+<p>文件头是ELF文件的标签，用来描述这个文件的一些信息，具体包括：</p>
+<ul>
+<li>
+<p><strong>魔数</strong>：用来说明这是一个ELF文件</p>
+</li>
+<li>
+<p><strong>文件类型</strong>：是哪种功能的ELF文件</p>
+</li>
+<li>
+<p><strong>架构</strong>：这个文件在什么样的架构下运行</p>
+</li>
+<li>
+<p><strong>入口地址</strong>：这个文件从哪里开始运行</p>
+</li>
+<li>
+<p><strong>程序头表和节头表的地址</strong>：字面意思</p>
+</li>
+</ul>
+
+<h3 class="relative group">节头表与节 &mdash; 链接视图
+    <div id="节头表与节--链接视图" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
+        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#%e8%8a%82%e5%a4%b4%e8%a1%a8%e4%b8%8e%e8%8a%82--%e9%93%be%e6%8e%a5%e8%a7%86%e5%9b%be" aria-label="锚点">#</a>
+    </span>
+    
+</h3>
+<p>在链接视图中，我们主要看<strong>节</strong>，这个结构是给<strong>链接器</strong>用的，它需要将来自不同文件的具有相同<strong>功能</strong>的代码或数据整合到一起，在这里功能最重要！</p>
+<p>节头表会列出每个节的<strong>名称、功能、大小、以及在文件中的位置</strong>。</p>
+<p>节是<strong>储存数据和代码的最小逻辑单位</strong>，当我们链接多个目标文件的时候，都是<strong>以节为对象</strong>进行操作的。</p>
+<p><strong>不同的节有不同的功能</strong>，常见的节与其功能如下：</p>
+<ul>
+<li>
+<p><strong>.text</strong>：存储<strong>代码</strong>。</p>
+</li>
+<li>
+<p><strong>.data</strong>：存储<strong>已经初始化</strong>的全局变量或静态变量。</p>
+</li>
+<li>
+<p><strong>.bss</strong>：存储<strong>未初始化</strong>的全局变量和静态变量，注意这个节在文件中<strong>只占用了描述该节具体信息的空间</strong>，<strong>不存储实际数据</strong>，是用来<strong>在内存中占用指定大小空间</strong>的。</p>
+</li>
+<li>
+<p><strong>.rodata</strong>：存储<strong>只读</strong>数据。</p>
+</li>
+<li>
+<p><strong>.symlab</strong>：存储<strong>函数，全局变量</strong>等的<strong>名字和地址</strong>，这里的名字指的是<strong>名字的字符串存储的地址</strong>。</p>
+</li>
+<li>
+<p><strong>.shstrtab</strong>：存储<strong>节的名字</strong>，同上。</p>
+</li>
+<li>
+<p><strong>.strtab</strong>：存储前两个节中的<strong>名字的字符串</strong>。</p>
+</li>
+<li>
+<p><strong>.dynamic</strong>：存储<strong>动态链接</strong>需要的信息，其中用到的字符串和前面类似，<strong>只存储地址</strong>。</p>
+</li>
+<li>
+<p><strong>.dynsym .dynstr</strong>：存储前面这个节的<strong>字符串</strong>。</p>
+</li>
+</ul>
+
+<h3 class="relative group">程序头表与段 &mdash; 执行视图
+    <div id="程序头表与段--执行视图" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
+        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#%e7%a8%8b%e5%ba%8f%e5%a4%b4%e8%a1%a8%e4%b8%8e%e6%ae%b5--%e6%89%a7%e8%a1%8c%e8%a7%86%e5%9b%be" aria-label="锚点">#</a>
+    </span>
+    
+</h3>
+<p>在执行视图中，我们主要看<strong>段</strong>，这个结构是给<strong>加载器</strong>看的，他需要将具有不同<strong>权限</strong>的代码或数据区域分开，方便管理，在这里权限最重要！</p>
+<p>程序头表会列出每个段的<strong>类型、权限、大小以及如何被装载到内存中</strong>。</p>
+<p>段是<strong>装载程序内容的最小逻辑单位</strong>，将程序装载到内存中的时候，<strong>以段为对象</strong>进行操作。</p>
+<p><strong>一个段包含了多个节</strong>，这些节有着<strong>相同的权限</strong>，常见的段如下：</p>
+<ul>
+<li>
+<p><strong>代码段（LOAD段）：可读可执行</strong>
+包含了<code>.text</code>、<code>.rodata</code>、<code>.plt</code>等节</p>
+</li>
+<li>
+<p><strong>数据段（也叫LOAD段）</strong>：<strong>可读可写</strong>
+包含了<code>.data</code>、<code>.bss</code>、<code>.got</code>等节
+（什么是plt和got？以后会说到（继续挖坑ing））</p>
+</li>
+<li>
+<p><strong>动态链接路径段（PT_INTERP段）</strong>：<strong>可读</strong>
+包含了<code>.interp</code>节，存储了动态链接器的路径</p>
+</li>
+<li>
+<p><strong>动态链接段（PT_DYNAMIC段）</strong>：<strong>可读可写</strong>
+包含了<code>.dynamic</code>节，存储了动态链接需要的数据</p>
+</li>
+</ul>
+
+<h2 class="relative group">内存装载
+    <div id="内存装载" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
+        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#%e5%86%85%e5%ad%98%e8%a3%85%e8%bd%bd" aria-label="锚点">#</a>
+    </span>
+    
+</h2>
+<p>当我们运行一个程序时，会先进行一些准备工作，也就是<strong>内存装载</strong>，<strong>将程序映射到内存空间中变为进程</strong>，装载过程分三步：</p>
+
+<h3 class="relative group">读取文件头、划分虚拟内存空间
+    <div id="读取文件头划分虚拟内存空间" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
+        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#%e8%af%bb%e5%8f%96%e6%96%87%e4%bb%b6%e5%a4%b4%e5%88%92%e5%88%86%e8%99%9a%e6%8b%9f%e5%86%85%e5%ad%98%e7%a9%ba%e9%97%b4" aria-label="锚点">#</a>
+    </span>
+    
+</h3>
+<p>首先，系统需要读取文件头，了解一些相关信息，比如是否为合法ELF文件，入口地址在哪之类的信息。</p>
+<p>接下来硬件会给程序分配一个<strong>虚拟内存空间</strong>，在32位中，每个程序都是最大空间，也就是<strong>4G</strong>，但是在64位中，最大空间太大了，不太好管理，所以分配的空间大小比较灵活。</p>
+<p>你可能有疑问：一台计算机的内存好像没有那么大，怎么做到给每个程序都分配那么大内存空间的？我们要知道这个内存空间只是一个虚拟的概念，是一种逻辑上的<strong>固定大小</strong>的<strong>连续</strong>的空间，实际上这个空间对应的物理内存空间<strong>既不连续</strong>，也不会那么大，具体<strong>受硬件限制</strong>，而且装载的所有内容也<strong>不是都始终在物理内存中</strong>（这个叫<strong>交换技术</strong>，大概原理是只有活跃的部分才会在内存中，不活跃的都扔进磁盘中的交换空间），甚至划分完虚拟内存后还<strong>不会全部立刻关联到物理内存区域</strong>，一般在物理内存找到空间写入数据之后才会关联到虚拟内存。也就是说虚拟内存空间的一些规格和物理内存关系不大。<em>像不像给你画大饼的hxd？把这篇文章转发给ta，让ta好好学习一下什么叫内存装载！</em></p>
+<p>不过这么大的虚拟内存空间也不是只给程序用的，我们把给程序用的空间叫做用户空间，除此之外还有<strong>内核空间</strong>，内核空间一般在<strong>虚拟内存空间的最高处</strong>。</p>
+<p>我们知道硬件资源是有限的，为了更好的使用硬件资源，操作系统规定了一个唯一的访问硬件资源的方法：<strong>通过内核访问</strong>，当程序需要执行<strong>文件读写等涉及硬件的操作</strong>时，就要通过<strong>系统调用</strong>，让内核帮你访问硬件资源。</p>
+<p>到了这步，分配的虚拟内存空间是这样的：</p>
+<figure><img
+    class="my-0 rounded-md"
+    loading="lazy"
+    decoding="async"
+    fetchpriority="auto"
+    alt="虚拟内存空间"
+    width="949"
+    height="594"
+    src="/posts/pwn/elf-load-stack-register/resources/image1_hu_fcd055c803a59d67.png"
+    srcset="/posts/pwn/elf-load-stack-register/resources/image1_hu_fcd055c803a59d67.png 800w, /posts/pwn/elf-load-stack-register/resources/image1.png 1280w"
+    sizes="(min-width: 768px) 50vw, 65vw"
+    data-zoom-src="/posts/pwn/elf-load-stack-register/resources/image1.png"></figure>
+
+<h3 class="relative group">装载
+    <div id="装载" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
+        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#%e8%a3%85%e8%bd%bd" aria-label="锚点">#</a>
+    </span>
+    
+</h3>
+<p>接下来正式把程序按照段复制到物理内存中，分别设置不同权限，接下来关联到虚拟内存。</p>
+<p>在现在，这里的复制也<strong>不是一次性将整段完全复制与关联</strong>，有些段会分成多部份，只有<strong>在使用时才会搞到物理内存中设立关联</strong>。</p>
+<p>虚拟内存空间和文件都是<strong>线性的</strong>，我们可以把他们想象成一条长的线段，按单位长度分成许多份，每一份为一字节，这个装载过程就是从虚拟内存空间这条线段的某一点开始，参照文件中的结构，一直向下与物理内存中存储的有关进程的信息相对应，最终这篇空间对应的<strong>段与段之间的相对结构应该是与实际文件结构相同的</strong>。</p>
+<p>在虚拟内存空间选择的这个起始点叫基址，一般来讲是不变的，但是现在在PIE（地址无关化可执行）保护（这个保护需要同时开启ASLR才管用，下面会说到）的作用下，<strong>保持文件内部的相对结构不变</strong>，基址可以是“随机”的，不过这个随机也不是完全在用户空间中为所欲为：在虚拟内存空间的最低处，划分了一个<strong>保留区域</strong>，主要目的是保护一些非法访问，比如<strong>空指针访问</strong>；而在其他地址处，还要预先留下足够的空间，之后要放置堆栈等东西。</p>
+<p>也就是说，我们除了将程序装载到物理内存，与虚拟内存空间关联以外，还要划分一个保留区，为后续初始化划分一些区域，这些都完成之后，虚拟内存空间大概是这样的：</p>
+<figure><img
+    class="my-0 rounded-md"
+    loading="lazy"
+    decoding="async"
+    fetchpriority="auto"
+    alt="虚拟内存空间"
+    width="721"
+    height="887"
+    src="/posts/pwn/elf-load-stack-register/resources/image2.png"
+    srcset="/posts/pwn/elf-load-stack-register/resources/image2.png 800w, /posts/pwn/elf-load-stack-register/resources/image2.png 1280w"
+    sizes="(min-width: 768px) 50vw, 65vw"
+    data-zoom-src="/posts/pwn/elf-load-stack-register/resources/image2.png"></figure>
+<p>这里要注意不同预留区域之间可能会有一些空白区域，现在很多系统都开启了ASLR（地址空间随机化）保护，这个保护会在<strong>规定的合法区域内随机选择一个基址</strong>，并从这个地址开始向下<strong>划分一片预留区域</strong>，专门用来给将要初始化的其中一个部分用，比如堆，栈等，不同的部分会划分不同的区域，这就会导致不同区域之间空出一些空白区域。当关闭这个保护时，基址固定，空白区域会少很多。</p>
+
+<h3 class="relative group">初始化、动态链接
+    <div id="初始化动态链接" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
+        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#%e5%88%9d%e5%a7%8b%e5%8c%96%e5%8a%a8%e6%80%81%e9%93%be%e6%8e%a5" aria-label="锚点">#</a>
+    </span>
+    
+</h3>
+<p>这时到了准备的最后一步，首先<strong>为栈分配物理内存</strong>，将其<strong>映射到虚拟内存空间中</strong>，栈空间内部会经历一个初始化过程，准备完成后会设置<strong>寄存器</strong>，调整一些初始参数。</p>
+<p>然后会映射<strong>动态链接器</strong>，接下来就开始了最重要的一步：<strong>动态链接</strong>。</p>
+<p>早期的程序导入一些外部内容都是静态链接，特点是<strong>在编译时就会把外部的内容导入到程序中</strong>，好处是只需要一个可执行文件就能跑，但是也有坏处：假设有一千个程序都要用同一个内容，都静态链接的话，磁盘中不仅会存入一千个程序，还会有一千个相同的内容！所以就出现了动态链接：在编译时<strong>只需要记载需要链接什么内容</strong>，在运行时将程序和这些内容<strong>一起搞到内存中，映射到同一个虚拟内存空间</strong>，这就是动态链接。动态链接的内容会被映射到虚拟内存空间中的<strong>堆与栈之间的一个区域</strong>，这里管他叫<strong>库预留区</strong>。</p>
+<p>接下来就剩堆区，堆区会怎么样呢？堆区比较特殊：这个区域<strong>动态分配内存</strong>。一开始划分预留区的时候，堆区的大小<strong>就是0</strong>，直到<strong>程序申请内存并实际访问</strong>时，堆区才会开始映射数据。如果没有申请内存的操作，堆区大小可以始终为0。</p>
+<p>至此，整个内存装载就结束了！此时的内存空间是这样的，程序可以开始运行了。</p>
+<figure><img
+    class="my-0 rounded-md"
+    loading="lazy"
+    decoding="async"
+    fetchpriority="auto"
+    alt="虚拟内存空间"
+    width="636"
+    height="895"
+    src="/posts/pwn/elf-load-stack-register/resources/image3.png"
+    srcset="/posts/pwn/elf-load-stack-register/resources/image3.png 800w, /posts/pwn/elf-load-stack-register/resources/image3.png 1280w"
+    sizes="(min-width: 768px) 50vw, 65vw"
+    data-zoom-src="/posts/pwn/elf-load-stack-register/resources/image3.png"></figure>
+
+<h2 class="relative group">栈与寄存器
+    <div id="栈与寄存器" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
+        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#%e6%a0%88%e4%b8%8e%e5%af%84%e5%ad%98%e5%99%a8" aria-label="锚点">#</a>
+    </span>
+    
+</h2>
+<p>在初始化的过程中我们提到了三个东西：<strong>栈、堆、寄存器</strong>，这三个负责存储一些程序计算时的中间状态，其中堆比较特殊，可以暂时不讲，现在来看看栈与寄存器到底是什么：</p>
+
+<h3 class="relative group">栈
+    <div id="栈" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
+        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#%e6%a0%88" aria-label="锚点">#</a>
+    </span>
+    
+</h3>
+<p>栈是在虚拟内存空间中一片连续的区域，由<strong>栈底和栈顶</strong>划分范围，其中<strong>栈底在高地址，栈顶在低地址</strong>。栈中存储了<strong>函数调用时的一些局部信息</strong>，每一个正在调用的函数都有一个独立的用于存储信息的部分，叫做<strong>栈帧</strong>。</p>
+<p>栈的特点是<strong>在存储和取出时只能操作栈顶的数据</strong>，是一种典型的<strong>后进先出</strong>结构，由于新存入的数据在栈顶，也就是低地址处，所以说<strong>栈向低处生长</strong>。</p>
+
+<h3 class="relative group">寄存器
+    <div id="寄存器" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
+        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#%e5%af%84%e5%ad%98%e5%99%a8" aria-label="锚点">#</a>
+    </span>
+    
+</h3>
+<p>寄存器是一种<strong>独立于内存</strong>，在CPU上的存储单元，与内存相比<strong>速度极快</strong>，但是<strong>容量极小</strong>，<strong>数量极少</strong>，适合做一些临时的存储。</p>
+<p>在32位处理器中，寄存器都以<strong>E</strong>开头，比如EAX，大小是<strong>32bits（4字节）</strong>，而在64位处理器中，以<strong>R</strong>开头，比如RAX，大小是<strong>64bit（8字节）</strong>。</p>
+<p>我们举一些常用的32位寄存器：</p>
+<ol>
+<li>通用寄存器</li>
+</ol>
+<p>具有通用的存储数据的功能，但是有的有一些专用功能。</p>
+<ul>
+<li>
+<p><strong>ESP</strong>：存放指向<strong>栈顶</strong>的指针，也就是存放<strong>栈顶地址</strong>。</p>
+</li>
+<li>
+<p><strong>EBP</strong>：存放指向<strong>栈底</strong>的指针，也就是存放<strong>栈底地址</strong>。当指定栈上某一处的一个数据时，通常<strong>用EBP加上其相对于栈底的位置来表达这个数据的位置</strong>。</p>
+</li>
+<li>
+<p><strong>EAX</strong>：<strong>执行加减乘除计算</strong>，存储<strong>累加值</strong>，存放<strong>函数返回值</strong>，存放<strong>系统调用号</strong>。</p>
+</li>
+<li>
+<p>EBX：存储<strong>内存地址的基址</strong>。</p>
+</li>
+<li>
+<p>ECX：作为<strong>循环计数器</strong>。</p>
+</li>
+<li>
+<p>EDX：存放I/O端口号**。</p>
+</li>
+<li>
+<p><strong>ESI</strong>：当对字符串或数组操作时，这个寄存器可以存放<strong>来源的地址</strong>。</p>
+</li>
+<li>
+<p><strong>EDI</strong>：当对字符串或数组操作时，这个寄存器可以存放<strong>目的地址</strong>。</p>
+</li>
+</ul>
+<p>这些寄存器在64位中都能找到对应的R开头的寄存器，在64位中也可以访问E开头的寄存器去只操作这些寄存器的低32位，清空高32位。</p>
+<p>除此之外，64位还加了<strong>R8到R15</strong>共8个额外的通用寄存器。</p>
+<ol start="2">
+<li>指令寄存器</li>
+</ol>
+<ul>
+<li><strong>EIP</strong>：存放一个指针，<strong>始终指向下一条指令</strong>，也就是存储了<strong>下一条指令的地址</strong>，<strong>这个寄存器不能被直接修改</strong>，只能在执行完当前指令后<strong>自动更新</strong>，或者被一些相关的指令<strong>间接修改</strong>，比如<strong>CALL、RET、JMP</strong>。</li>
+</ul>
+<p>64位中对应RIP，也可以访问EIP，操作RIP低32位，清空高32位。</p>
+<p>除此之外还有<strong>标志寄存器</strong>与<strong>段寄存器</strong>，一般做题用不到，这里就不讲了。</p>
+
+<h2 class="relative group">总结
+    <div id="总结" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
+        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#%e6%80%bb%e7%bb%93" aria-label="锚点">#</a>
+    </span>
+    
+</h2>
+<p>本篇文章讲述了一些pwn中的基础知识，包括ELF文件结构，内存装载，栈与寄存器，有些知识可能讲了不会立刻用到，所以不需要全都记住，用到了再现查也没问题。</p>
+<p>所以我们讲了什么是栈，但是为什么要栈溢出？他会给我们什么好处？这里涉及到栈帧的基本结构，在下一篇文章中会说到。</p>
+
+          
+          
+          
+            <strong class="block mt-8">
+              <a
+                target="_blank"
+                class="m-1 rounded bg-neutral-300 p-1.5 text-neutral-700 hover:bg-primary-500 hover:text-neutral dark:bg-neutral-700 dark:text-neutral-300 dark:hover:bg-primary-400 dark:hover:text-neutral-800"
+                href="mailto:EndotherminUnit2@outlook.com?subject=Reply%20to%20ELF%e3%80%81%e5%86%85%e5%ad%98%e8%a3%85%e8%bd%bd%e3%80%81%e6%a0%88%e4%b8%8e%e5%af%84%e5%ad%98%e5%99%a8">
+                通过邮件回复
+              </a>
+            </strong>
+          
+        </div>
+        
+        
+
+        
+
+        
+
+      </div>
+
+      
+      
+        
+        
+          
+          
+        
+        
+        
+        <script
+          type="text/javascript"
+          src="/js/page.min.54b6f4371722649edbe871e431d8670d670878c22be8f36e229fe53cc9b786fe25a834def5e6de621f7a3e37b72bc8cd73839aa5ed907ed6cbd45cd3e1b0fa20.js"
+          integrity="sha512-VLb0NxciZJ7b6HHkMdhnDWcIeMIr6PNuIp/lPMm3hv4lqDTe9ebeYh96Pje3K8jNc4Oape2QftbL1FzT4bD6IA=="
+          data-oid="views_posts/pwn/ELF-load-stack-register/index.md"
+          data-oid-likes="likes_posts/pwn/ELF-load-stack-register/index.md"></script>
+      
+    </section>
+
+    
+    <footer class="pt-8 max-w-prose print:hidden">
+      
+  
+    
+    
+    
+    <div class="pt-8">
+      <hr class="border-dotted border-neutral-300 dark:border-neutral-600">
+      <div class="flex justify-between pt-3">
+        <span class="flex flex-col">
+          
+            <a
+              class="flex text-neutral-700 hover:text-primary-600 dark:text-neutral dark:hover:text-primary-400"
+              href="/posts/pwn/pwntools/">
+              <span class="leading-6">
+                <span class="inline-block rtl:rotate-180">&larr;</span>&ensp;Python Pwntools的基础使用方法
+              </span>
+            </a>
+            
+              <span class="ms-6 mt-1 text-xs text-neutral-500 dark:text-neutral-400">
+                <time datetime="2025-12-06T17:00:00&#43;08:00">2025-12-06</time>
+              </span>
+            
+          
+        </span>
+        <span class="flex flex-col items-end">
+          
+        </span>
+      </div>
+    </div>
+  
+
+
+      
+    </footer>
+  </article>
+
+        
+
+
+  
+
+
+
+
+
+
+<div
+  id="scroll-to-top"
+  class="fixed bottom-6 end-6 z-50 transform translate-y-4 opacity-0 duration-200">
+  <a
+    href="#the-top"
+    class="pointer-events-auto flex h-12 w-12 items-center justify-center rounded-full bg-neutral/50 text-xl text-neutral-700 hover:text-primary-600 dark:bg-neutral-800/50 dark:text-neutral dark:hover:text-primary-400"
+    aria-label="返回顶部"
+    title="返回顶部">
+    &uarr;
+  </a>
+</div>
+
+      </main><footer id="site-footer" class="py-10 print:hidden">
+  
+  
+    
+  
+  <div class="flex items-center justify-between">
+    
+    
+      <p class="text-sm text-neutral-500 dark:text-neutral-400">
+          &copy;
+          2025
+          KioroshiAki
+      </p>
+    
+
+    
+    
+      <p class="text-xs text-neutral-500 dark:text-neutral-400">
+        
+        
+        由 <a class="hover:underline hover:decoration-primary-400 hover:text-primary-500"
+          href="https://gohugo.io/" target="_blank" rel="noopener noreferrer">Hugo</a> &amp; <a class="hover:underline hover:decoration-primary-400 hover:text-primary-500"
+          href="https://blowfish.page/" target="_blank" rel="noopener noreferrer">Blowfish</a> 强力驱动
+      </p>
+    
+  </div>
+  
+    <script>
+      mediumZoom(document.querySelectorAll("img:not(.nozoom)"), {
+        margin: 24,
+        background: "rgba(0,0,0,0.5)",
+        scrollOffset: 0,
+      });
+    </script>
+  
+  
+  
+  <script
+    type="text/javascript"
+    src="/js/process.min.ee03488f19c93c2efb199e2e3014ea5f3cb2ce7d45154adb3399a158cac27ca52831db249ede5bb602700ef87eb02434139de0858af1818ab0fb4182472204a4.js"
+    integrity="sha512-7gNIjxnJPC77GZ4uMBTqXzyyzn1FFUrbM5mhWMrCfKUoMdsknt5btgJwDvh&#43;sCQ0E53ghYrxgYqw&#43;0GCRyIEpA=="></script>
+  
+  
+</footer>
+
+    </div>
+  </body>
+  
+</html>
