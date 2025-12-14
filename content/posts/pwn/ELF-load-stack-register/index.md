@@ -163,7 +163,7 @@ ELF（Executable and Linkable Format）是Linux中的一种二进制文件格式
 
 - ECX：作为**循环计数器**。
 
-- EDX：存放I/O端口号**。
+- EDX：存放**I/O端口号**。
 
 - **ESI**：当对字符串或数组操作时，这个寄存器可以存放**来源的地址**。
 
