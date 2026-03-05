@@ -3,6 +3,8 @@ date = '2025-12-06T17:00:00+08:00'
 draft = false
 title = 'Python Pwntools的基础使用方法'
 categories = ["Pwn"]
+series = ["Pwn"]
+series_order = 1
 summary = "看完这篇就能成为口算大神了吗？"
 +++
 
@@ -160,7 +162,8 @@ int math1()
 
 这时就可以用上面提到的`recvuntil`和`strip`了！
 
-写好的payload如下：
+写好的exp如下：
+
 ```python
 from pwn import *
 # 我们也可以设置context的，但是这里不需要设置，懒了（跪
@@ -203,6 +206,7 @@ cat flag # 如果有flag，直接读取
 ```
 
 最后大概就是这样：
+
 ```terminal
 [+] Starting local process './main': pid 8358
 [+] a = 9307

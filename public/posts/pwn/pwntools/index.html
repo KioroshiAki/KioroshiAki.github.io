@@ -54,6 +54,8 @@
     <meta property="article:published_time" content="2025-12-06T17:00:00+08:00">
     <meta property="article:modified_time" content="2025-12-06T17:00:00+08:00">
     <meta property="og:image" content="http://localhost:1313/posts/pwn/pwntools/featured.png">
+      <meta property="og:see_also" content="http://localhost:1313/posts/pwn/frame-overflow-rop-ret2text/">
+      <meta property="og:see_also" content="http://localhost:1313/posts/pwn/elf-load-stack-register/">
 
   
   <meta name="twitter:card" content="summary_large_image">
@@ -225,7 +227,7 @@
     
     
     "mainEntityOfPage": "true",
-    "wordCount": "2056"
+    "wordCount": "2052"
   },
   {
     "@context": "https://schema.org",
@@ -339,7 +341,7 @@
       
         
   <a
-  href="/categories/"
+  href="/series/"
   
   class="flex items-center hover:text-primary-600 dark:hover:text-primary-400"
   aria-label="分类"
@@ -384,6 +386,24 @@
   
     <p class="text-base font-medium">
       关于
+    </p>
+  
+</a>
+
+
+
+      
+        
+  <a
+  href="/friends/"
+  
+  class="flex items-center hover:text-primary-600 dark:hover:text-primary-400"
+  aria-label="友链"
+  title="友链合集">
+  
+  
+    <p class="text-base font-medium">
+      友链
     </p>
   
 </a>
@@ -492,7 +512,7 @@
               
   <li class="mt-1">
   <a
-    href="/categories/"
+    href="/series/"
     
     class="flex items-center hover:text-primary-600 dark:hover:text-primary-400"
     aria-label="分类"
@@ -541,6 +561,26 @@
     
       <p class="text-bg font-bg">
         关于
+      </p>
+    
+  </a>
+</li>
+
+
+
+            
+              
+  <li class="mt-1">
+  <a
+    href="/friends/"
+    
+    class="flex items-center hover:text-primary-600 dark:hover:text-primary-400"
+    aria-label="友链"
+    title="友链合集">
+    
+    
+      <p class="text-bg font-bg">
+        友链
       </p>
     
   </a>
@@ -779,7 +819,7 @@
   <div class="flex flex-row flex-wrap items-center">
     
     
-      <time datetime="2025-12-06T17:00:00&#43;08:00">2025-12-06</time><span class="px-2 text-primary-500">&middot;</span><span>2056 字</span><span class="px-2 text-primary-500">&middot;</span><span class="mb-[2px]">
+      <time datetime="2025-12-06T17:00:00&#43;08:00">2025-12-06</time><span class="px-2 text-primary-500">&middot;</span><span>2052 字</span><span class="px-2 text-primary-500">&middot;</span><span class="mb-[2px]">
   <span
     id="zen-mode-button"
     class="text-lg hover:text-primary-500"
@@ -813,7 +853,7 @@
                 <span class="flex cursor-pointer">
   <span
     class="rounded-md border border-primary-400 px-1 py-[1px] text-xs font-normal text-primary-700 dark:border-primary-600 dark:text-primary-400">
-    PWN
+    Pwn
   </span>
 </span>
 
@@ -1089,6 +1129,49 @@
 
       <div class="min-w-0 min-h-0 max-w-fit">
         
+  <details
+    class="mt-2 mb-5 overflow-hidden rounded-lg ms-0 ps-5"
+    open>
+    
+  <summary
+    class="py-1 text-lg font-semibold cursor-pointer bg-primary-200 text-neutral-800 -ms-5 ps-5 dark:bg-primary-800 dark:text-neutral-100">
+    Pwn -
+    这篇文章属于一个选集。
+  </summary>
+  
+  
+    
+      <div
+        class="py-1 border-dotted border-neutral-300 border-s-1 -ms-5 ps-5 dark:border-neutral-600">
+        § 1:
+        本文
+      </div>
+    
+  
+    
+      <div
+        class="py-1 border-dotted border-neutral-300 border-s-1 -ms-5 ps-5 dark:border-neutral-600">
+        <a href="/posts/pwn/elf-load-stack-register/">
+          § 2:
+          ELF、内存装载、栈与寄存器
+        </a>
+      </div>
+    
+  
+    
+      <div
+        class="py-1 border-dotted border-neutral-300 border-s-1 -ms-5 ps-5 dark:border-neutral-600">
+        <a href="/posts/pwn/frame-overflow-rop-ret2text/">
+          § 3:
+          栈帧、栈溢出、ROP、ret2text
+        </a>
+      </div>
+    
+  
+
+
+  </details>
+
 
         <div class="article-content max-w-prose mb-20">
           <p>大概一个半月之前，我打算开始学pwn，那时我还是啥都不知道的小菜。花了半天时间配了个WSL，找了一堆视频和文章，有的上来开始讲ELF，有的上来开始讲栈溢出，虽然这些在pwn中确实很基础，但我看了半天感觉确实也很离谱。</p>
@@ -1269,7 +1352,7 @@
 </span></span></code></pre></div><p>这个函数会随机两个一万以内的数，要求你在限定时间内输入这两个数的积。</p>
 <p>我们只要收到数字然后相乘就可以了，但是他发送的是一个乘法，不是单纯的两个数字，如何去掉其他字符呢？</p>
 <p>这时就可以用上面提到的<code>recvuntil</code>和<code>strip</code>了！</p>
-<p>写好的payload如下：</p>
+<p>写好的exp如下：</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">pwn</span> <span class="kn">import</span> <span class="o">*</span>
 </span></span><span class="line"><span class="cl"><span class="c1"># 我们也可以设置context的，但是这里不需要设置，懒了（跪</span>
 </span></span><span class="line"><span class="cl"><span class="n">io</span> <span class="o">=</span> <span class="n">process</span><span class="p">(</span><span class="s2">&#34;./main&#34;</span><span class="p">)</span>
@@ -1339,6 +1422,47 @@ kioroshiaki
         </div>
         
         
+  <details class="mt-2 mb-5 overflow-hidden rounded-lg ms-0 ps-5">
+    
+  <summary
+    class="py-1 text-lg font-semibold cursor-pointer bg-primary-200 text-neutral-800 -ms-5 ps-5 dark:bg-primary-800 dark:text-neutral-100">
+    Pwn -
+    这篇文章属于一个选集。
+  </summary>
+  
+  
+    
+      <div
+        class="py-1 border-dotted border-neutral-300 border-s-1 -ms-5 ps-5 dark:border-neutral-600">
+        § 1:
+        本文
+      </div>
+    
+  
+    
+      <div
+        class="py-1 border-dotted border-neutral-300 border-s-1 -ms-5 ps-5 dark:border-neutral-600">
+        <a href="/posts/pwn/elf-load-stack-register/">
+          § 2:
+          ELF、内存装载、栈与寄存器
+        </a>
+      </div>
+    
+  
+    
+      <div
+        class="py-1 border-dotted border-neutral-300 border-s-1 -ms-5 ps-5 dark:border-neutral-600">
+        <a href="/posts/pwn/frame-overflow-rop-ret2text/">
+          § 3:
+          栈帧、栈溢出、ROP、ret2text
+        </a>
+      </div>
+    
+  
+
+
+  </details>
+
 
         
 
@@ -1367,36 +1491,6 @@ kioroshiaki
     
     <footer class="pt-8 max-w-prose print:hidden">
       
-  
-    
-    
-    
-    <div class="pt-8">
-      <hr class="border-dotted border-neutral-300 dark:border-neutral-600">
-      <div class="flex justify-between pt-3">
-        <span class="flex flex-col">
-          
-        </span>
-        <span class="flex flex-col items-end">
-          
-            <a
-              class="flex text-right text-neutral-700 hover:text-primary-600 dark:text-neutral dark:hover:text-primary-400"
-              href="/posts/pwn/elf-load-stack-register/">
-              <span class="leading-6">
-                ELF、内存装载、栈与寄存器&ensp;<span class="inline-block rtl:rotate-180">&rarr;</span>
-              </span>
-            </a>
-            
-              <span class="me-6 mt-1 text-xs text-neutral-500 dark:text-neutral-400">
-                <time datetime="2025-12-12T08:00:00&#43;08:00">2025-12-12</time>
-              </span>
-            
-          
-        </span>
-      </div>
-    </div>
-  
-
 
       
     </footer>
@@ -1434,7 +1528,7 @@ kioroshiaki
     
       <p class="text-sm text-neutral-500 dark:text-neutral-400">
           &copy;
-          2025
+          2026
           KioroshiAki
       </p>
     

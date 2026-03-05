@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Writeup on KA&#39;s Blog</title>
+    <link>http://localhost:1313/categories/writeup/</link>
+    <description>Recent content in Writeup on KA&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <managingEditor>EndotherminUnit2@outlook.com (KioroshiAki)</managingEditor>
+    <webMaster>EndotherminUnit2@outlook.com (KioroshiAki)</webMaster>
+    <copyright>© 2026 KioroshiAki</copyright>
+    <lastBuildDate>Sat, 31 Jan 2026 08:00:00 +0800</lastBuildDate><atom:link href="http://localhost:1313/categories/writeup/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>TSCTF-J 2025 Pwn题目全复现</title>
+      <link>http://localhost:1313/posts/writeup/tsctf-j-2025-pwn/</link>
+      <pubDate>Sat, 31 Jan 2026 08:00:00 +0800</pubDate>
+      <author>EndotherminUnit2@outlook.com (KioroshiAki)</author>
+      <guid>http://localhost:1313/posts/writeup/tsctf-j-2025-pwn/</guid>
+      <description>好难</description>
+      <media:content xmlns:media="http://search.yahoo.com/mrss/" url="http://localhost:1313/posts/writeup/tsctf-j-2025-pwn/featured.jpg" />
+    </item>
+    
+  </channel>
+</rss>

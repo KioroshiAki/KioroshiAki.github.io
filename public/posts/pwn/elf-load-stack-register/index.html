@@ -54,6 +54,8 @@
     <meta property="article:published_time" content="2025-12-12T08:00:00+08:00">
     <meta property="article:modified_time" content="2025-12-12T08:00:00+08:00">
     <meta property="og:image" content="http://localhost:1313/posts/pwn/elf-load-stack-register/featured.png">
+      <meta property="og:see_also" content="http://localhost:1313/posts/pwn/frame-overflow-rop-ret2text/">
+      <meta property="og:see_also" content="http://localhost:1313/posts/pwn/pwntools/">
 
   
   <meta name="twitter:card" content="summary_large_image">
@@ -225,7 +227,7 @@
     
     
     "mainEntityOfPage": "true",
-    "wordCount": "4196"
+    "wordCount": "4225"
   },
   {
     "@context": "https://schema.org",
@@ -339,7 +341,7 @@
       
         
   <a
-  href="/categories/"
+  href="/series/"
   
   class="flex items-center hover:text-primary-600 dark:hover:text-primary-400"
   aria-label="分类"
@@ -384,6 +386,24 @@
   
     <p class="text-base font-medium">
       关于
+    </p>
+  
+</a>
+
+
+
+      
+        
+  <a
+  href="/friends/"
+  
+  class="flex items-center hover:text-primary-600 dark:hover:text-primary-400"
+  aria-label="友链"
+  title="友链合集">
+  
+  
+    <p class="text-base font-medium">
+      友链
     </p>
   
 </a>
@@ -492,7 +512,7 @@
               
   <li class="mt-1">
   <a
-    href="/categories/"
+    href="/series/"
     
     class="flex items-center hover:text-primary-600 dark:hover:text-primary-400"
     aria-label="分类"
@@ -541,6 +561,26 @@
     
       <p class="text-bg font-bg">
         关于
+      </p>
+    
+  </a>
+</li>
+
+
+
+            
+              
+  <li class="mt-1">
+  <a
+    href="/friends/"
+    
+    class="flex items-center hover:text-primary-600 dark:hover:text-primary-400"
+    aria-label="友链"
+    title="友链合集">
+    
+    
+      <p class="text-bg font-bg">
+        友链
       </p>
     
   </a>
@@ -779,7 +819,7 @@
   <div class="flex flex-row flex-wrap items-center">
     
     
-      <time datetime="2025-12-12T08:00:00&#43;08:00">2025-12-12</time><span class="px-2 text-primary-500">&middot;</span><span>4196 字</span><span class="px-2 text-primary-500">&middot;</span><span class="mb-[2px]">
+      <time datetime="2025-12-12T08:00:00&#43;08:00">2025-12-12</time><span class="px-2 text-primary-500">&middot;</span><span>4225 字</span><span class="px-2 text-primary-500">&middot;</span><span class="mb-[2px]">
   <span
     id="zen-mode-button"
     class="text-lg hover:text-primary-500"
@@ -813,7 +853,7 @@
                 <span class="flex cursor-pointer">
   <span
     class="rounded-md border border-primary-400 px-1 py-[1px] text-xs font-normal text-primary-700 dark:border-primary-600 dark:text-primary-400">
-    PWN
+    Pwn
   </span>
 </span>
 
@@ -1111,6 +1151,49 @@
 
       <div class="min-w-0 min-h-0 max-w-fit">
         
+  <details
+    class="mt-2 mb-5 overflow-hidden rounded-lg ms-0 ps-5"
+    open>
+    
+  <summary
+    class="py-1 text-lg font-semibold cursor-pointer bg-primary-200 text-neutral-800 -ms-5 ps-5 dark:bg-primary-800 dark:text-neutral-100">
+    Pwn -
+    这篇文章属于一个选集。
+  </summary>
+  
+  
+    
+      <div
+        class="py-1 border-dotted border-neutral-300 border-s-1 -ms-5 ps-5 dark:border-neutral-600">
+        <a href="/posts/pwn/pwntools/">
+          § 1:
+          Python Pwntools的基础使用方法
+        </a>
+      </div>
+    
+  
+    
+      <div
+        class="py-1 border-dotted border-neutral-300 border-s-1 -ms-5 ps-5 dark:border-neutral-600">
+        § 2:
+        本文
+      </div>
+    
+  
+    
+      <div
+        class="py-1 border-dotted border-neutral-300 border-s-1 -ms-5 ps-5 dark:border-neutral-600">
+        <a href="/posts/pwn/frame-overflow-rop-ret2text/">
+          § 3:
+          栈帧、栈溢出、ROP、ret2text
+        </a>
+      </div>
+    
+  
+
+
+  </details>
+
 
         <div class="article-content max-w-prose mb-20">
           <p>要说pwn中最基础的一种攻击手段，必须是栈溢出，但是什么是栈，为什么要溢出？在正式了解栈溢出之前，需要<strong>简单</strong>了解一些前置知识：</p>
@@ -1183,7 +1266,7 @@
 <p><strong>.rodata</strong>：存储<strong>只读</strong>数据。</p>
 </li>
 <li>
-<p><strong>.symlab</strong>：存储<strong>函数，全局变量</strong>等的<strong>名字和地址</strong>，这里的名字指的是<strong>名字的字符串存储的地址</strong>。</p>
+<p><strong>.symtab</strong>：存储<strong>函数，全局变量</strong>等的<strong>名字和地址</strong>，这里的名字指的是<strong>其字符串存储的地址</strong>，不存储字符串。</p>
 </li>
 <li>
 <p><strong>.shstrtab</strong>：存储<strong>节的名字</strong>，同上。</p>
@@ -1192,10 +1275,10 @@
 <p><strong>.strtab</strong>：存储前两个节中的<strong>名字的字符串</strong>。</p>
 </li>
 <li>
-<p><strong>.dynamic</strong>：存储<strong>动态链接</strong>需要的信息，其中用到的字符串和前面类似，<strong>只存储地址</strong>。</p>
+<p><strong>.dynamic</strong>：存储<strong>动态链接</strong>需要的信息，其中用到的符号和前面类似，<strong>只存储地址</strong>。</p>
 </li>
 <li>
-<p><strong>.dynsym .dynstr</strong>：存储前面这个节的<strong>字符串</strong>。</p>
+<p><strong>.dynsym .dynstr</strong>：存储前面这个节的<strong>符号的字符串</strong>。</p>
 </li>
 </ul>
 
@@ -1219,7 +1302,7 @@
 </li>
 <li>
 <p><strong>数据段（也叫LOAD段）</strong>：<strong>可读可写</strong>
-包含了<code>.data</code>、<code>.bss</code>、<code>.got</code>等节
+包含了<code>.data</code>、<code>.bss</code>、<code>.got</code>等节，和上面的<strong>不是同一个LOAD段</strong>，<strong>通过权限区分</strong>
 （什么是plt和got？以后会说到（继续挖坑ing））</p>
 </li>
 <li>
@@ -1253,8 +1336,8 @@
     
 </h3>
 <p>首先，系统需要读取文件头，了解一些相关信息，比如是否为合法ELF文件，入口地址在哪之类的信息。</p>
-<p>接下来硬件会给程序分配一个<strong>虚拟内存空间</strong>，在32位中，每个程序都是最大空间，也就是<strong>4G</strong>，但是在64位中，最大空间太大了，不太好管理，所以分配的空间大小比较灵活。</p>
-<p>你可能有疑问：一台计算机的内存好像没有那么大，怎么做到给每个程序都分配那么大内存空间的？我们要知道这个内存空间只是一个虚拟的概念，是一种逻辑上的<strong>固定大小</strong>的<strong>连续</strong>的空间，实际上这个空间对应的物理内存空间<strong>既不连续</strong>，也不会那么大，具体<strong>受硬件限制</strong>，而且装载的所有内容也<strong>不是都始终在物理内存中</strong>（这个叫<strong>交换技术</strong>，大概原理是只有活跃的部分才会在内存中，不活跃的都扔进磁盘中的交换空间），甚至划分完虚拟内存后还<strong>不会全部立刻关联到物理内存区域</strong>，一般在物理内存找到空间写入数据之后才会关联到虚拟内存。也就是说虚拟内存空间的一些规格和物理内存关系不大。<em>像不像给你画大饼的hxd？把这篇文章转发给ta，让ta好好学习一下什么叫内存装载！</em></p>
+<p>接下来硬件会给程序分配一个<strong>虚拟内存空间</strong>，在32位中，这个空间最大是<strong>4GB</strong>，在64位中，最大空间是4GB * 4GB = 16EB，现实情况下计算机内存无法达到这个大小。</p>
+<p>你可能有疑问：一台计算机的内存没有那么大，怎么做到给每个程序都分配那么大内存空间的？我们要知道这个内存空间只是一个虚拟的概念，是一种逻辑上的<strong>固定大小</strong>的<strong>连续</strong>的空间，实际上这个空间对应的物理内存空间<strong>既不连续</strong>，也不会那么大，具体<strong>受硬件限制</strong>，而且装载的所有内容也<strong>不是都始终在物理内存中</strong>（这个叫<strong>交换技术</strong>，大概原理是只有活跃的部分才会在内存中，不活跃的都扔进磁盘中的交换空间），甚至划分完虚拟内存后还<strong>不会全部立刻关联到物理内存区域</strong>，一般在物理内存找到空间写入数据之后才会关联到虚拟内存。也就是说虚拟内存空间的一些规格和物理内存关系不大。<em>像不像给你画大饼的hxd？把这篇文章转发给ta，让ta好好学习一下什么叫内存装载！</em></p>
 <p>不过这么大的虚拟内存空间也不是只给程序用的，我们把给程序用的空间叫做用户空间，除此之外还有<strong>内核空间</strong>，内核空间一般在<strong>虚拟内存空间的最高处</strong>。</p>
 <p>我们知道硬件资源是有限的，为了更好的使用硬件资源，操作系统规定了一个唯一的访问硬件资源的方法：<strong>通过内核访问</strong>，当程序需要执行<strong>文件读写等涉及硬件的操作</strong>时，就要通过<strong>系统调用</strong>，让内核帮你访问硬件资源。</p>
 <p>到了这步，分配的虚拟内存空间是这样的：</p>
@@ -1281,9 +1364,9 @@
     
 </h3>
 <p>接下来正式把程序按照段复制到物理内存中，分别设置不同权限，接下来关联到虚拟内存。</p>
-<p>在现在，这里的复制也<strong>不是一次性将整段完全复制与关联</strong>，有些段会分成多部份，只有<strong>在使用时才会搞到物理内存中设立关联</strong>。</p>
+<p>在现在，这里的复制也<strong>不是一次性将整段完全复制与关联</strong>，有些段会分成多部分，只有<strong>在使用时才会搞到物理内存中设立关联</strong>。</p>
 <p>虚拟内存空间和文件都是<strong>线性的</strong>，我们可以把他们想象成一条长的线段，按单位长度分成许多份，每一份为一字节，这个装载过程就是从虚拟内存空间这条线段的某一点开始，参照文件中的结构，一直向下与物理内存中存储的有关进程的信息相对应，最终这篇空间对应的<strong>段与段之间的相对结构应该是与实际文件结构相同的</strong>。</p>
-<p>在虚拟内存空间选择的这个起始点叫基址，一般来讲是不变的，但是现在在PIE（地址无关化可执行）保护（这个保护需要同时开启ASLR才管用，下面会说到）的作用下，<strong>保持文件内部的相对结构不变</strong>，基址可以是“随机”的，不过这个随机也不是完全在用户空间中为所欲为：在虚拟内存空间的最低处，划分了一个<strong>保留区域</strong>，主要目的是保护一些非法访问，比如<strong>空指针访问</strong>；而在其他地址处，还要预先留下足够的空间，之后要放置堆栈等东西。</p>
+<p>在虚拟内存空间选择的这个起始点叫基址，一般来讲是不变的，但是现在在PIE（地址无关化可执行）保护的作用下，<strong>保持文件内部的相对结构不变</strong>，基址可以是“随机”的，不过这个随机也不是完全在用户空间中为所欲为：在虚拟内存空间的最低处，划分了一个<strong>保留区域</strong>，主要目的是保护一些非法访问，比如<strong>空指针访问</strong>；而在其他地址处，还要预先留下足够的空间，之后要放置堆栈等东西。</p>
 <p>也就是说，我们除了将程序装载到物理内存，与虚拟内存空间关联以外，还要划分一个保留区，为后续初始化划分一些区域，这些都完成之后，虚拟内存空间大概是这样的：</p>
 <figure><img
     class="my-0 rounded-md"
@@ -1308,7 +1391,7 @@
     </span>
     
 </h3>
-<p>这时到了准备的最后一步，首先<strong>为栈分配物理内存</strong>，将其<strong>映射到虚拟内存空间中</strong>，栈空间内部会经历一个初始化过程，准备完成后会设置<strong>寄存器</strong>，调整一些初始参数。</p>
+<p>这时到了准备的最后一步，首先<strong>为栈区分配物理内存</strong>，将其<strong>映射到虚拟内存空间中</strong>，栈空间内部会经历一个初始化过程，准备完成后会设置<strong>寄存器</strong>，调整一些初始参数。</p>
 <p>然后会映射<strong>动态链接器</strong>，接下来就开始了最重要的一步：<strong>动态链接</strong>。</p>
 <p>早期的程序导入一些外部内容都是静态链接，特点是<strong>在编译时就会把外部的内容导入到程序中</strong>，好处是只需要一个可执行文件就能跑，但是也有坏处：假设有一千个程序都要用同一个内容，都静态链接的话，磁盘中不仅会存入一千个程序，还会有一千个相同的内容！所以就出现了动态链接：在编译时<strong>只需要记载需要链接什么内容</strong>，在运行时将程序和这些内容<strong>一起搞到内存中，映射到同一个虚拟内存空间</strong>，这就是动态链接。动态链接的内容会被映射到虚拟内存空间中的<strong>堆与栈之间的一个区域</strong>，这里管他叫<strong>库预留区</strong>。</p>
 <p>接下来就剩堆区，堆区会怎么样呢？堆区比较特殊：这个区域<strong>动态分配内存</strong>。一开始划分预留区的时候，堆区的大小<strong>就是0</strong>，直到<strong>程序申请内存并实际访问</strong>时，堆区才会开始映射数据。如果没有申请内存的操作，堆区大小可以始终为0。</p>
@@ -1346,7 +1429,7 @@
     </span>
     
 </h3>
-<p>栈是在虚拟内存空间中一片连续的区域，由<strong>栈底和栈顶</strong>划分范围，其中<strong>栈底在高地址，栈顶在低地址</strong>。栈中存储了<strong>函数调用时的一些局部信息</strong>，每一个正在调用的函数都有一个独立的用于存储信息的部分，叫做<strong>栈帧</strong>。</p>
+<p>栈是在栈区中一片连续的区域，栈中存储了<strong>函数调用时的一些局部信息</strong>。每一个正在调用的函数都有一个独立的用于存储信息的部分，叫做<strong>栈帧</strong>，<strong>栈是已分配栈帧的总和</strong>。相同时间内已调用的函数只有一个能处于活跃状态，因此栈帧只有一个能处于活跃状态，该栈帧<strong>由栈顶和栈底划分</strong>。</p>
 <p>栈的特点是<strong>在存储和取出时只能操作栈顶的数据</strong>，是一种典型的<strong>后进先出</strong>结构，由于新存入的数据在栈顶，也就是低地址处，所以说<strong>栈向低处生长</strong>。</p>
 
 <h3 class="relative group">寄存器
@@ -1382,7 +1465,7 @@
 <p>ECX：作为<strong>循环计数器</strong>。</p>
 </li>
 <li>
-<p>EDX：存放I/O端口号**。</p>
+<p>EDX：存放<strong>I/O端口号</strong>。</p>
 </li>
 <li>
 <p><strong>ESI</strong>：当对字符串或数组操作时，这个寄存器可以存放<strong>来源的地址</strong>。</p>
@@ -1400,7 +1483,7 @@
 <li><strong>EIP</strong>：存放一个指针，<strong>始终指向下一条指令</strong>，也就是存储了<strong>下一条指令的地址</strong>，<strong>这个寄存器不能被直接修改</strong>，只能在执行完当前指令后<strong>自动更新</strong>，或者被一些相关的指令<strong>间接修改</strong>，比如<strong>CALL、RET、JMP</strong>。</li>
 </ul>
 <p>64位中对应RIP，也可以访问EIP，操作RIP低32位，清空高32位。</p>
-<p>除此之外还有<strong>标志寄存器</strong>与<strong>段寄存器</strong>，一般做题用不到，这里就不讲了。</p>
+<p>除此之外还有<strong>标志寄存器</strong>与<strong>段寄存器</strong>，和基础知识不太搭边（躺）。</p>
 
 <h2 class="relative group">总结
     <div id="总结" class="anchor"></div>
@@ -1429,6 +1512,47 @@
         </div>
         
         
+  <details class="mt-2 mb-5 overflow-hidden rounded-lg ms-0 ps-5">
+    
+  <summary
+    class="py-1 text-lg font-semibold cursor-pointer bg-primary-200 text-neutral-800 -ms-5 ps-5 dark:bg-primary-800 dark:text-neutral-100">
+    Pwn -
+    这篇文章属于一个选集。
+  </summary>
+  
+  
+    
+      <div
+        class="py-1 border-dotted border-neutral-300 border-s-1 -ms-5 ps-5 dark:border-neutral-600">
+        <a href="/posts/pwn/pwntools/">
+          § 1:
+          Python Pwntools的基础使用方法
+        </a>
+      </div>
+    
+  
+    
+      <div
+        class="py-1 border-dotted border-neutral-300 border-s-1 -ms-5 ps-5 dark:border-neutral-600">
+        § 2:
+        本文
+      </div>
+    
+  
+    
+      <div
+        class="py-1 border-dotted border-neutral-300 border-s-1 -ms-5 ps-5 dark:border-neutral-600">
+        <a href="/posts/pwn/frame-overflow-rop-ret2text/">
+          § 3:
+          栈帧、栈溢出、ROP、ret2text
+        </a>
+      </div>
+    
+  
+
+
+  </details>
+
 
         
 
@@ -1457,36 +1581,6 @@
     
     <footer class="pt-8 max-w-prose print:hidden">
       
-  
-    
-    
-    
-    <div class="pt-8">
-      <hr class="border-dotted border-neutral-300 dark:border-neutral-600">
-      <div class="flex justify-between pt-3">
-        <span class="flex flex-col">
-          
-            <a
-              class="flex text-neutral-700 hover:text-primary-600 dark:text-neutral dark:hover:text-primary-400"
-              href="/posts/pwn/pwntools/">
-              <span class="leading-6">
-                <span class="inline-block rtl:rotate-180">&larr;</span>&ensp;Python Pwntools的基础使用方法
-              </span>
-            </a>
-            
-              <span class="ms-6 mt-1 text-xs text-neutral-500 dark:text-neutral-400">
-                <time datetime="2025-12-06T17:00:00&#43;08:00">2025-12-06</time>
-              </span>
-            
-          
-        </span>
-        <span class="flex flex-col items-end">
-          
-        </span>
-      </div>
-    </div>
-  
-
 
       
     </footer>
@@ -1524,7 +1618,7 @@
     
       <p class="text-sm text-neutral-500 dark:text-neutral-400">
           &copy;
-          2025
+          2026
           KioroshiAki
       </p>
     

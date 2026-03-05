@@ -8,8 +8,18 @@
     <language>zh-cn</language>
     <managingEditor>EndotherminUnit2@outlook.com (KioroshiAki)</managingEditor>
     <webMaster>EndotherminUnit2@outlook.com (KioroshiAki)</webMaster>
-    <copyright>© 2025 KioroshiAki</copyright>
-    <lastBuildDate>Fri, 12 Dec 2025 08:00:00 +0800</lastBuildDate><atom:link href="http://localhost:1313/posts/index.xml" rel="self" type="application/rss+xml" />
+    <copyright>© 2026 KioroshiAki</copyright>
+    <lastBuildDate>Sun, 15 Mar 2026 18:00:00 +0800</lastBuildDate><atom:link href="http://localhost:1313/posts/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>栈帧、栈溢出、ROP、ret2text</title>
+      <link>http://localhost:1313/posts/pwn/frame-overflow-rop-ret2text/</link>
+      <pubDate>Sun, 15 Mar 2026 18:00:00 +0800</pubDate>
+      <author>EndotherminUnit2@outlook.com (KioroshiAki)</author>
+      <guid>http://localhost:1313/posts/pwn/frame-overflow-rop-ret2text/</guid>
+      <description>超级嗨客的基础课 &amp;mdash; 栈攻击</description>
+      <media:content xmlns:media="http://search.yahoo.com/mrss/" url="http://localhost:1313/posts/pwn/frame-overflow-rop-ret2text/featured.png" />
+    </item>
     
     <item>
       <title>ELF、内存装载、栈与寄存器</title>

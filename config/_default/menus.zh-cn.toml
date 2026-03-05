@@ -17,7 +17,7 @@
 
 [[main]]
   name = "分类"
-  pageRef = "categories"
+  pageRef = "series"
   weight = 10
 
 [[main]]
@@ -43,5 +43,5 @@
 
 # [[footer]]
 #   name = "分类"
-#   pageRef = "categories"
+#   pageRef = "series"
 #   weight = 10
