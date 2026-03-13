@@ -9,12 +9,12 @@
     <managingEditor>EndotherminUnit2@outlook.com (KioroshiAki)</managingEditor>
     <webMaster>EndotherminUnit2@outlook.com (KioroshiAki)</webMaster>
     <copyright>© 2026 KioroshiAki</copyright>
-    <lastBuildDate>Sun, 15 Mar 2026 18:00:00 +0800</lastBuildDate><atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 05 Mar 2026 18:00:00 +0800</lastBuildDate><atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>栈帧、栈溢出、ROP、ret2text</title>
       <link>http://localhost:1313/posts/pwn/frame-overflow-rop-ret2text/</link>
-      <pubDate>Sun, 15 Mar 2026 18:00:00 +0800</pubDate>
+      <pubDate>Thu, 05 Mar 2026 18:00:00 +0800</pubDate>
       <author>EndotherminUnit2@outlook.com (KioroshiAki)</author>
       <guid>http://localhost:1313/posts/pwn/frame-overflow-rop-ret2text/</guid>
       <description>超级嗨客的基础课 &amp;mdash; 栈攻击</description>
@@ -49,6 +49,16 @@
       <guid>http://localhost:1313/friends/convr3/</guid>
       <description>CUIT好哥们</description>
       <media:content xmlns:media="http://search.yahoo.com/mrss/" url="http://localhost:1313/friends/convr3/featured.jpg" />
+    </item>
+    
+    <item>
+      <title>Converter258</title>
+      <link>http://localhost:1313/friends/djfl/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <author>EndotherminUnit2@outlook.com (KioroshiAki)</author>
+      <guid>http://localhost:1313/friends/djfl/</guid>
+      <description>Web大手子</description>
+      <media:content xmlns:media="http://search.yahoo.com/mrss/" url="http://localhost:1313/friends/djfl/featured.jpg" />
     </item>
     
     <item>
