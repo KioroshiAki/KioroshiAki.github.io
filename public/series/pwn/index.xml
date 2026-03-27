@@ -17,8 +17,8 @@
       <pubDate>Wed, 25 Mar 2026 18:00:00 +0800</pubDate>
       <author>EndotherminUnit2@outlook.com (KioroshiAki)</author>
       <guid>http://localhost:1313/posts/pwn/pivot/</guid>
-      <description>They don&amp;rsquo;t dance on the floor, the floor dances to keep on their step&amp;hellip;</description>
-      
+      <description>They don&amp;rsquo;t dance on the floor, the floor dances to catch up with their steps&amp;hellip;</description>
+      <media:content xmlns:media="http://search.yahoo.com/mrss/" url="http://localhost:1313/posts/pwn/pivot/featured.png" />
     </item>
     
     <item>
@@ -48,7 +48,7 @@
       <author>EndotherminUnit2@outlook.com (KioroshiAki)</author>
       <guid>http://localhost:1313/posts/pwn/pwntools/</guid>
       <description>看完这篇就能成为口算大神了吗？</description>
-      <media:content xmlns:media="http://search.yahoo.com/mrss/" url="http://localhost:1313/posts/pwn/pwntools/featured.png" />
+      <media:content xmlns:media="http://search.yahoo.com/mrss/" url="http://localhost:1313/posts/pwn/pwntools/featured.jpg" />
     </item>
     
   </channel>
