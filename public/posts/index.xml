@@ -9,26 +9,36 @@
     <managingEditor>EndotherminUnit2@outlook.com (KioroshiAki)</managingEditor>
     <webMaster>EndotherminUnit2@outlook.com (KioroshiAki)</webMaster>
     <copyright>© 2026 KioroshiAki</copyright>
-    <lastBuildDate>Thu, 05 Mar 2026 18:00:00 +0800</lastBuildDate><atom:link href="http://localhost:1313/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 25 Mar 2026 18:00:00 +0800</lastBuildDate><atom:link href="http://localhost:1313/posts/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>栈迁移</title>
+      <link>http://localhost:1313/posts/pwn/pivot/</link>
+      <pubDate>Wed, 25 Mar 2026 18:00:00 +0800</pubDate>
+      <author>EndotherminUnit2@outlook.com (KioroshiAki)</author>
+      <guid>http://localhost:1313/posts/pwn/pivot/</guid>
+      <description>They don&amp;rsquo;t dance on the floor, the floor dances to catch up with their steps&amp;hellip;</description>
+      <media:content xmlns:media="http://search.yahoo.com/mrss/" url="http://localhost:1313/posts/pwn/pivot/featured.png" />
+    </item>
     
     <item>
       <title>栈帧、栈溢出、ROP、ret2text</title>
-      <link>http://localhost:1313/posts/pwn/frame-overflow-rop-ret2text/</link>
+      <link>http://localhost:1313/posts/pwn/ret2text/</link>
       <pubDate>Thu, 05 Mar 2026 18:00:00 +0800</pubDate>
       <author>EndotherminUnit2@outlook.com (KioroshiAki)</author>
-      <guid>http://localhost:1313/posts/pwn/frame-overflow-rop-ret2text/</guid>
+      <guid>http://localhost:1313/posts/pwn/ret2text/</guid>
       <description>超级嗨客的基础课 &amp;mdash; 栈攻击</description>
-      <media:content xmlns:media="http://search.yahoo.com/mrss/" url="http://localhost:1313/posts/pwn/frame-overflow-rop-ret2text/featured.png" />
+      <media:content xmlns:media="http://search.yahoo.com/mrss/" url="http://localhost:1313/posts/pwn/ret2text/featured.png" />
     </item>
     
     <item>
       <title>ELF、内存装载、栈与寄存器</title>
-      <link>http://localhost:1313/posts/pwn/elf-load-stack-register/</link>
+      <link>http://localhost:1313/posts/pwn/elf-basic/</link>
       <pubDate>Fri, 12 Dec 2025 08:00:00 +0800</pubDate>
       <author>EndotherminUnit2@outlook.com (KioroshiAki)</author>
-      <guid>http://localhost:1313/posts/pwn/elf-load-stack-register/</guid>
+      <guid>http://localhost:1313/posts/pwn/elf-basic/</guid>
       <description>从磁盘到内存，程序经历了什么？</description>
-      <media:content xmlns:media="http://search.yahoo.com/mrss/" url="http://localhost:1313/posts/pwn/elf-load-stack-register/featured.png" />
+      <media:content xmlns:media="http://search.yahoo.com/mrss/" url="http://localhost:1313/posts/pwn/elf-basic/featured.png" />
     </item>
     
     <item>
@@ -38,7 +48,7 @@
       <author>EndotherminUnit2@outlook.com (KioroshiAki)</author>
       <guid>http://localhost:1313/posts/pwn/pwntools/</guid>
       <description>看完这篇就能成为口算大神了吗？</description>
-      <media:content xmlns:media="http://search.yahoo.com/mrss/" url="http://localhost:1313/posts/pwn/pwntools/featured.png" />
+      <media:content xmlns:media="http://search.yahoo.com/mrss/" url="http://localhost:1313/posts/pwn/pwntools/featured.jpg" />
     </item>
     
   </channel>

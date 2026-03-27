@@ -2,7 +2,7 @@
 date = '2026-03-05T18:00:00+08:00'
 draft = false
 title = '栈帧、栈溢出、ROP、ret2text'
-categories = ["Pwn", "ret2text"]
+categories = ["Pwn", "ret2text", "ROP"]
 series = ["Pwn"]
 series_order = 3
 summary = "超级嗨客的基础课 --- 栈攻击"

@@ -13,12 +13,12 @@
     
     <item>
       <title>栈帧、栈溢出、ROP、ret2text</title>
-      <link>http://localhost:1313/posts/pwn/frame-overflow-rop-ret2text/</link>
+      <link>http://localhost:1313/posts/pwn/ret2text/</link>
       <pubDate>Thu, 05 Mar 2026 18:00:00 +0800</pubDate>
       <author>EndotherminUnit2@outlook.com (KioroshiAki)</author>
-      <guid>http://localhost:1313/posts/pwn/frame-overflow-rop-ret2text/</guid>
+      <guid>http://localhost:1313/posts/pwn/ret2text/</guid>
       <description>超级嗨客的基础课 &amp;mdash; 栈攻击</description>
-      <media:content xmlns:media="http://search.yahoo.com/mrss/" url="http://localhost:1313/posts/pwn/frame-overflow-rop-ret2text/featured.png" />
+      <media:content xmlns:media="http://search.yahoo.com/mrss/" url="http://localhost:1313/posts/pwn/ret2text/featured.png" />
     </item>
     
   </channel>

