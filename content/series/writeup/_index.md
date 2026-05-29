@@ -7,4 +7,4 @@ showWordCount = false
 hiddenFromSearch = true
 +++
 
-**Write Up和题目复现！**
+**WriteUp和题目复现！**
