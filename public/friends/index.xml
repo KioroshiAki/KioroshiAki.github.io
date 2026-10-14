@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>友链合集 on KA&#39;s Blog</title>
+    <link>http://localhost:1313/friends/</link>
+    <description>Recent content in 友链合集 on KA&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <managingEditor>EndotherminUnit2@outlook.com (Kioroshi Aki)</managingEditor>
+    <webMaster>EndotherminUnit2@outlook.com (Kioroshi Aki)</webMaster>
+    <copyright>© Kioroshi Aki - Just COPY, that&#39;s RIGHT.</copyright>
+    <atom:link href="http://localhost:1313/friends/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Converter258</title>
+      <link>http://localhost:1313/friends/convr3/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <author>EndotherminUnit2@outlook.com (Kioroshi Aki)</author>
+      <guid>http://localhost:1313/friends/convr3/</guid>
+      <description>CUIT好哥们</description>
+      <media:content xmlns:media="http://search.yahoo.com/mrss/" url="http://localhost:1313/friends/convr3/featured.jpg" />
+    </item>
+    
+    <item>
+      <title>djfl</title>
+      <link>http://localhost:1313/friends/djfl/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <author>EndotherminUnit2@outlook.com (Kioroshi Aki)</author>
+      <guid>http://localhost:1313/friends/djfl/</guid>
+      <description>Web大手子</description>
+      <media:content xmlns:media="http://search.yahoo.com/mrss/" url="http://localhost:1313/friends/djfl/featured.jpg" />
+    </item>
+    
+    <item>
+      <title>宛宛</title>
+      <link>http://localhost:1313/friends/wan/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <author>EndotherminUnit2@outlook.com (Kioroshi Aki)</author>
+      <guid>http://localhost:1313/friends/wan/</guid>
+      <description>TSCTF-J2026全栈榜一大佬/拜谢</description>
+      <media:content xmlns:media="http://search.yahoo.com/mrss/" url="http://localhost:1313/friends/wan/featured.jpg" />
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>KA&#39;s Blog</title>
+    <link>http://localhost:1313/</link>
+    <description>Recent content on KA&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <managingEditor>EndotherminUnit2@outlook.com (Kioroshi Aki)</managingEditor>
+    <webMaster>EndotherminUnit2@outlook.com (Kioroshi Aki)</webMaster>
+    <copyright>© Kioroshi Aki - Just COPY, that&#39;s RIGHT.</copyright>
+    <lastBuildDate>Wed, 14 Oct 2026 08:00:00 +0800</lastBuildDate><atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>TSCTF-J 2026 Pwn WriteUp</title>
+      <link>http://localhost:1313/posts/writeup/tsctf-j2026pwn/</link>
+      <pubDate>Wed, 14 Oct 2026 08:00:00 +0800</pubDate>
+      <author>EndotherminUnit2@outlook.com (Kioroshi Aki)</author>
+      <guid>http://localhost:1313/posts/writeup/tsctf-j2026pwn/</guid>
+      <description>这tm新生赛吗？</description>
+      <media:content xmlns:media="http://search.yahoo.com/mrss/" url="http://localhost:1313/posts/writeup/tsctf-j2026pwn/featured.png" />
+    </item>
+    
+    <item>
+      <title>TSCTF-J 2025 Pwn题目全复现</title>
+      <link>http://localhost:1313/posts/writeup/tsctf-j2025pwn/</link>
+      <pubDate>Fri, 29 May 2026 08:00:00 +0800</pubDate>
+      <author>EndotherminUnit2@outlook.com (Kioroshi Aki)</author>
+      <guid>http://localhost:1313/posts/writeup/tsctf-j2025pwn/</guid>
+      <description>好难</description>
+      <media:content xmlns:media="http://search.yahoo.com/mrss/" url="http://localhost:1313/posts/writeup/tsctf-j2025pwn/featured.png" />
+    </item>
+    
+    <item>
+      <title>栈迁移</title>
+      <link>http://localhost:1313/posts/pwn_basic/pivot/</link>
+      <pubDate>Fri, 27 Mar 2026 18:00:00 +0800</pubDate>
+      <author>EndotherminUnit2@outlook.com (Kioroshi Aki)</author>
+      <guid>http://localhost:1313/posts/pwn_basic/pivot/</guid>
+      <description>They don&amp;rsquo;t dance on the floor, the floor dances to catch up with their steps&amp;hellip;</description>
+      <media:content xmlns:media="http://search.yahoo.com/mrss/" url="http://localhost:1313/posts/pwn_basic/pivot/featured.png" />
+    </item>
+    
+    <item>
+      <title>栈帧、栈溢出、ROP、ret2text</title>
+      <link>http://localhost:1313/posts/pwn_basic/ret2text/</link>
+      <pubDate>Thu, 05 Mar 2026 18:00:00 +0800</pubDate>
+      <author>EndotherminUnit2@outlook.com (Kioroshi Aki)</author>
+      <guid>http://localhost:1313/posts/pwn_basic/ret2text/</guid>
+      <description>超级嗨客的基础课 &amp;mdash; 栈攻击</description>
+      <media:content xmlns:media="http://search.yahoo.com/mrss/" url="http://localhost:1313/posts/pwn_basic/ret2text/featured.png" />
+    </item>
+    
+    <item>
+      <title>ELF、内存装载、栈与寄存器</title>
+      <link>http://localhost:1313/posts/pwn_basic/elfbasic/</link>
+      <pubDate>Fri, 12 Dec 2025 08:00:00 +0800</pubDate>
+      <author>EndotherminUnit2@outlook.com (Kioroshi Aki)</author>
+      <guid>http://localhost:1313/posts/pwn_basic/elfbasic/</guid>
+      <description>从磁盘到内存，程序经历了什么？</description>
+      <media:content xmlns:media="http://search.yahoo.com/mrss/" url="http://localhost:1313/posts/pwn_basic/elfbasic/featured.png" />
+    </item>
+    
+    <item>
+      <title>Python Pwntools的基础使用方法</title>
+      <link>http://localhost:1313/posts/pwn_basic/pwntools/</link>
+      <pubDate>Sat, 06 Dec 2025 17:00:00 +0800</pubDate>
+      <author>EndotherminUnit2@outlook.com (Kioroshi Aki)</author>
+      <guid>http://localhost:1313/posts/pwn_basic/pwntools/</guid>
+      <description>看完这篇就能成为口算大神了吗？</description>
+      <media:content xmlns:media="http://search.yahoo.com/mrss/" url="http://localhost:1313/posts/pwn_basic/pwntools/featured.jpg" />
+    </item>
+    
+    <item>
+      <title>Converter258</title>
+      <link>http://localhost:1313/friends/convr3/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <author>EndotherminUnit2@outlook.com (Kioroshi Aki)</author>
+      <guid>http://localhost:1313/friends/convr3/</guid>
+      <description>CUIT好哥们</description>
+      <media:content xmlns:media="http://search.yahoo.com/mrss/" url="http://localhost:1313/friends/convr3/featured.jpg" />
+    </item>
+    
+    <item>
+      <title>djfl</title>
+      <link>http://localhost:1313/friends/djfl/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <author>EndotherminUnit2@outlook.com (Kioroshi Aki)</author>
+      <guid>http://localhost:1313/friends/djfl/</guid>
+      <description>Web大手子</description>
+      <media:content xmlns:media="http://search.yahoo.com/mrss/" url="http://localhost:1313/friends/djfl/featured.jpg" />
+    </item>
+    
+    <item>
+      <title>宛宛</title>
+      <link>http://localhost:1313/friends/wan/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <author>EndotherminUnit2@outlook.com (Kioroshi Aki)</author>
+      <guid>http://localhost:1313/friends/wan/</guid>
+      <description>TSCTF-J2026全栈榜一大佬/拜谢</description>
+      <media:content xmlns:media="http://search.yahoo.com/mrss/" url="http://localhost:1313/friends/wan/featured.jpg" />
+    </item>
+    
+    <item>
+      <title>我    是    谁    ？</title>
+      <link>http://localhost:1313/about/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <author>EndotherminUnit2@outlook.com (Kioroshi Aki)</author>
+      <guid>http://localhost:1313/about/</guid>
+      <description>&lt;p&gt;&lt;strong&gt;KioroshiAki&lt;/strong&gt;，简称&lt;strong&gt;KA&lt;/strong&gt;。&lt;/p&gt;&#xA;&#xD;&#xA;&lt;h2 class=&#34;relative group&#34;&gt;&lt;strong&gt;感兴趣 / 正在学习&lt;/strong&gt;&#xD;&#xA;    &lt;div id=&#34;感兴趣--正在学习&#34; class=&#34;anchor&#34;&gt;&lt;/div&gt;&#xD;&#xA;    &#xD;&#xA;    &lt;span&#xD;&#xA;        class=&#34;absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none&#34;&gt;&#xD;&#xA;        &lt;a class=&#34;text-primary-300 dark:text-neutral-700 !no-underline&#34; href=&#34;#%e6%84%9f%e5%85%b4%e8%b6%a3--%e6%ad%a3%e5%9c%a8%e5%ad%a6%e4%b9%a0&#34; aria-label=&#34;锚点&#34;&gt;#&lt;/a&gt;&#xD;&#xA;    &lt;/span&gt;&#xD;&#xA;    &#xD;&#xA;&lt;/h2&gt;&#xD;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&#xA;&lt;p&gt;程序设计&lt;/p&gt;</description>
+      
+    </item>
+    
+  </channel>
+</rss>
