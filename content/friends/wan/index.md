@@ -1,6 +1,6 @@
 +++
 title = '宛宛'
-externalUrl = 'blog.3w3.asia'
+externalUrl = 'https://blog.3w3.asia/'
 summary = 'TSCTF-J2026全栈榜一大佬/拜谢'
 showdate = false
 showAuthor = false
