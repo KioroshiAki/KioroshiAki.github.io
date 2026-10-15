@@ -1,8 +1,6 @@
-# 构建产物：本地生成，不纳入版本库
-# （GitHub Actions 部署时会用 hugo 重新构建 ./public）
-# 带前导斜杠 = 只匹配仓库根目录，避免误伤 content/**/resources/ 这类文章资源目录
+# local build caches
 /public/
 /resources/
 
-# Hugo 每次构建自动生成的锁文件
+# Hugo lock file
 /.hugo_build.lock
