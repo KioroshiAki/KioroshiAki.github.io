@@ -4,7 +4,7 @@ draft = false
 title = 'TSCTF-J 2026 Pwn WriteUp'
 categories = ["writeup"]
 series = ["writeup"]
-series_order = 1
+series_order = 2
 summary = "这tm新生赛吗？"
 +++
 
