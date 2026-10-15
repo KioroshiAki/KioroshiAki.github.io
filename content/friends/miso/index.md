@@ -1,5 +1,5 @@
 +++
-title = 'Map1e'
+title = 'miso'
 externalUrl = 'https://miso2233.github.io/'
 summary = '正在自研agent的web大佬'
 showdate = false
