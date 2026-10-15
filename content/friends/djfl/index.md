@@ -1,7 +1,7 @@
 +++
 title = 'djfl'
 externalUrl = 'https://djfl-cyber.github.io/'
-summary = 'Web大手子'
+summary = 'misc大手子'
 showdate = false
 showAuthor = false
 showZenMode = false

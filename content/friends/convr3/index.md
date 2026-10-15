@@ -1,7 +1,7 @@
 +++
 title = 'Converter258'
 externalUrl = 'https://converter258.cn/'
-summary = 'CUIT好哥们'
+summary = '来自syclover，我的好基友'
 showdate = false
 showAuthor = false
 showZenMode = false

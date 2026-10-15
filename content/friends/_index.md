@@ -6,6 +6,7 @@ showAuthor = false
 showZenMode = false
 showWordCount = false
 hiddenFromSearch = true
+cardView = true
 +++
 
 **来看看hxd们写了啥！**
