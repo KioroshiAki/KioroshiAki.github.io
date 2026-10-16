@@ -203,3 +203,41 @@ forgejoDefaultServer = "https://v11.next.forgejo.org"
 
 [advertisement]
   # adsense = ""
+
+# Floating music player. Playlist lives in data/music.yaml.
+
+[musicPlayer]
+  enable = true
+  draggable = true                  # drag and remember position
+  startCollapsed = false            # start as a pill
+  resumeAcrossPages = true          # restore track and time after navigation
+  autoplay = false                  # avoid browser autoplay blocking
+  volume = 0.5
+  order = "list"                    # list or random
+  loop = "all"                      # all, one, or none
+  listFolded = true                 # fold playlist initially
+  listMaxHeight = "220px"
+  preload = "none"
+  storageName = "ka-music-player"
+
+# PJAX keeps the player alive across internal links.
+
+[navPjax]
+  enable = true
+  maxNavigations = 100              # fall back to a full load after this many navigations
+
+# /music jukebox.
+
+[jukebox]
+  enable = true
+  windowSeconds = 15                # rate-limit window
+  maxRerolls = 5                    # max rerolls per window
+
+# Terminal overlay and virtual filesystem.
+# ~ maps to content/, / is the virtual root.
+# The seccomp easter egg lives in ~/etc and ~/challenge.
+# Type "silent" to mute deny logs and "--log /dev/pts/0" to restore them.
+[terminal]
+  enable = true
+  historyMax = 300                  # max output lines kept
+  duckVolume = 0.2                  # player volume while the terminal is open

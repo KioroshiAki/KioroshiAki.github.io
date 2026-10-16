@@ -1,0 +1,41 @@
+/* Top progress bar for PJAX navigation. */
+
+.np-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  z-index: 60;
+  background: transparent;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.np-progress[data-active="true"] {
+  opacity: 1;
+}
+
+.np-progress i {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: #4a9ef0;
+  transition: width 0.4s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.np-progress[data-active="true"] i {
+  width: 80%;
+}
+
+.np-progress[data-done="true"] i {
+  width: 100%;
+  transition: width 0.12s ease;
+}
+
+@media print {
+  .np-progress {
+    display: none !important;
+  }
+}

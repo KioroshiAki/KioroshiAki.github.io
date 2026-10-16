@@ -8,6 +8,7 @@ showZenMode = false
 showWordCount = false
 hiddenFromSearch = true
 showTableOfContents = false
+replyByEmail = false
 +++
 
 **KioroshiAki**，简称**KA**。

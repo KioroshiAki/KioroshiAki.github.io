@@ -1,0 +1,219 @@
+/* Full-screen terminal overlay. */
+
+:root {
+  --tm-accent: #4a9ef0;
+  --tm-font: ui-monospace, "Cascadia Mono", "Cascadia Code", Consolas, "SFMono-Regular",
+             "Liberation Mono", "Microsoft YaHei", "PingFang SC", "Hiragino Sans GB",
+             system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+.tm-scope[data-tm-scheme="light"] {
+  --tm-veil: rgba(240, 243, 250, 0.42);
+  --tm-bar-bg: rgba(252, 253, 255, 0.93);
+  --tm-line: rgba(13, 18, 51, 0.14);
+  --tm-bar-fg: #0d1233;
+  --tm-dim: #626a96;
+  --tm-chat-fg: #0b1026;
+  --tm-chat-dim: #3c4468;
+  --tm-chat-shadow: 0 1px 2px rgba(255, 255, 255, 0.95), 0 0 10px rgba(255, 255, 255, 0.75);
+  --tm-accent: #2f73cd;
+  --tm-root: #d92c2c;
+}
+
+.tm-scope[data-tm-scheme="dark"] {
+  --tm-veil: rgba(6, 9, 24, 0.38);
+  --tm-bar-bg: rgba(22, 28, 60, 0.88);
+  --tm-line: rgba(255, 255, 255, 0.16);
+  --tm-bar-fg: #eef0f9;
+  --tm-dim: #8d94bd;
+  --tm-chat-fg: #f4f6ff;
+  --tm-chat-dim: #b9c0e0;
+  --tm-chat-shadow: 0 1px 3px rgba(0, 0, 0, 0.9), 0 0 12px rgba(0, 0, 0, 0.55);
+  --tm-accent: #6bb0ff;
+  --tm-root: #ff5b5b;
+}
+
+/* Backdrop blur. */
+.tm-veil {
+  position: fixed; inset: 0; z-index: 45;
+  background: var(--tm-veil, rgba(6, 9, 24, 0.38));
+  visibility: hidden; opacity: 0; pointer-events: none;
+  transition: opacity .2s ease, visibility 0s linear .2s;
+}
+.tm-veil[data-open="true"] {
+  visibility: visible; opacity: 1; pointer-events: auto;
+  -webkit-backdrop-filter: blur(16px) saturate(130%);
+  backdrop-filter: blur(16px) saturate(130%);
+  transition: opacity .2s ease, visibility 0s linear 0s;
+}
+
+/* Custom scrollbar on the left. */
+.tm-scrollbar {
+  position: fixed; left: 26px; z-index: 51;
+  bottom: calc(24px + 52px + 22px);
+  width: 3px; height: 50vh; max-height: calc(100vh - 190px);
+  border-radius: 2px;
+  background: color-mix(in srgb, var(--tm-chat-fg) 10%, transparent);
+  opacity: 0; pointer-events: none;
+  transition: opacity .25s ease;
+  visibility: hidden;
+}
+.tm-scrollbar[data-open="true"] { visibility: visible; }
+.tm-scrollbar i {
+  display: block; width: 100%; border-radius: 2px;
+  background: color-mix(in srgb, var(--tm-chat-fg) 34%, transparent);
+}
+
+/* History log. */
+.tm-log {
+  position: fixed; left: 24px; z-index: 50;
+  bottom: calc(24px + 52px + 22px);
+  width: min(760px, calc(100vw - 48px));
+  height: 50vh;
+  max-height: calc(100vh - 190px);
+  overflow-y: auto; overflow-x: hidden;
+  display: flex; flex-direction: column;           /* Keep DOM order for text selection. */
+  padding: 0 4px 2px 10px;
+  font: 14px/1.72 var(--tm-font);
+  color: var(--tm-chat-fg);
+  text-shadow: var(--tm-chat-shadow);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, transparent 3%, #000 24%, #000 100%);
+  mask-image: linear-gradient(to bottom, transparent 0, transparent 3%, #000 24%, #000 100%);
+  scrollbar-width: none;                           /* Hide the native scrollbar. */
+  visibility: hidden; opacity: 0; translate: 0 8px; pointer-events: none;
+  transition: opacity .18s ease, translate .18s ease, visibility 0s linear .18s;
+}
+.tm-log[data-open="true"] {
+  visibility: visible; opacity: 1; translate: 0 0; pointer-events: auto;
+  transition: opacity .18s ease, translate .18s ease, visibility 0s linear 0s;
+}
+.tm-log::-webkit-scrollbar { display: none; }
+.tm-log .tm-line { white-space: pre-wrap; overflow-wrap: anywhere; }
+.tm-log .tm-line + .tm-line { margin-top: 3px; }
+/* Keep short logs aligned to the input bar. */
+.tm-log .tm-line:first-child { margin-top: auto; }
+.tm-dim { color: var(--tm-chat-dim); }
+.tm-cmd { color: var(--tm-chat-fg); }
+.tm-cmd .tm-path { color: var(--tm-chat-dim); }
+.tm-cmd b { color: var(--tm-accent); font-weight: 700; }
+.tm-ok { color: var(--tm-chat-fg); }
+.tm-err { color: #ff8a80; }
+.tm-note { color: #ffcf8a; }
+
+/* Input bar. */
+.tm-bar {
+  position: fixed; left: 24px; bottom: 24px; z-index: 50;
+  width: min(760px, calc(100vw - 48px));
+  height: 52px;
+  display: flex; align-items: center; gap: 10px;
+  padding: 0 8px 0 16px;
+  border-radius: 12px;
+  border: 1px solid var(--tm-line);
+  background: var(--tm-bar-bg);
+  -webkit-backdrop-filter: blur(14px) saturate(150%);
+  backdrop-filter: blur(14px) saturate(150%);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, .30);
+  color: var(--tm-bar-fg);
+  font: 14px/1.6 var(--tm-font);
+  visibility: hidden; opacity: 0; translate: 0 10px; pointer-events: none;
+  transition: opacity .18s ease, translate .18s ease, background .25s ease,
+              border-color .25s ease, box-shadow .25s ease, visibility 0s linear .18s;
+}
+.tm-bar[data-open="true"] {
+  visibility: visible; opacity: 1; translate: 0 0; pointer-events: auto;
+  transition: opacity .18s ease, translate .18s ease, background .25s ease,
+              border-color .25s ease, box-shadow .25s ease, visibility 0s linear 0s;
+}
+/* Draw the focus ring on the whole bar. */
+.tm-bar:focus-within {
+  border-color: color-mix(in srgb, var(--tm-accent) 72%, var(--tm-line));
+  box-shadow: 0 16px 40px rgba(0, 0, 0, .30),
+              0 0 0 3px color-mix(in srgb, var(--tm-accent) 30%, transparent);
+}
+.tm-bar .tm-prompt {
+  flex: none; color: var(--tm-accent); font-weight: 700;
+  -webkit-user-select: none; user-select: none;
+}
+/* Root prompt. */
+.tm-bar .tm-prompt[data-root="true"] { color: var(--tm-root); }
+.tm-bar input {
+  flex: 1; min-width: 0; height: 100%;
+  background: none; border: 0; outline: 0;
+  color: var(--tm-bar-fg); font: inherit; caret-color: var(--tm-accent);
+}
+/* Override theme focus styles on the input. */
+.tm-bar .tm-input,
+.tm-bar .tm-input:hover,
+.tm-bar .tm-input:focus,
+.tm-bar .tm-input:focus-visible {
+  outline: none; box-shadow: none; border: 0; background: transparent;
+}
+.tm-bar input::placeholder { color: color-mix(in srgb, var(--tm-dim) 75%, transparent); }
+.tm-bar .tm-run {
+  flex: none; display: inline-flex; align-items: center; gap: .4rem;
+  height: 36px; padding: 0 14px; border: 0; border-radius: 8px;
+  background: var(--tm-accent); color: #fff; font: 600 13px/1 inherit; cursor: pointer;
+  -webkit-user-select: none; user-select: none;
+}
+.tm-bar .tm-run:hover { filter: brightness(1.08); }
+.tm-bar .tm-run kbd { font: 12px/1 var(--tm-font); opacity: .85; }
+
+/* Launcher button. */
+.tm-launcher {
+  position: fixed; right: 84px; bottom: 24px;
+  z-index: 55;
+  display: inline-flex; align-items: center; gap: .5rem;
+  height: 40px; padding: 0 12px;
+  border: 1px solid var(--tm-line);
+  border-radius: 12px;
+  background: var(--tm-bar-bg);
+  -webkit-backdrop-filter: blur(14px) saturate(160%);
+  backdrop-filter: blur(14px) saturate(160%);
+  color: var(--tm-bar-fg); font: 14px/1 var(--tm-font); cursor: pointer;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, .22);
+  -webkit-user-select: none; user-select: none;
+  transition: bottom .2s ease, border-color .2s ease;
+}
+.tm-launcher:hover { border-color: color-mix(in srgb, var(--tm-accent) 60%, var(--tm-line)); }
+.tm-launcher .tm-ico { color: var(--tm-accent); font-weight: 700; }
+.tm-launcher kbd {
+  font: 11px/1 var(--tm-font); padding: .25rem .4rem;
+  border-radius: 5px; border: 1px solid var(--tm-line); color: var(--tm-dim);
+}
+
+/* Hide the player while the terminal is open. */
+html[data-tm-open="true"] .mp-panel {
+  opacity: 0;
+  translate: 0 10px;
+  pointer-events: none;
+  transition: opacity .22s ease, translate .22s ease;
+}
+
+/* Limit text selection to terminal content. */
+html[data-tm-open="true"] body,
+html[data-tm-open="true"] body * {
+  -webkit-user-select: none;
+  user-select: none;
+}
+html[data-tm-open="true"] .tm-scope .tm-log,
+html[data-tm-open="true"] .tm-scope .tm-log *,
+html[data-tm-open="true"] .tm-scope .tm-bar .tm-input {
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+@media (max-width: 640px) {
+  .tm-log, .tm-bar { left: 16px; width: calc(100vw - 32px); }
+  .tm-log { height: 46vh; }
+  .tm-scrollbar { left: 18px; height: 46vh; }
+  /* Mobile launcher stays on the left edge. */
+  .tm-launcher {
+    left: 0; right: auto; top: 50%; bottom: auto; transform: translateY(-50%);
+    padding: 0 12px 0 10px;
+    border-left: 0; border-radius: 0 10px 10px 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tm-veil, .tm-log, .tm-bar { transition: none; }
+}

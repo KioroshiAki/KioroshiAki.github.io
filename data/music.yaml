@@ -1,0 +1,113 @@
+# Blog playlist. Only free, no-cookie tracks are playable.
+# Playback URL: https://music.163.com/song/media/outer/url?id=<id>.mp3
+
+# Playable tracks.
+
+tracks:
+  - id: 2629943921
+    name: Design the Night
+    artist: Ary-You
+    cover: http://p1.music.126.net/nW_Ga1Wgo1fvcKVyThthdg==/109951169984956662.jpg?param=130y130
+
+  - id: 2137516044
+    name: Evocation
+    artist: KOAN Sound
+    cover: http://p2.music.126.net/JG21Iw0euRV81mF7Biu1_w==/109951171443281257.jpg?param=177y177
+
+  - id: 2613541779
+    name: Fallen Angels
+    artist: PHONO RECORDS / Salty Salt
+    cover: http://p2.music.126.net/TO99MamUTUQBu_tTITMd-A==/109951169837488454.jpg?param=130y130
+
+  - id: 1416893385
+    name: Get Your Wish
+    artist: Porter Robinson
+    cover: http://p1.music.126.net/FqW-CZGSq4ERqctZWfnfMw==/109951164628611663.jpg?param=130y130
+
+  - id: 2648146034
+    name: JETLAGG!
+    artist: Wooden
+    cover: http://p1.music.126.net/hSi2U8us5u4djz_P4fIy0Q==/109951170168809062.jpg?param=130y130
+
+  - id: 2108294446
+    name: Leave The World Behind
+    artist: nuphory / Luna Lenta
+    cover: http://p2.music.126.net/IQx-hSXfldw8tBIB64omiQ==/109951169531056125.jpg?param=130y130
+
+  - id: 1839140772
+    name: Lifelike
+    artist: Porter Robinson
+    cover: http://p1.music.126.net/2qW-OYZod7SgrzxTwtyBqA==/109951165911363831.jpg?param=130y130
+
+  - id: 1980964964
+    name: Luminiferous
+    artist: Wooden / LBD Records
+    cover: http://p1.music.126.net/9ZTbIkXQl9Ac4gGwQLrM4w==/109951171902492369.jpg?param=130y130
+
+  - id: 2648146033
+    name: MEMORYLEAK
+    artist: RYOQUCHA
+    cover: http://p2.music.126.net/hSi2U8us5u4djz_P4fIy0Q==/109951170168809062.jpg?param=130y130
+
+  - id: 2023038152
+    name: Neverland
+    artist: PHONO RECORDS / Aurora Sky
+    cover: http://p1.music.126.net/l2I4yqRTcxMLlUngGijTZQ==/109951168314845747.jpg?param=130y130
+
+  - id: 2017640347
+    name: Old School
+    artist: Marshmello / Ray Volpe
+    cover: http://p2.music.126.net/hMi-61hiMMLRMLqm3NRwEA==/109951168264032192.jpg?param=130y130
+
+  - id: 3412550714
+    name: Phase_Orbit
+    artist: Anicille
+    cover: http://p1.music.126.net/9jQzM0nIQVADCi5T09yUbw==/109951173109609715.jpg?param=130y130
+
+  - id: 1427889071
+    name: Something Comforting
+    artist: Porter Robinson
+    cover: http://p1.music.126.net/2K8B7AGvv5DpZMocphP7oA==/109951164790454324.jpg?param=130y130
+
+  - id: 3404096928
+    name: WannaCry
+    artist: Ninajirachi / Porter Robinson
+    cover: http://p1.music.126.net/yq71ouspbOGnAVtQB96_YQ==/109951173656394795.jpg?param=130y130
+
+  - id: 2661494556
+    name: WonderStruck
+    artist: PHONO RECORDS / Shiroi-Ice / Ceru_
+    cover: http://p2.music.126.net/y0a53SxrzPB2vp50HdVkaA==/109951170331265990.jpg?param=130y130
+
+  - id: 2609075490
+    name: belong to u
+    artist: PHONO RECORDS / Bob Hou / HPEIRTAZ / Brik / Layzzz / 預製品
+    cover: http://p1.music.126.net/UhftBn1N-_9e4paF3UlPxA==/109951169797502302.jpg?param=130y130
+
+  - id: 3347421250
+    name: change my mind
+    artist: Altare
+    cover: http://p2.music.126.net/ADU5bb75foAvfAgCOIE5Cg==/109951172760236004.jpg?param=130y130
+
+  - id: 2700421303
+    name: 焚蝶
+    artist: Aurora Sky
+    cover: http://p2.music.126.net/cHUSC0OTVgApGuPCortOaQ==/109951170929002869.jpg?param=130y130
+
+  - id: 2679432746
+    name: 记忆电台
+    artist: PHONO RECORDS / 茶几
+    cover: http://p2.music.126.net/flUDl8Uhz2gjHvjDrInq7w==/109951170523080786.jpg?param=130y130
+
+  - id: 2131316143
+    name: 靶向药物
+    artist: Venoflame / Mestie / PHONO RECORDS
+    cover: http://p2.music.126.net/TaZuLHL2AAPMafZrm0v2RQ==/109951169377413726.jpg?param=130y130
+
+
+# Requires login (disabled).
+
+# - id: 212809678
+#   name: Relay
+#   artist: acloudyskye
+#   cover: http://p1.music.126.net/WHtjU8gIN3iJE3hwjTuEqQ==/109951169351615384.jpg?param=130y130

@@ -26,6 +26,11 @@
   weight = 20
 
 [[main]]
+  name = "唱片机"
+  pageRef = "music"
+  weight = 25
+
+[[main]]
   name = "友链"
   pageRef = "friends"
   weight = 30

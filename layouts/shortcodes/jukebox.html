@@ -1,0 +1,21 @@
+{{- /* Jukebox card scaffold; JS fills it and controls the global player. */ -}}
+{{- with site.Params.jukebox -}}
+  {{- if .enable }}
+<div class="jb" data-jb="widget" data-jb-scheme="light">
+  <div class="jb-disc" aria-hidden="true">
+    <span class="jb-label" data-jb="cover"></span>
+  </div>
+  <div class="jb-info">
+    <p class="jb-kicker">随机一首 · 来自本站歌单</p>
+    <h2 class="jb-title" data-jb="title">准备中…</h2>
+    <p class="jb-artist" data-jb="artist"></p>
+    <div class="jb-actions">
+      <button type="button" class="jb-btn jb-btn-primary" data-jb="play" disabled>播放这首</button>
+      <button type="button" class="jb-btn jb-btn-ghost" data-jb="reroll" disabled>换一首</button>
+    </div>
+    <p class="jb-hint" data-jb="hint"></p>
+  </div>
+  <div class="jb-toast" data-jb="toast" role="status" aria-live="polite"></div>
+</div>
+  {{- end -}}
+{{- end -}}

@@ -1,0 +1,78 @@
+{{- /* Inject player, jukebox, terminal, and PJAX data and scripts. */ -}}
+{{- with site.Params.musicPlayer -}}
+  {{- if .enable -}}
+    {{- $tracks := slice -}}
+    {{- with hugo.Data.music -}}
+      {{- range .tracks -}}
+        {{- if not .disabled -}}
+          {{- $tracks = $tracks | append . -}}
+        {{- end -}}
+      {{- end -}}
+    {{- end -}}
+    {{- if gt (len $tracks) 0 }}
+    {{- /* Player data; the panel itself is created by JS. jsonify needs safeJS. */ -}}
+    <script type="application/json" id="ka-music-data">{{ dict "tracks" $tracks "outerUrlTemplate" "https://music.163.com/song/media/outer/url?id={id}.mp3" "options" . | jsonify | safeJS }}</script>
+      {{- /* Load APlayer before the initializer. */ -}}
+      {{- with resources.Get "lib/aplayer/APlayer.min.js" }}
+    <script defer src="{{ (. | fingerprint "sha256").RelPermalink }}"></script>
+      {{- end }}
+      {{- with resources.Get "js/music-player.js" }}
+    <script defer src="{{ (. | fingerprint "sha256").RelPermalink }}"></script>
+      {{- end }}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- /* Jukebox script. */ -}}
+{{- with site.Params.jukebox -}}
+  {{- if .enable }}
+    <script type="application/json" id="ka-jukebox-config">{{ dict "enable" true "windowseconds" (.windowSeconds | default 15) "maxrerolls" (.maxRerolls | default 5) | jsonify | safeJS }}</script>
+    {{- with resources.Get "js/jukebox.js" }}
+    <script defer src="{{ (. | fingerprint "sha256").RelPermalink }}"></script>
+    {{- end }}
+  {{- end -}}
+{{- end -}}
+{{- /* Terminal config, site map, and script. */ -}}
+{{- with site.Params.terminal -}}
+  {{- if .enable }}
+    {{- /* Compact VFS map: p=path t=title d=date s=summary f=files u=externalUrl. */ -}}
+    {{- $pages := slice -}}
+    {{- range site.RegularPages -}}
+      {{- $files := slice -}}
+      {{- range .Resources -}}
+        {{- $files = $files | append .Name -}}
+      {{- end -}}
+      {{- $summary := .Params.summary | default .Description | default (.Plain | truncate 160) -}}
+      {{- $pages = $pages | append (dict "p" .RelPermalink "t" .Title "d" (.Date.Format "2006-01-02") "s" $summary "f" $files "u" (.Params.externalUrl | default "")) -}}
+    {{- end }}
+    {{- /* Content sections only; they do not get run.sh. */ -}}
+    {{- $sections := slice -}}
+    {{- range site.Pages -}}
+      {{- if eq .Kind "section" -}}
+        {{- $files := slice -}}
+        {{- range .Resources -}}
+          {{- $files = $files | append .Name -}}
+        {{- end -}}
+        {{- $summary := .Params.summary | default .Description | default (.Plain | truncate 160) -}}
+        {{- $sections = $sections | append (dict "p" .RelPermalink "t" .Title "d" (.Date.Format "2006-01-02") "s" $summary "f" $files "u" (.Params.externalUrl | default "")) -}}
+      {{- end -}}
+    {{- end }}
+    <script type="application/json" id="ka-terminal-config">{{ dict "enable" true "historymax" (.historyMax | default 300) "duckvolume" (.duckVolume | default 0.2) | jsonify | safeJS }}</script>
+    <script type="application/json" id="ka-site-map">{{ dict "pages" $pages "sections" $sections | jsonify | safeJS }}</script>
+    {{- with resources.Get "js/terminal.js" }}
+    <script defer src="{{ (. | fingerprint "sha256").RelPermalink }}"></script>
+    {{- end }}
+  {{- end -}}
+{{- end -}}
+{{- /* PJAX navigation keeps the player alive. */ -}}
+{{- with site.Params.navPjax -}}
+  {{- if .enable }}
+    {{- /* JSON config also needs safeJS. */ -}}
+    <script type="application/json" id="ka-navpjax-config">{{ dict "enable" true "maxNavigations" (.maxNavigations | default 100) | jsonify | safeJS }}</script>
+    {{- with resources.Get "lib/pjax/pjax.min.js" }}
+    <script defer src="{{ (. | fingerprint "sha256").RelPermalink }}"></script>
+    {{- end }}
+    {{- with resources.Get "js/nav-pjax.js" }}
+    <script defer src="{{ (. | fingerprint "sha256").RelPermalink }}"></script>
+    {{- end }}
+  {{- end -}}
+{{- end -}}

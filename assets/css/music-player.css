@@ -1,0 +1,318 @@
+/* Floating music player wrapper and APlayer theme overrides. */
+
+/* Light theme tokens. */
+.mp-panel {
+  --mp-bg: rgba(246, 247, 252, 0.94);
+  --mp-border: rgba(13, 18, 51, 0.10);
+  --mp-fg: #0d1233;
+  --mp-fg-dim: #626a96;
+  --mp-icon: #46507a;
+  --mp-line: rgba(13, 18, 51, 0.10);
+  --mp-bar: rgba(13, 18, 51, 0.16);
+  --mp-bar-loaded: rgba(13, 18, 51, 0.30);
+  --mp-hover: rgba(13, 18, 51, 0.06);
+  --mp-shadow: 0 10px 30px rgba(13, 18, 51, 0.22);
+}
+
+/* Dark theme tokens. */
+.mp-panel[data-mp-scheme="dark"] {
+  --mp-bg: rgba(26, 33, 74, 0.92);
+  --mp-border: rgba(255, 255, 255, 0.12);
+  --mp-fg: #eef0f9;
+  --mp-fg-dim: #8d94bd;
+  --mp-icon: #c3c8e2;
+  --mp-line: rgba(255, 255, 255, 0.10);
+  --mp-bar: rgba(255, 255, 255, 0.18);
+  --mp-bar-loaded: rgba(255, 255, 255, 0.32);
+  --mp-hover: rgba(255, 255, 255, 0.07);
+  --mp-shadow: 0 10px 30px rgba(0, 0, 0, 0.40);
+}
+
+/* Panel. */
+.mp-panel {
+  position: fixed;
+  left: 20px;
+  bottom: 20px;
+  z-index: 40;
+  width: 340px;
+  max-width: calc(100vw - 32px);
+  border-radius: 16px;
+  border: 1px solid var(--mp-border);
+  background: var(--mp-bg);
+  -webkit-backdrop-filter: blur(16px) saturate(150%);
+  backdrop-filter: blur(16px) saturate(150%);
+  box-shadow: var(--mp-shadow);
+  color: var(--mp-fg);
+  font-size: 14px;
+  overflow: hidden;
+  /* The panel itself is not selectable; text areas are handled below. */
+  -webkit-user-select: none;
+  user-select: none;
+  transition: background 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+/* Freeze page selection while dragging inside the player. */
+html[data-mp-selecting="true"] body,
+html[data-mp-selecting="true"] body * {
+  -webkit-user-select: none;
+  user-select: none;
+}
+html[data-mp-selecting="true"] .mp-panel .mp-nowplaying,
+html[data-mp-selecting="true"] .mp-panel .aplayer-music,
+html[data-mp-selecting="true"] .mp-panel .aplayer-music *,
+html[data-mp-selecting="true"] .mp-panel .aplayer-lrc-contents,
+html[data-mp-selecting="true"] .mp-panel .aplayer-lrc-contents * {
+  -webkit-user-select: text;
+  user-select: text;
+}
+html[data-mp-selecting="true"] img {
+  -webkit-user-drag: none;
+  -webkit-touch-callout: none;
+}
+
+/* Drag handle. */
+.mp-handle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 32px;
+  padding: 0 6px 0 12px;
+  border-bottom: 1px solid var(--mp-line);
+  cursor: grab;
+  user-select: none;
+  touch-action: none;
+}
+
+.mp-handle:active {
+  cursor: grabbing;
+}
+
+.mp-grip {
+  display: flex;
+  gap: 3px;
+  flex: none;
+}
+
+.mp-grip i {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--mp-fg-dim);
+  opacity: 0.75;
+}
+
+.mp-nowplaying {
+  display: none;
+  flex: 1;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: 12px;
+  color: var(--mp-fg-dim);
+}
+
+.mp-tools {
+  display: flex;
+  gap: 2px;
+  margin-left: auto;
+  flex: none;
+}
+
+.mp-tools button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--mp-fg-dim);
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.mp-tools button:hover {
+  background: var(--mp-hover);
+  color: var(--mp-fg);
+}
+
+.mp-tools button svg {
+  width: 13px;
+  height: 13px;
+  fill: currentColor;
+}
+
+/* Player area; the playlist opens upward. */
+.mp-body {
+  padding: 2px 4px 6px;
+}
+
+.mp-body .aplayer {
+  display: flex;
+  flex-direction: column-reverse;
+  width: 100%;
+  margin: 0;
+  border-radius: 12px;
+  background: transparent;
+  box-shadow: none;
+  color: var(--mp-fg);
+  font-family: inherit;
+  line-height: normal;
+}
+
+.mp-body .aplayer .aplayer-body,
+.mp-body .aplayer .aplayer-info {
+  background: transparent;
+}
+
+.mp-body .aplayer .aplayer-pic {
+  border-radius: 10px;
+}
+
+.mp-body .aplayer .aplayer-title {
+  color: var(--mp-fg);
+}
+
+.mp-body .aplayer .aplayer-author,
+.mp-body .aplayer .aplayer-info .aplayer-controller .aplayer-time {
+  color: var(--mp-fg-dim);
+}
+
+.mp-body .aplayer .aplayer-info {
+  border-top-color: var(--mp-line);
+}
+
+.mp-body .aplayer.aplayer-withlist .aplayer-info {
+  border-bottom-color: var(--mp-line);
+}
+
+.mp-body .aplayer .aplayer-info .aplayer-controller .aplayer-time .aplayer-icon path {
+  fill: var(--mp-icon);
+}
+
+.mp-body .aplayer .aplayer-info .aplayer-controller .aplayer-time .aplayer-icon:hover path {
+  fill: var(--mp-fg);
+}
+
+/* Cover play/pause icons stay white. */
+.mp-body .aplayer .aplayer-pic .aplayer-button path {
+  fill: #fff;
+}
+
+.mp-body .aplayer .aplayer-info .aplayer-controller .aplayer-bar-wrap .aplayer-bar {
+  background: var(--mp-bar);
+}
+
+.mp-body .aplayer .aplayer-info .aplayer-controller .aplayer-bar-wrap .aplayer-bar .aplayer-loaded {
+  background: var(--mp-bar-loaded);
+}
+
+.mp-body .aplayer .aplayer-info .aplayer-controller .aplayer-volume-wrap .aplayer-volume-bar-wrap .aplayer-volume-bar {
+  background: var(--mp-bar);
+}
+
+.mp-body .aplayer .aplayer-list {
+  border-top: 1px solid var(--mp-line);
+}
+
+.mp-body .aplayer .aplayer-list ol li {
+  color: var(--mp-fg);
+  border-top-color: var(--mp-line);
+}
+
+.mp-body .aplayer .aplayer-list ol li:hover,
+.mp-body .aplayer .aplayer-list ol li.aplayer-list-light {
+  background: var(--mp-hover);
+}
+
+.mp-body .aplayer .aplayer-list ol li .aplayer-list-index,
+.mp-body .aplayer .aplayer-list ol li .aplayer-list-author {
+  color: var(--mp-fg-dim);
+}
+
+.mp-body .aplayer .aplayer-list ol::-webkit-scrollbar-thumb {
+  background-color: var(--mp-bar-loaded);
+}
+
+/* Hide APlayer's built-in mini switcher. */
+.mp-body .aplayer .aplayer-miniswitcher {
+  display: none;
+}
+
+.mp-body .aplayer .aplayer-notice {
+  background-color: rgba(13, 18, 51, 0.88);
+  color: #eef0f9;
+  font-size: 12px;
+}
+
+/* Collapsed pill. */
+.mp-panel[data-mp-collapsed="true"] {
+  width: auto;
+  max-width: min(300px, calc(100vw - 32px));
+  border-radius: 999px;
+}
+
+.mp-panel[data-mp-collapsed="true"] .mp-body,
+.mp-panel[data-mp-collapsed="true"] .mp-grip,
+.mp-panel[data-mp-collapsed="true"] .mp-list-toggle {
+  display: none;
+}
+
+.mp-panel[data-mp-collapsed="true"] .mp-handle {
+  height: 44px;
+  padding: 0 6px 0 14px;
+  border-bottom: 0;
+}
+
+.mp-panel[data-mp-collapsed="true"] .mp-nowplaying {
+  display: block;
+}
+
+/* All-tracks-failed fallback. */
+.mp-dead {
+  padding: 12px 14px 14px;
+  font-size: 12px;
+  line-height: 1.7;
+  color: var(--mp-fg-dim);
+}
+
+.mp-dead strong {
+  display: block;
+  margin-bottom: 2px;
+  font-size: 13px;
+  color: var(--mp-fg);
+}
+
+.mp-dead code {
+  padding: 0 4px;
+  border-radius: 4px;
+  background: var(--mp-hover);
+}
+
+/* Hide in zen mode and print. */
+body.zen-mode-enable .mp-panel {
+  display: none !important;
+}
+
+@media print {
+  .mp-panel {
+    display: none !important;
+  }
+}
+
+/* Mobile layout. */
+@media (max-width: 640px) {
+  .mp-panel {
+    left: 12px;
+    right: 12px;
+    bottom: 12px;
+    width: auto;
+    max-width: none;
+  }
+
+  .mp-panel .mp-handle {
+    cursor: default;
+  }
+}

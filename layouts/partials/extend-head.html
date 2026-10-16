@@ -1,0 +1,35 @@
+{{- /* Inject custom CSS through the theme's head hook. */ -}}
+{{- with site.Params.musicPlayer -}}
+  {{- if .enable -}}
+    {{- with resources.Get "lib/aplayer/APlayer.min.css" }}
+    <link rel="stylesheet" href="{{ (. | fingerprint "sha256").RelPermalink }}">
+    {{- end }}
+    {{- with resources.Get "css/music-player.css" }}
+    <link rel="stylesheet" href="{{ (. | fingerprint "sha256").RelPermalink }}">
+    {{- end }}
+  {{- end -}}
+{{- end -}}
+{{- /* PJAX progress bar. */ -}}
+{{- with site.Params.navPjax -}}
+  {{- if .enable -}}
+    {{- with resources.Get "css/nav-pjax.css" }}
+    <link rel="stylesheet" href="{{ (. | fingerprint "sha256").RelPermalink }}">
+    {{- end }}
+  {{- end -}}
+{{- end -}}
+{{- /* Global jukebox styles; PJAX does not replace the head. */ -}}
+{{- with site.Params.jukebox -}}
+  {{- if .enable -}}
+    {{- with resources.Get "css/jukebox.css" }}
+    <link rel="stylesheet" href="{{ (. | fingerprint "sha256").RelPermalink }}">
+    {{- end }}
+  {{- end -}}
+{{- end -}}
+{{- /* Global terminal styles. */ -}}
+{{- with site.Params.terminal -}}
+  {{- if .enable -}}
+    {{- with resources.Get "css/terminal.css" }}
+    <link rel="stylesheet" href="{{ (. | fingerprint "sha256").RelPermalink }}">
+    {{- end }}
+  {{- end -}}
+{{- end -}}
